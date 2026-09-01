@@ -24,8 +24,9 @@ documents on the phone.
 - Watch the task queue of the server and acknowledge failures
 - Open a document inside the app: it is downloaded into the private cache
   directory, which is emptied when the app closes and when you sign out.
-  "Save to Downloads" writes a copy to `~/Downloads`, which is also the only
-  place another application can read a document from
+  "Save on device" keeps a copy in `~/Downloads` or `~/Documents`, under a name
+  you choose, and those are also the only places another application can read a
+  document from
 - Self-signed certificates can be accepted explicitly
 
 ## Requirements
@@ -94,10 +95,10 @@ and signing out removes the whole cache.
 
 ## Permissions
 
-`Internet` for the API, `Downloads` for keeping a copy of a document where
-another application can open it, `Documents` and `Pictures` for picking files to
-upload, `Camera` for scanning, `Secrets` for the API token and `WebView` for
-signing in through the web interface of the server.
+`Internet` for the API, `Downloads` and `Documents` for keeping a copy of a
+document where another application can open it and for picking files to upload,
+`Pictures` for pictures to upload, `Camera` for scanning, `Secrets` for the API
+token and `WebView` for signing in through the web interface of the server.
 
 ## Licence
 

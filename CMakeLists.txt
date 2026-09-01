@@ -77,6 +77,7 @@ add_custom_target(distfiles
         qml/pages/LookupPickerPage.qml
         qml/pages/NotesPage.qml
         qml/pages/PdfViewPage.qml
+        qml/pages/SavePage.qml
         qml/pages/SettingsPage.qml
         qml/pages/StartPage.qml
         qml/pages/TasksPage.qml

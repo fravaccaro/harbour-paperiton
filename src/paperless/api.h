@@ -74,9 +74,11 @@ public:
     // Downloads a document into the private cache directory, where only this
     // app can read it, for viewing inside the app.
     Q_INVOKABLE void saveDocument(int documentId, const QString &fileName, bool original);
-    // Downloads a document into ~/Downloads, which is the only way another app
-    // can open it: the cache directory is invisible outside this sandbox.
-    Q_INVOKABLE void exportDocument(int documentId, const QString &fileName, bool original);
+    // Saves a document where the user keeps files, which is also the only way
+    // another app can open it: the cache directory is invisible outside this
+    // sandbox. The destination is "documents" or, by default, "downloads".
+    Q_INVOKABLE void exportDocument(int documentId, const QString &fileName, bool original,
+                                    const QString &destination = QString());
     // Everything the app has written into the cache, including thumbnails and
     // the web view profile. Used when signing out.
     Q_INVOKABLE void clearCache();

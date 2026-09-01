@@ -48,10 +48,19 @@ Page {
         Paperless.saveDocument(documentId, fileName(original), original)
     }
 
-    function saveToDownloads() {
+    function saveOnDevice() {
         page.errorMessage = ""
         page.statusMessage = ""
-        Paperless.exportDocument(documentId, fileName(true), true)
+
+        var dialog = pageStack.push(Qt.resolvedUrl("SavePage.qml"), {
+                                        archivedName: fileName(false),
+                                        originalName: details.original_file_name
+                                                      ? details.original_file_name : ""
+                                    })
+        dialog.accepted.connect(function() {
+            Paperless.exportDocument(page.documentId, dialog.fileName, dialog.original,
+                                     dialog.destination)
+        })
     }
 
     function view(path) {
@@ -206,9 +215,9 @@ Page {
             }
 
             MenuItem {
-                text: qsTr("Save to Downloads")
-                enabled: !page.saving
-                onClicked: page.saveToDownloads()
+                text: qsTr("Save on device")
+                enabled: !page.saving && !page.loadingDetails
+                onClicked: page.saveOnDevice()
             }
 
             MenuItem {

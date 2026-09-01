@@ -573,11 +573,15 @@ void PaperlessApi::saveDocument(int documentId, const QString &fileName, bool or
                      false, false);
 }
 
-void PaperlessApi::exportDocument(int documentId, const QString &fileName, bool original)
+void PaperlessApi::exportDocument(int documentId, const QString &fileName, bool original,
+                                  const QString &destination)
 {
+    const QStandardPaths::StandardLocation location =
+            destination == QLatin1String("documents") ? QStandardPaths::DocumentsLocation
+                                                      : QStandardPaths::DownloadLocation;
+
     downloadDocument(documentId, fileName, original,
-                     QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
-                     true, true);
+                     QStandardPaths::writableLocation(location), true, true);
 }
 
 void PaperlessApi::downloadDocument(int documentId, const QString &fileName, bool original,
@@ -585,7 +589,7 @@ void PaperlessApi::downloadDocument(int documentId, const QString &fileName, boo
 {
     if (directory.isEmpty() || !QDir().mkpath(directory)) {
         emit documentSaveFailed(documentId, exported
-                                ? translated("The Downloads folder is not available.")
+                                ? translated("The folder %1 is not available.").arg(directory)
                                 : translated("The cache folder is not available."));
         return;
     }
@@ -614,7 +618,7 @@ void PaperlessApi::downloadDocument(int documentId, const QString &fileName, boo
         QFile file(path);
         if (!file.open(QIODevice::WriteOnly)) {
             emit documentSaveFailed(documentId, exported
-                                    ? translated("Could not write to the Downloads folder.")
+                                    ? translated("Could not write to %1.").arg(directory)
                                     : translated("Could not write to the cache folder."));
             return;
         }

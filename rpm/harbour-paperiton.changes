@@ -6,8 +6,9 @@
 - Edit title, correspondent, type, tags, date, archive serial number and
   custom fields, and change several documents at once
 - Notes, saved views, inbox and the task queue of the server
-- Downloaded documents live in the private cache directory, which is emptied
-  when the app closes and when you sign out
+- Documents are shown inside the app from the private cache directory, which is
+  emptied when the app closes and when you sign out; "Save on device" keeps a
+  copy in Downloads or in Documents
 
 * Tue Sep 01 2026 fravaccaro 0.1-1
 - Initial release: token login, document browsing, search, tag and
