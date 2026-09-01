@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+X-Nemo-Application-Type=silica-qt5
+Icon=harbour-paperiton
+Exec=harbour-paperiton
+Name=Paperiton
+Comment=Paperless-ngx client
+
+[X-Sailjail]
+OrganizationName=org.fravaccaro
+ApplicationName=harbour-paperiton
+Permissions=Internet;Downloads
+
+[X-HarbourBackup]
+BackupPathList=.config/org.fravaccaro/harbour-paperiton/

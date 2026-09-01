@@ -1,0 +1,6 @@
+# Rename this file to harbour-paperiton.changes to include it in the RPM.
+# Add newest entries at the top.
+
+* Tue Sep 01 2026 Francesco Vaccaro <me@fravaccaro.com> 0.1-1
+- Initial release: token login, document browsing, search, tag and
+  correspondent filters, thumbnails, OCR text and previews

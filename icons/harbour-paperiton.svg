@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="172" height="172" viewBox="0 0 172 172">
+  <g fill="#ffffff" fill-rule="evenodd">
+    <path d="M42 14h56a10 10 0 0 1 7.07 2.93l28 28A10 10 0 0 1 136 52v106a10 10 0 0 1-10 10H42a10 10 0 0 1-10-10V24a10 10 0 0 1 10-10zm0 14a4 4 0 0 0-4 4v126a4 4 0 0 0 4 4h84a4 4 0 0 0 4-4V58H98a8 8 0 0 1-8-8V28H42z"/>
+    <rect x="52" y="74" width="64" height="9" rx="4.5"/>
+    <rect x="52" y="96" width="64" height="9" rx="4.5"/>
+    <rect x="52" y="118" width="40" height="9" rx="4.5"/>
+  </g>
+</svg>
