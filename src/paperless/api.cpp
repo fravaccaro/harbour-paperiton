@@ -145,6 +145,10 @@ PaperlessApi::PaperlessApi(Config *config, QObject *parent)
     , m_permissionsKnown(false)
 {
     connect(m_config, &Config::configuredChanged, this, &PaperlessApi::authenticatedChanged);
+    connect(this, &PaperlessApi::authenticatedChanged, this, [this]() {
+        if (isAuthenticated())
+            checkAccess();
+    });
 }
 
 bool PaperlessApi::isAuthenticated() const
@@ -385,7 +389,6 @@ void PaperlessApi::applyLogin(const QString &serverUrl, const QString &username,
     m_config->setUsername(username);
     m_config->setToken(token);
     setLastError(QString());
-    checkAccess();
     emit loginSucceeded();
 }
 
@@ -407,12 +410,13 @@ void PaperlessApi::checkAccess()
             [this](const QJsonDocument &document, const QString &error) {
         m_permissions.clear();
         m_permissionsKnown = error.isEmpty();
-        if (!m_permissionsKnown)
-            return;
+        if (m_permissionsKnown) {
+            const QJsonArray permissions = document.object().value(QStringLiteral("permissions")).toArray();
+            for (int i = 0; i < permissions.count(); ++i)
+                m_permissions.insert(permissions.at(i).toString());
+        }
 
-        const QJsonArray permissions = document.object().value(QStringLiteral("permissions")).toArray();
-        for (int i = 0; i < permissions.count(); ++i)
-            m_permissions.insert(permissions.at(i).toString());
+        emit permissionsChanged();
     }, true);
 }
 
@@ -503,6 +507,44 @@ void PaperlessApi::logout()
     setAccessWarning(QString());
     m_permissions.clear();
     m_permissionsKnown = false;
+    emit permissionsChanged();
+}
+
+void PaperlessApi::detectSignInOptions(const QString &serverUrl)
+{
+    const QString normalized = Config::normalizeServerUrl(serverUrl);
+    if (normalized.isEmpty())
+        return;
+
+    RequestContext context;
+    context.authorized = false;
+    context.quiet = true;
+
+    dispatch(QUrl(normalized + QStringLiteral("/accounts/login/")), context,
+             [this](const QByteArray &data, const QString &error) {
+        if (!error.isEmpty()) {
+            emit signInOptionsDetected(QStringList(), true);
+            return;
+        }
+
+        const QString html = QString::fromUtf8(data);
+        QStringList providers;
+
+        // Paperless renders OpenID brands as links and every other provider as
+        // a form with a submit button.
+        QRegExp brandLink(QStringLiteral("oidc-url\"[^>]*>([^<]+)<"));
+        brandLink.setMinimal(true);
+        for (int at = brandLink.indexIn(html); at >= 0; at = brandLink.indexIn(html, at + 1))
+            providers.append(brandLink.cap(1).trimmed());
+
+        QRegExp socialButton(QStringLiteral("<button type=\"submit\" class=\"btn btn-secondary\">([^<]+)<"));
+        socialButton.setMinimal(true);
+        for (int at = socialButton.indexIn(html); at >= 0; at = socialButton.indexIn(html, at + 1))
+            providers.append(socialButton.cap(1).trimmed());
+
+        providers.removeDuplicates();
+        emit signInOptionsDetected(providers, html.contains(QStringLiteral("name=\"login\"")));
+    }, MaxRedirects);
 }
 
 void PaperlessApi::fetchDocument(int documentId)
@@ -520,9 +562,31 @@ void PaperlessApi::fetchDocument(int documentId)
 
 void PaperlessApi::saveDocument(int documentId, const QString &fileName, bool original)
 {
-    const QString directory = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+    const QString cache = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    if (cache.isEmpty()) {
+        emit documentSaveFailed(documentId, translated("The cache folder is not available."));
+        return;
+    }
+
+    // Same document, same file: the cache is emptied anyway when the app quits.
+    downloadDocument(documentId, fileName, original, cache + QStringLiteral("/documents"),
+                     false, false);
+}
+
+void PaperlessApi::exportDocument(int documentId, const QString &fileName, bool original)
+{
+    downloadDocument(documentId, fileName, original,
+                     QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
+                     true, true);
+}
+
+void PaperlessApi::downloadDocument(int documentId, const QString &fileName, bool original,
+                                    const QString &directory, bool unique, bool exported)
+{
     if (directory.isEmpty() || !QDir().mkpath(directory)) {
-        emit documentSaveFailed(documentId, translated("The Downloads folder is not available."));
+        emit documentSaveFailed(documentId, exported
+                                ? translated("The Downloads folder is not available.")
+                                : translated("The cache folder is not available."));
         return;
     }
 
@@ -531,27 +595,37 @@ void PaperlessApi::saveDocument(int documentId, const QString &fileName, bool or
         name = QStringLiteral("paperless-%1.pdf").arg(documentId);
     if (!name.contains(QLatin1Char('.')))
         name.append(QStringLiteral(".pdf"));
+    if (!unique)
+        name = QStringLiteral("%1-%2").arg(documentId).arg(name);
 
     emit documentSaveStarted(documentId);
 
     const QUrl url = documentFileUrl(documentId, original ? QStringLiteral("download")
                                                           : QStringLiteral("preview"));
-    getData(url, [this, documentId, directory, name](const QByteArray &data, const QString &error) {
+    getData(url, [this, documentId, directory, name, unique, exported]
+            (const QByteArray &data, const QString &error) {
         if (!error.isEmpty()) {
             emit documentSaveFailed(documentId, error);
             return;
         }
 
-        const QString path = uniqueFilePath(directory, name);
+        const QString path = unique ? uniqueFilePath(directory, name)
+                                    : directory + QLatin1Char('/') + name;
         QFile file(path);
         if (!file.open(QIODevice::WriteOnly)) {
-            emit documentSaveFailed(documentId, translated("Could not write to the Downloads folder."));
+            emit documentSaveFailed(documentId, exported
+                                    ? translated("Could not write to the Downloads folder.")
+                                    : translated("Could not write to the cache folder."));
             return;
         }
 
         file.write(data);
         file.close();
-        emit documentSaved(documentId, path);
+
+        if (exported)
+            emit documentExported(documentId, path);
+        else
+            emit documentSaved(documentId, path);
     });
 }
 
@@ -728,5 +802,18 @@ void PaperlessApi::clearCache()
     if (cacheDir.isEmpty())
         return;
 
+    clearTransientCache();
     QDir(cacheDir + QStringLiteral("/thumbnails")).removeRecursively();
+    // The web view profile holds the session cookies of the server.
+    QDir(cacheDir + QStringLiteral("/.mozilla")).removeRecursively();
+}
+
+void PaperlessApi::clearTransientCache()
+{
+    const QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    if (cacheDir.isEmpty())
+        return;
+
+    QDir(cacheDir + QStringLiteral("/documents")).removeRecursively();
+    QDir(cacheDir + QStringLiteral("/captures")).removeRecursively();
 }

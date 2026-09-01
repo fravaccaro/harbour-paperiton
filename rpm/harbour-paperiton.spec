@@ -1,13 +1,15 @@
 Name:       harbour-paperiton
 
 Summary:    Paperless-ngx client for Sailfish OS
-Version:    0.1
+Version:    0.5
 Release:    1
-License:    GPLv3+
+License:    GPLv3
 URL:        https://github.com/fravaccaro/harbour-paperiton
 Source0:    %{name}-%{version}.tar.bz2
 Requires:   sailfishsilica-qt5 >= 0.10.9
+Requires:   sailfish-components-webview-qt5
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
+BuildRequires:  pkgconfig(sailfishsecrets)
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Network)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -16,14 +18,15 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  cmake
 
 %description
-Paperiton browses the documents of a Paperless-ngx server: full text search,
-filtering by tag and correspondent, thumbnails, OCR text and previews.
+Paperiton works with the documents of a Paperless-ngx server: full text search,
+filtering by tag and correspondent, thumbnails, OCR text and previews, uploads
+from the device or the camera, metadata editing, notes and the task queue.
 A running Paperless-ngx instance is required.
 
 %if 0%{?_chum}
 Title: Paperiton
 Type: desktop-application
-DeveloperName: Francesco Vaccaro
+DeveloperName: fravaccaro
 Categories:
  - Office
  - Network

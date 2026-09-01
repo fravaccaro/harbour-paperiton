@@ -48,6 +48,9 @@ public:
     // they are removed once the server has accepted them.
     Q_INVOKABLE void enqueue(const QString &filePath, const QVariantMap &metadata,
                              bool temporary = false);
+    // A writable path inside the sandbox for a camera capture that is about to
+    // be enqueued as a temporary file.
+    Q_INVOKABLE QString captureFilePath(const QString &suffix) const;
     Q_INVOKABLE void retry(int index);
     Q_INVOKABLE void remove(int index);
     Q_INVOKABLE void clearFinished();

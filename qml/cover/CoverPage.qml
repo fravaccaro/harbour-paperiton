@@ -24,6 +24,8 @@ CoverBackground {
             text: {
                 if (!Paperless.authenticated)
                     return qsTr("Not signed in")
+                if (Uploads.activeCount > 0)
+                    return qsTr("Uploading %n file(s)", "", Uploads.activeCount)
                 if (Paperless.totalDocuments === 0)
                     return qsTr("No documents yet")
                 return qsTr("%n document(s)", "", Paperless.totalDocuments)

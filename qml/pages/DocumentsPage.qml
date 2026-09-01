@@ -14,7 +14,53 @@ Page {
         return parts.join("  \u00b7  ")
     }
 
+    property var selectedIds: []
+    property bool filtered: documents.tagId > 0 || documents.correspondentId > 0
+                            || documents.searchQuery !== "" || documents.ordering !== ""
+
+    property var bulkOperations: []
+    property int bulkIndex: -1
+    property string bulkError
+
     allowedOrientations: Orientation.All
+
+    function runBulk(operations) {
+        bulkError = ""
+        bulkOperations = operations
+        bulkIndex = -1
+        nextBulkOperation()
+    }
+
+    function nextBulkOperation() {
+        bulkIndex++
+        if (bulkIndex >= bulkOperations.length) {
+            bulkIndex = -1
+            selectedIds = []
+            documents.reload()
+            return
+        }
+
+        var operation = bulkOperations[bulkIndex]
+        Paperless.bulkEdit(selectedIds, operation.method, operation.parameters)
+    }
+
+    function startSelection(documentId) {
+        selectedIds = [documentId]
+    }
+
+    function toggleSelection(documentId) {
+        var ids = selectedIds.slice()
+        var at = ids.indexOf(documentId)
+        if (at >= 0)
+            ids.splice(at, 1)
+        else
+            ids.push(documentId)
+        selectedIds = ids
+    }
+
+    function isSelected(documentId) {
+        return selectedIds.indexOf(documentId) >= 0
+    }
 
     function subtitle(created, correspondentId, lookupsReady) {
         var parts = []
@@ -37,6 +83,28 @@ Page {
         id: documents
     }
 
+    Connections {
+        target: Uploads
+        onUploadCompleted: documents.reload()
+    }
+
+    Connections {
+        target: Paperless
+
+        onBulkEditFinished: {
+            if (page.bulkIndex < 0)
+                return
+
+            if (error !== "") {
+                page.bulkIndex = -1
+                page.bulkError = error
+                return
+            }
+
+            page.nextBulkOperation()
+        }
+    }
+
     Timer {
         id: searchDelay
         interval: 600
@@ -54,7 +122,18 @@ Page {
 
             PageHeader {
                 title: qsTr("Documents")
-                description: page.filterSummary
+                description: page.selectedIds.length > 0
+                             ? qsTr("%n selected", "", page.selectedIds.length) : page.filterSummary
+            }
+
+            Label {
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2 * Theme.horizontalPageMargin
+                visible: page.bulkError !== ""
+                wrapMode: Text.WordWrap
+                color: Theme.errorColor
+                font.pixelSize: Theme.fontSizeSmall
+                text: page.bulkError
             }
 
             SearchField {
@@ -75,25 +154,66 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: qsTr("Settings")
+                visible: page.selectedIds.length === 0
                 onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
             }
 
             MenuItem {
-                text: qsTr("Clear filters")
-                visible: documents.tagId > 0 || documents.correspondentId > 0
+                text: qsTr("Edit %n document(s)", "", page.selectedIds.length)
+                visible: page.selectedIds.length > 0
                 onClicked: {
-                    documents.tagId = -1
-                    documents.correspondentId = -1
+                    var dialog = pageStack.push(Qt.resolvedUrl("BulkEditPage.qml"), {
+                                                    documentCount: page.selectedIds.length
+                                                })
+                    dialog.accepted.connect(function() {
+                        page.runBulk(dialog.operations())
+                    })
                 }
             }
 
             MenuItem {
+                text: qsTr("Cancel selection")
+                visible: page.selectedIds.length > 0
+                onClicked: page.selectedIds = []
+            }
+
+            MenuItem {
+                text: qsTr("Clear filters")
+                visible: page.selectedIds.length === 0 && page.filtered
+                onClicked: {
+                    documents.clearFilters()
+                    searchField.text = ""
+                }
+            }
+
+            MenuItem {
+                text: qsTr("Views")
+                visible: page.selectedIds.length === 0
+                onClicked: pageStack.push(Qt.resolvedUrl("ViewsPage.qml"), { documents: documents })
+            }
+
+            MenuItem {
                 text: qsTr("Filter")
+                visible: page.selectedIds.length === 0
                 onClicked: pageStack.push(Qt.resolvedUrl("FilterPage.qml"), { documents: documents })
             }
 
             MenuItem {
+                text: qsTr("Tasks")
+                visible: page.selectedIds.length === 0
+                onClicked: pageStack.push(Qt.resolvedUrl("TasksPage.qml"))
+            }
+
+            MenuItem {
+                text: Uploads.activeCount > 0 ? qsTr("Uploads (%1)").arg(Uploads.activeCount)
+                                              : qsTr("Upload")
+                visible: page.selectedIds.length === 0 && app.allowed("add_document")
+                onClicked: pageStack.push(Qt.resolvedUrl("UploadPage.qml"))
+            }
+
+            MenuItem {
                 text: qsTr("Refresh")
+                visible: page.selectedIds.length === 0
                 onClicked: documents.reload()
             }
         }
@@ -102,16 +222,33 @@ Page {
             id: item
 
             property var documentTags: model.tagIds
+            property bool selected: page.isSelected(model.documentId)
 
             contentHeight: Theme.itemSizeLarge
+            highlighted: down || selected
 
-            onClicked: pageStack.push(Qt.resolvedUrl("DocumentPage.qml"), {
-                                          documentId: model.documentId,
-                                          documentTitle: model.title,
-                                          created: model.created,
-                                          correspondentId: model.correspondentId,
-                                          tagIds: model.tagIds
-                                      })
+            menu: ContextMenu {
+                MenuItem {
+                    text: qsTr("Select")
+                    visible: page.selectedIds.length === 0 && app.allowed("change_document")
+                    onClicked: page.startSelection(model.documentId)
+                }
+            }
+
+            onClicked: {
+                if (page.selectedIds.length > 0) {
+                    page.toggleSelection(model.documentId)
+                    return
+                }
+
+                pageStack.push(Qt.resolvedUrl("DocumentPage.qml"), {
+                                   documentId: model.documentId,
+                                   documentTitle: model.title,
+                                   created: model.created,
+                                   correspondentId: model.correspondentId,
+                                   tagIds: model.tagIds
+                               })
+            }
 
             Row {
                 anchors {
@@ -139,6 +276,13 @@ Page {
                         fillMode: Image.PreserveAspectCrop
                         verticalAlignment: Image.AlignTop
                         source: model.thumbnailSource
+                        opacity: item.selected ? Theme.opacityLow : 1.0
+                    }
+
+                    Image {
+                        anchors.centerIn: parent
+                        visible: item.selected
+                        source: "image://theme/icon-s-installed?" + Theme.highlightColor
                     }
                 }
 

@@ -66,11 +66,23 @@ add_custom_target(distfiles
         harbour-paperiton.desktop
         qml/harbour-paperiton.qml
         qml/cover/CoverPage.qml
+        qml/pages/BulkEditPage.qml
+        qml/pages/CameraPage.qml
+        qml/pages/DocumentEditPage.qml
         qml/pages/DocumentPage.qml
         qml/pages/DocumentsPage.qml
         qml/pages/FilterPage.qml
+        qml/pages/ImageViewPage.qml
         qml/pages/LoginPage.qml
+        qml/pages/LookupPickerPage.qml
+        qml/pages/NotesPage.qml
+        qml/pages/PdfViewPage.qml
         qml/pages/SettingsPage.qml
+        qml/pages/StartPage.qml
+        qml/pages/TasksPage.qml
+        qml/pages/UploadPage.qml
+        qml/pages/ViewsPage.qml
+        qml/pages/WebLoginPage.qml
         rpm/harbour-paperiton.changes.in
         rpm/harbour-paperiton.changes.run.in
         rpm/harbour-paperiton.spec

@@ -5,11 +5,19 @@ Icon=harbour-paperiton
 Exec=harbour-paperiton
 Name=Paperiton
 Comment=Paperless-ngx client
+X-Share-Methods=upload
+X-DBusActivatable=true
 
 [X-Sailjail]
-OrganizationName=org.fravaccaro
+OrganizationName=org.frapps.paperiton
 ApplicationName=harbour-paperiton
-Permissions=Internet;Downloads
+Permissions=Internet;Downloads;Documents;Pictures;Camera;Secrets;WebView
+ExecDBus=harbour-paperiton
+
+[X-Share Method upload]
+Description=Add to your Paperless archive
+Capabilities=application/pdf;image/*;text/plain
+SupportsMultipleFiles=true
 
 [X-HarbourBackup]
-BackupPathList=.config/org.fravaccaro/harbour-paperiton/
+BackupPathList=.config/org.frapps.paperiton/harbour-paperiton/

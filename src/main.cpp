@@ -13,9 +13,13 @@
 
 #include "paperless/api.h"
 #include "paperless/config.h"
+#include "paperless/customfieldsmodel.h"
 #include "paperless/documentlistmodel.h"
 #include "paperless/lookupmodel.h"
+#include "paperless/savedviewmodel.h"
+#include "paperless/tasklistmodel.h"
 #include "paperless/thumbimageprovider.h"
+#include "paperless/uploadqueue.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,20 +27,33 @@ int main(int argc, char *argv[])
 
     // Must be set before anything resolves QStandardPaths, so that settings and
     // caches land in the directories Sailjail whitelists for this app.
-    app->setOrganizationName(QStringLiteral("org.fravaccaro"));
-    app->setOrganizationDomain(QStringLiteral("fravaccaro.org"));
+    app->setOrganizationName(QStringLiteral("org.frapps.paperiton"));
+    app->setOrganizationDomain(QStringLiteral("frapps.org"));
     app->setApplicationName(QStringLiteral("harbour-paperiton"));
-    app->setApplicationVersion(QStringLiteral("0.1"));
+    app->setApplicationVersion(QStringLiteral("0.5"));
 
     Config config;
     PaperlessApi api(&config);
+
+    // Document copies and camera captures are scratch files: they go when the
+    // app quits, and leftovers of a run that was killed go at the next start.
+    api.clearTransientCache();
+    QObject::connect(app.data(), &QGuiApplication::aboutToQuit,
+                     &api, &PaperlessApi::clearTransientCache);
+
     LookupModel tags(&api, QStringLiteral("tags"));
     LookupModel correspondents(&api, QStringLiteral("correspondents"));
     LookupModel documentTypes(&api, QStringLiteral("document_types"));
+    CustomFieldsModel customFields(&api);
+    SavedViewModel savedViews(&api);
+    TaskListModel tasks(&api);
+    UploadQueue uploads(&api);
     ThumbnailFetcher thumbnailFetcher(&api);
 
     DocumentListModel::setApi(&api);
     qmlRegisterType<DocumentListModel>("harbour.paperiton", 1, 0, "DocumentListModel");
+    qmlRegisterUncreatableType<UploadQueue>("harbour.paperiton", 1, 0, "UploadQueue",
+                                            QStringLiteral("Provided as the Uploads context property"));
 
     QScopedPointer<QQuickView> view(SailfishApp::createView());
     view->engine()->addImageProvider(QStringLiteral("paperless"),
@@ -48,12 +65,10 @@ int main(int argc, char *argv[])
     context->setContextProperty(QStringLiteral("Tags"), &tags);
     context->setContextProperty(QStringLiteral("Correspondents"), &correspondents);
     context->setContextProperty(QStringLiteral("DocumentTypes"), &documentTypes);
-
-    if (api.isAuthenticated()) {
-        tags.reload();
-        correspondents.reload();
-        documentTypes.reload();
-    }
+    context->setContextProperty(QStringLiteral("CustomFields"), &customFields);
+    context->setContextProperty(QStringLiteral("SavedViews"), &savedViews);
+    context->setContextProperty(QStringLiteral("Tasks"), &tasks);
+    context->setContextProperty(QStringLiteral("Uploads"), &uploads);
 
     view->setSource(SailfishApp::pathTo(QStringLiteral("qml/harbour-paperiton.qml")));
     view->show();

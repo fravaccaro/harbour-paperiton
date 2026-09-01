@@ -1,3 +1,14 @@
-* Tue Sep 01 2026 Francesco Vaccaro <me@fravaccaro.com> 0.1-1
+* Tue Sep 01 2026 fravaccaro 0.5-1
+- Sign in through the web interface, so that single sign-on and two-factor
+  authentication work; the API token is kept in Sailfish Secrets
+- Upload files from the device, from other apps and from the camera, and
+  follow the consumer task until the document exists
+- Edit title, correspondent, type, tags, date, archive serial number and
+  custom fields, and change several documents at once
+- Notes, saved views, inbox and the task queue of the server
+- Downloaded documents live in the private cache directory, which is emptied
+  when the app closes and when you sign out
+
+* Tue Sep 01 2026 fravaccaro 0.1-1
 - Initial release: token login, document browsing, search, tag and
   correspondent filters, thumbnails, OCR text and previews

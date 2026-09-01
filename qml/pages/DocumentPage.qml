@@ -16,6 +16,9 @@ Page {
     property string statusMessage
     property string errorMessage
 
+    property var pdfComponent: null
+    property bool openAfterExport: false
+
     allowedOrientations: Orientation.All
 
     // The preview endpoint serves the archived PDF, the download endpoint the
@@ -33,10 +36,49 @@ Page {
         return /\.(png|jpe?g|gif|webp|bmp|tiff?)$/.test(name)
     }
 
+    function isImagePath(path) {
+        return /\.(png|jpe?g|gif|webp|bmp|tiff?)$/.test(String(path).toLowerCase())
+    }
+
+    // Downloads into the private cache, from where only this app can read the
+    // file; it is deleted again when the app quits.
     function open(original) {
         page.errorMessage = ""
         page.statusMessage = ""
         Paperless.saveDocument(documentId, fileName(original), original)
+    }
+
+    function saveToDownloads() {
+        page.errorMessage = ""
+        page.statusMessage = ""
+        Paperless.exportDocument(documentId, fileName(true), true)
+    }
+
+    function view(path) {
+        if (isImagePath(path)) {
+            pageStack.push(Qt.resolvedUrl("ImageViewPage.qml"), {
+                               source: Paperless.fileUrl(path),
+                               title: page.documentTitle
+                           })
+            return
+        }
+
+        if (page.pdfComponent === null)
+            page.pdfComponent = Qt.createComponent(Qt.resolvedUrl("PdfViewPage.qml"))
+
+        if (page.pdfComponent.status === Component.Ready) {
+            pageStack.push(page.pdfComponent, {
+                               source: Paperless.fileUrl(path),
+                               title: page.documentTitle
+                           })
+            return
+        }
+
+        // Without the system viewer the file has to leave the sandbox, because
+        // no other app can read the cache directory.
+        page.statusMessage = qsTr("Opening in another app")
+        page.openAfterExport = true
+        Paperless.exportDocument(documentId, fileName(true), true)
     }
 
     function formatDate(value) {
@@ -82,14 +124,42 @@ Page {
             if (documentId !== page.documentId)
                 return
             page.saving = false
+            page.view(filePath)
+        }
+
+        onDocumentExported: {
+            if (documentId !== page.documentId)
+                return
+            page.saving = false
             page.statusMessage = qsTr("Saved to %1").arg(filePath)
-            Qt.openUrlExternally(Paperless.fileUrl(filePath))
+            if (page.openAfterExport) {
+                page.openAfterExport = false
+                Qt.openUrlExternally(Paperless.fileUrl(filePath))
+            }
         }
 
         onDocumentSaveFailed: {
             if (documentId !== page.documentId)
                 return
             page.saving = false
+            page.openAfterExport = false
+            page.errorMessage = error
+        }
+
+        onDocumentUpdated: {
+            if (documentId !== page.documentId)
+                return
+            page.details = document
+            page.documentTitle = document.title ? document.title : page.documentTitle
+            page.tagIds = document.tags ? document.tags : []
+            page.correspondentId = document.correspondent ? document.correspondent : -1
+            page.created = document.created ? new Date(document.created) : page.created
+            page.statusMessage = qsTr("Changes saved")
+        }
+
+        onDocumentUpdateFailed: {
+            if (documentId !== page.documentId)
+                return
             page.errorMessage = error
         }
     }
@@ -100,6 +170,30 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                text: qsTr("Notes")
+                onClicked: pageStack.push(Qt.resolvedUrl("NotesPage.qml"), {
+                                              documentId: page.documentId,
+                                              documentTitle: page.documentTitle
+                                          })
+            }
+
+            MenuItem {
+                text: qsTr("Edit")
+                visible: app.allowed("change_document")
+                enabled: !page.loadingDetails
+                onClicked: pageStack.push(Qt.resolvedUrl("DocumentEditPage.qml"), {
+                                              documentId: page.documentId,
+                                              details: page.details,
+                                              documentTitle: page.documentTitle,
+                                              correspondentId: page.correspondentId,
+                                              documentTypeId: page.details.document_type
+                                                              ? page.details.document_type : -1,
+                                              tagIds: page.tagIds,
+                                              created: page.created
+                                          })
+            }
+
+            MenuItem {
                 text: qsTr("Open")
                 enabled: !page.saving
                 onClicked: page.open(false)
@@ -109,6 +203,12 @@ Page {
                 text: qsTr("Open original file")
                 enabled: !page.saving
                 onClicked: page.open(true)
+            }
+
+            MenuItem {
+                text: qsTr("Save to Downloads")
+                enabled: !page.saving
+                onClicked: page.saveToDownloads()
             }
 
             MenuItem {

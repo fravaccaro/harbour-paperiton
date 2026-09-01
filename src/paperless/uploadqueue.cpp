@@ -3,11 +3,14 @@
 #include "api.h"
 
 #include <QCoreApplication>
+#include <QDateTime>
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QStandardPaths>
 #include <QTimer>
 
 namespace {
@@ -127,6 +130,17 @@ void UploadQueue::enqueue(const QString &filePath, const QVariantMap &metadata, 
     emit countChanged();
     emit activeCountChanged();
     startNext();
+}
+
+QString UploadQueue::captureFilePath(const QString &suffix) const
+{
+    const QString directory = QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
+            + QStringLiteral("/captures");
+    if (!QDir().mkpath(directory))
+        return QString();
+
+    const QString stamp = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-hhmmss"));
+    return QStringLiteral("%1/scan-%2.%3").arg(directory, stamp, suffix);
 }
 
 void UploadQueue::retry(int index)
