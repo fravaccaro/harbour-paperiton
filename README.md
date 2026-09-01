@@ -54,6 +54,11 @@ sfdk deploy --sdk
 RPMs for armv7hl and aarch64 are also built by the GitHub Actions workflow in
 `.github/workflows/build.yml`.
 
+`sfdk check` reports one error, `Import 'Sailfish.Office 1.0' is not allowed`.
+That import is the viewer of the Documents application, without which a
+document in the private cache directory cannot be shown at all, so the package
+is meant for Chum and OpenRepos rather than the Jolla Store.
+
 ## Architecture
 
 | Part | Purpose |
