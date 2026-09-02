@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="en" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -576,8 +576,9 @@
     </message>
     <message numerus="yes">
         <source>show license(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>show license</numerusform>
+            <numerusform>show licenses</numerusform>
         </translation>
     </message>
     <message>
@@ -622,8 +623,9 @@
     </message>
     <message numerus="yes">
         <source>License(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>License</numerusform>
+            <numerusform>Licenses</numerusform>
         </translation>
     </message>
     <message>
