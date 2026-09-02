@@ -3,10 +3,12 @@
 #endif
 
 #include <QGuiApplication>
+#include <QLocale>
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QQuickView>
 #include <QScopedPointer>
+#include <QTranslator>
 #include <QtQml>
 
 #include <sailfishapp.h>
@@ -30,7 +32,15 @@ int main(int argc, char *argv[])
     app->setOrganizationName(QStringLiteral("org.frapps.paperiton"));
     app->setOrganizationDomain(QStringLiteral("frapps.org"));
     app->setApplicationName(QStringLiteral("harbour-paperiton"));
-    app->setApplicationVersion(QStringLiteral("0.5"));
+    app->setApplicationVersion(QStringLiteral(APP_VERSION));
+
+    // The interface follows the device language; without a catalogue for it the
+    // sources' English is used.
+    QScopedPointer<QTranslator> translator(new QTranslator);
+    if (translator->load(QLocale(), QStringLiteral("harbour-paperiton"), QStringLiteral("-"),
+                         SailfishApp::pathTo(QStringLiteral("translations")).toLocalFile())) {
+        app->installTranslator(translator.data());
+    }
 
     Config config;
     PaperlessApi api(&config);

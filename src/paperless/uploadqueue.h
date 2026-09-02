@@ -16,6 +16,12 @@ class UploadQueue : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
     Q_PROPERTY(int activeCount READ activeCount NOTIFY activeCountChanged)
+    // What is left of the files enqueued together, so that the progress of a
+    // whole run can be shown while it happens rather than file by file.
+    Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
+    Q_PROPERTY(QString currentFileName READ currentFileName NOTIFY progressChanged)
+    Q_PROPERTY(int runTotal READ runTotal NOTIFY progressChanged)
+    Q_PROPERTY(int runDone READ runDone NOTIFY progressChanged)
 
 public:
     enum Status {
@@ -43,6 +49,10 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     int activeCount() const;
+    qreal progress() const;
+    QString currentFileName() const;
+    int runTotal() const { return m_runTotal; }
+    int runDone() const { return m_runAdded + m_runFailed; }
 
     // Set temporary for files the app created itself, such as camera captures;
     // they are removed once the server has accepted them.
@@ -58,12 +68,18 @@ public:
 signals:
     void countChanged();
     void activeCountChanged();
+    void progressChanged();
     void uploadCompleted(int documentId, const QString &fileName);
     void uploadFailed(const QString &fileName, const QString &error);
+    // Nothing is left to upload: what the run achieved, in one place.
+    void runFinished(int added, int failed);
 
 private:
     struct Entry {
         int id;
+        // Which run this file belongs to; rows of finished runs stay listed
+        // until they are cleared and must not count towards the current one.
+        int run;
         QString filePath;
         QString fileName;
         QString taskId;
@@ -75,6 +91,8 @@ private:
         bool temporary;
     };
 
+    // Files enqueued while nothing is in flight open a new run.
+    void beginRunIfIdle();
     void startNext();
     void upload(int index);
     void pollTasks();
@@ -89,6 +107,11 @@ private:
     QVector<Entry> m_entries;
     int m_nextId;
     bool m_busy;
+    // Files enqueued since the queue was last empty of work, and how they ended.
+    int m_runId;
+    int m_runTotal;
+    int m_runAdded;
+    int m_runFailed;
 };
 
 #endif // PAPERLESS_UPLOADQUEUE_H

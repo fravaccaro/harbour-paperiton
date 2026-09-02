@@ -46,6 +46,7 @@ DocumentListModel::DocumentListModel(QObject *parent)
     , m_ordering(defaultOrdering())
     , m_tagId(-1)
     , m_correspondentId(-1)
+    , m_pageSize(PageSize)
     , m_totalCount(0)
     , m_page(0)
     , m_generation(0)
@@ -200,6 +201,18 @@ void DocumentListModel::setFilters(const QVariantMap &filters)
     reload();
 }
 
+void DocumentListModel::setPageSize(int size)
+{
+    if (size < 1 || size == m_pageSize)
+        return;
+
+    m_pageSize = size;
+    emit pageSizeChanged();
+    // Set before the first query, as the cover does, there is nothing to redo.
+    if (m_page > 0)
+        reload();
+}
+
 void DocumentListModel::clearFilters()
 {
     if (m_tagId == -1 && m_correspondentId == -1 && m_searchQuery.isEmpty() && m_filters.isEmpty()
@@ -274,7 +287,7 @@ void DocumentListModel::fetchPage(int page)
 
     QUrlQuery query;
     query.addQueryItem(QStringLiteral("page"), QString::number(page));
-    query.addQueryItem(QStringLiteral("page_size"), QString::number(PageSize));
+    query.addQueryItem(QStringLiteral("page_size"), QString::number(m_pageSize));
     query.addQueryItem(QStringLiteral("ordering"), m_ordering);
     if (!m_searchQuery.isEmpty())
         query.addQueryItem(QStringLiteral("query"), m_searchQuery);

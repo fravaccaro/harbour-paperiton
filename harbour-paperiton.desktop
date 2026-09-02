@@ -5,6 +5,7 @@ Icon=harbour-paperiton
 Exec=harbour-paperiton
 Name=Paperiton
 Comment=Paperless-ngx client
+Comment[it]=Client per Paperless-ngx
 X-Share-Methods=upload
 X-DBusActivatable=true
 
@@ -16,6 +17,7 @@ ExecDBus=harbour-paperiton
 
 [X-Share Method upload]
 Description=Add to your Paperless archive
+Description[it]=Aggiungi al tuo archivio Paperless
 Capabilities=application/pdf;image/*;text/plain
 SupportsMultipleFiles=true
 

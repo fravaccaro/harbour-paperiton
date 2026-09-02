@@ -3,7 +3,6 @@
 #include "config.h"
 
 #include <QBuffer>
-#include <QCoreApplication>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -25,11 +24,6 @@ namespace {
 
 const int RequestTimeoutMs = 30000;
 const int MaxRedirects = 3;
-
-QString translated(const char *text)
-{
-    return QCoreApplication::translate("PaperlessApi", text);
-}
 
 void applyHeaders(QNetworkRequest &request, const QString &token, bool withApiVersion)
 {
@@ -86,24 +80,24 @@ QString describeFailure(QNetworkReply *reply, int status, const QByteArray &body
     switch (status) {
     case 401:
     case 403:
-        return translated("Not authorised. Check your credentials or API token.");
+        return PaperlessApi::tr("Not authorised. Check your credentials or API token.");
     case 404:
-        return translated("Not found. Check the server address.");
+        return PaperlessApi::tr("Not found. Check the server address.");
     default:
         break;
     }
 
     if (status >= 500)
-        return translated("The server reported an error (%1).").arg(status);
+        return PaperlessApi::tr("The server reported an error (%1).").arg(status);
 
     switch (reply->error()) {
     case QNetworkReply::SslHandshakeFailedError:
-        return translated("TLS handshake failed. For a self-signed certificate, enable "
-                          "\"Ignore certificate errors\" in the settings.");
+        return PaperlessApi::tr("TLS handshake failed. For a self-signed certificate, enable "
+                                "\"Ignore certificate errors\" in the settings.");
     case QNetworkReply::HostNotFoundError:
-        return translated("Server not found. Check the address and your connection.");
+        return PaperlessApi::tr("Server not found. Check the address and your connection.");
     case QNetworkReply::OperationCanceledError:
-        return translated("The request timed out.");
+        return PaperlessApi::tr("The request timed out.");
     default:
         break;
     }
@@ -319,7 +313,7 @@ void PaperlessApi::send(QNetworkReply *reply, const DataCallback &callback, int 
 void PaperlessApi::getData(const QUrl &url, const DataCallback &callback)
 {
     if (m_config->serverUrl().isEmpty()) {
-        callback(QByteArray(), translated("No server configured."));
+        callback(QByteArray(), PaperlessApi::tr("No server configured."));
         return;
     }
 
@@ -346,7 +340,7 @@ PaperlessApi::DataCallback jsonReader(const PaperlessApi::JsonCallback &callback
         QJsonParseError parseError;
         const QJsonDocument document = QJsonDocument::fromJson(data, &parseError);
         if (parseError.error != QJsonParseError::NoError) {
-            callback(QJsonDocument(), translated("The server did not return valid JSON."));
+            callback(QJsonDocument(), PaperlessApi::tr("The server did not return valid JSON."));
             return;
         }
 
@@ -359,7 +353,7 @@ PaperlessApi::DataCallback jsonReader(const PaperlessApi::JsonCallback &callback
 void PaperlessApi::getJson(const QUrl &url, const JsonCallback &callback, bool quiet)
 {
     if (m_config->serverUrl().isEmpty()) {
-        callback(QJsonDocument(), translated("No server configured."));
+        callback(QJsonDocument(), PaperlessApi::tr("No server configured."));
         return;
     }
 
@@ -372,7 +366,7 @@ void PaperlessApi::sendJson(const QByteArray &verb, const QUrl &url, const QJson
                             const JsonCallback &callback)
 {
     if (m_config->serverUrl().isEmpty()) {
-        callback(QJsonDocument(), translated("No server configured."));
+        callback(QJsonDocument(), PaperlessApi::tr("No server configured."));
         return;
     }
 
@@ -435,11 +429,11 @@ void PaperlessApi::login(const QString &serverUrl, const QString &username, cons
 {
     const QString normalized = Config::normalizeServerUrl(serverUrl);
     if (normalized.isEmpty()) {
-        emit loginFailed(translated("Enter the address of your Paperless-ngx server."));
+        emit loginFailed(PaperlessApi::tr("Enter the address of your Paperless-ngx server."));
         return;
     }
     if (username.isEmpty() || password.isEmpty()) {
-        emit loginFailed(translated("Enter your user name and password."));
+        emit loginFailed(PaperlessApi::tr("Enter your user name and password."));
         return;
     }
 
@@ -462,7 +456,7 @@ void PaperlessApi::login(const QString &serverUrl, const QString &username, cons
         const QJsonObject object = QJsonDocument::fromJson(data).object();
         const QString token = object.value(QStringLiteral("token")).toString();
         if (token.isEmpty()) {
-            emit loginFailed(translated("The server did not return an API token."));
+            emit loginFailed(PaperlessApi::tr("The server did not return an API token."));
             return;
         }
 
@@ -474,11 +468,11 @@ void PaperlessApi::loginWithToken(const QString &serverUrl, const QString &token
 {
     const QString normalized = Config::normalizeServerUrl(serverUrl);
     if (normalized.isEmpty()) {
-        emit loginFailed(translated("Enter the address of your Paperless-ngx server."));
+        emit loginFailed(PaperlessApi::tr("Enter the address of your Paperless-ngx server."));
         return;
     }
     if (token.trimmed().isEmpty()) {
-        emit loginFailed(translated("Enter an API token."));
+        emit loginFailed(PaperlessApi::tr("Enter an API token."));
         return;
     }
 
@@ -568,7 +562,7 @@ void PaperlessApi::saveDocument(int documentId, const QString &fileName, bool or
 {
     const QString cache = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
     if (cache.isEmpty()) {
-        emit documentSaveFailed(documentId, translated("The cache folder is not available."));
+        emit documentSaveFailed(documentId, PaperlessApi::tr("The cache folder is not available."));
         return;
     }
 
@@ -589,8 +583,8 @@ void PaperlessApi::downloadDocument(int documentId, const QString &fileName, boo
 {
     if (directory.isEmpty() || !QDir().mkpath(directory)) {
         emit documentSaveFailed(documentId, exported
-                                ? translated("The folder %1 is not available.").arg(directory)
-                                : translated("The cache folder is not available."));
+                                ? PaperlessApi::tr("The folder %1 is not available.").arg(directory)
+                                : PaperlessApi::tr("The cache folder is not available."));
         return;
     }
 
@@ -617,8 +611,8 @@ void PaperlessApi::downloadDocument(int documentId, const QString &fileName, boo
         QFile file(path);
         if (!file.open(QIODevice::WriteOnly)) {
             emit documentSaveFailed(documentId, exported
-                                    ? translated("Could not write to %1.").arg(directory)
-                                    : translated("Could not write to the cache folder."));
+                                    ? PaperlessApi::tr("Could not write to %1.").arg(directory)
+                                    : PaperlessApi::tr("Could not write to the cache folder."));
             return;
         }
 
@@ -726,7 +720,7 @@ void PaperlessApi::uploadDocument(const QString &filePath, const QVariantMap &me
     QFile *file = new QFile(filePath);
     if (!file->open(QIODevice::ReadOnly)) {
         delete file;
-        callback(QByteArray(), translated("The file could not be read."));
+        callback(QByteArray(), PaperlessApi::tr("The file could not be read."));
         return;
     }
 

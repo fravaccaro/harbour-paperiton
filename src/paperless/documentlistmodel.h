@@ -21,6 +21,9 @@ class DocumentListModel : public QAbstractListModel
     Q_PROPERTY(QString defaultOrdering READ defaultOrdering CONSTANT)
     // Extra query parameters, used for the inbox tag and for saved views.
     Q_PROPERTY(QVariantMap filters READ filters WRITE setFilters NOTIFY filtersChanged)
+    // The cover only wants totalCount, so it asks for the smallest page the
+    // server will send rather than a screenful of documents it never shows.
+    Q_PROPERTY(int pageSize READ pageSize WRITE setPageSize NOTIFY pageSizeChanged)
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
     Q_PROPERTY(int totalCount READ totalCount NOTIFY totalCountChanged)
     Q_PROPERTY(bool loading READ isLoading NOTIFY loadingChanged)
@@ -67,6 +70,9 @@ public:
     QVariantMap filters() const { return m_filters; }
     void setFilters(const QVariantMap &filters);
 
+    int pageSize() const { return m_pageSize; }
+    void setPageSize(int size);
+
     int totalCount() const { return m_totalCount; }
     bool isLoading() const { return m_loading; }
     bool canLoadMore() const;
@@ -86,6 +92,7 @@ signals:
     void correspondentIdChanged();
     void orderingChanged();
     void filtersChanged();
+    void pageSizeChanged();
     void countChanged();
     void totalCountChanged();
     void loadingChanged();
@@ -120,6 +127,7 @@ private:
     QVariantMap m_filters;
     int m_tagId;
     int m_correspondentId;
+    int m_pageSize;
     int m_totalCount;
     int m_page;
     int m_generation;

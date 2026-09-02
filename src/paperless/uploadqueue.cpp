@@ -2,7 +2,6 @@
 
 #include "api.h"
 
-#include <QCoreApplication>
 #include <QDateTime>
 #include <QDir>
 #include <QFile>
@@ -16,11 +15,6 @@
 namespace {
 
 const int PollIntervalMs = 3000;
-
-QString translated(const char *text)
-{
-    return QCoreApplication::translate("UploadQueue", text);
-}
 
 // Paperless answers with a bare array before API version 10 and with a
 // paginated object from then on.
@@ -39,6 +33,10 @@ UploadQueue::UploadQueue(PaperlessApi *api, QObject *parent)
     , m_pollTimer(new QTimer(this))
     , m_nextId(1)
     , m_busy(false)
+    , m_runId(0)
+    , m_runTotal(0)
+    , m_runAdded(0)
+    , m_runFailed(0)
 {
     m_pollTimer->setInterval(PollIntervalMs);
     connect(m_pollTimer, &QTimer::timeout, this, &UploadQueue::pollTasks);
@@ -96,6 +94,43 @@ int UploadQueue::activeCount() const
     return count;
 }
 
+qreal UploadQueue::progress() const
+{
+    if (m_runTotal <= 0)
+        return 0;
+
+    // What the run has settled is counted rather than read off the rows, which
+    // can be cleared away while the run is still going. A file that reached the
+    // server still has to be turned into a document, and that wait is worth the
+    // last tenth of its share.
+    qreal done = runDone();
+    for (int i = 0; i < m_entries.count(); ++i) {
+        const Entry &entry = m_entries.at(i);
+        if (entry.run != m_runId)
+            continue;
+
+        if (entry.status == Processing)
+            done += 0.9;
+        else if (entry.status == Uploading)
+            done += 0.9 * entry.progress;
+    }
+
+    return qMin(done / qreal(m_runTotal), qreal(1));
+}
+
+QString UploadQueue::currentFileName() const
+{
+    for (int i = 0; i < m_entries.count(); ++i) {
+        if (m_entries.at(i).status == Uploading)
+            return m_entries.at(i).fileName;
+    }
+    for (int i = 0; i < m_entries.count(); ++i) {
+        if (m_entries.at(i).status == Processing)
+            return m_entries.at(i).fileName;
+    }
+    return QString();
+}
+
 void UploadQueue::update(int index, const QVector<int> &roles)
 {
     const QModelIndex modelIndex = this->index(index, 0);
@@ -111,10 +146,24 @@ int UploadQueue::indexOfId(int id) const
     return -1;
 }
 
+void UploadQueue::beginRunIfIdle()
+{
+    if (activeCount() > 0)
+        return;
+
+    ++m_runId;
+    m_runTotal = 0;
+    m_runAdded = 0;
+    m_runFailed = 0;
+}
+
 void UploadQueue::enqueue(const QString &filePath, const QVariantMap &metadata, bool temporary)
 {
+    beginRunIfIdle();
+
     Entry entry;
     entry.id = m_nextId++;
+    entry.run = m_runId;
     entry.filePath = filePath;
     entry.fileName = QFileInfo(filePath).fileName();
     entry.metadata = metadata;
@@ -123,12 +172,15 @@ void UploadQueue::enqueue(const QString &filePath, const QVariantMap &metadata, 
     entry.documentId = -1;
     entry.temporary = temporary;
 
+    ++m_runTotal;
+
     beginInsertRows(QModelIndex(), m_entries.count(), m_entries.count());
     m_entries.append(entry);
     endInsertRows();
 
     emit countChanged();
     emit activeCountChanged();
+    emit progressChanged();
     startNext();
 }
 
@@ -148,11 +200,23 @@ void UploadQueue::retry(int index)
     if (index < 0 || index >= m_entries.count() || m_entries.at(index).status != Failed)
         return;
 
+    // A retry after everything settled is a run of its own; one during a run
+    // joins it as another file to get through.
+    beginRunIfIdle();
+    if (m_entries.at(index).run != m_runId) {
+        m_entries[index].run = m_runId;
+        ++m_runTotal;
+    } else {
+        // It was counted as a failure of the run it is still part of.
+        --m_runFailed;
+    }
+
     m_entries[index].status = Waiting;
     m_entries[index].message.clear();
     m_entries[index].progress = 0;
     update(index, QVector<int>() << StatusRole << MessageRole << ProgressRole);
     emit activeCountChanged();
+    emit progressChanged();
     startNext();
 }
 
@@ -161,9 +225,16 @@ void UploadQueue::remove(int index)
     if (index < 0 || index >= m_entries.count())
         return;
 
-    const Status status = m_entries.at(index).status;
-    if (status == Uploading)
+    const Entry &entry = m_entries.at(index);
+    if (entry.status == Uploading)
         return;
+
+    // Dropping a file before it settled shortens the run it belonged to; one
+    // that already finished is counted in the run's tally and stays there.
+    if (entry.run == m_runId && m_runTotal > 0
+            && (entry.status == Waiting || entry.status == Processing)) {
+        --m_runTotal;
+    }
 
     beginRemoveRows(QModelIndex(), index, index);
     m_entries.remove(index);
@@ -171,6 +242,7 @@ void UploadQueue::remove(int index)
 
     emit countChanged();
     emit activeCountChanged();
+    emit progressChanged();
 }
 
 void UploadQueue::clearFinished()
@@ -204,6 +276,7 @@ void UploadQueue::upload(int index)
     m_busy = true;
     m_entries[index].status = Uploading;
     update(index, QVector<int>() << StatusRole);
+    emit progressChanged();
 
     const int id = m_entries.at(index).id;
     const QString filePath = m_entries.at(index).filePath;
@@ -227,8 +300,9 @@ void UploadQueue::upload(int index)
 
         m_entries[index].taskId = QString::fromUtf8(taskId);
         m_entries[index].status = Processing;
-        m_entries[index].message = translated("Waiting for the server to process the file");
+        m_entries[index].message = UploadQueue::tr("Waiting for the server to process the file");
         update(index, QVector<int>() << StatusRole << MessageRole);
+        emit progressChanged();
 
         if (!m_pollTimer->isActive())
             m_pollTimer->start();
@@ -241,6 +315,7 @@ void UploadQueue::upload(int index)
 
         m_entries[index].progress = qreal(sent) / qreal(total);
         update(index, QVector<int>() << ProgressRole);
+        emit progressChanged();
     });
 }
 
@@ -276,8 +351,10 @@ void UploadQueue::pollTasks()
                     const int documentId = task.value(QStringLiteral("related_document")).toInt(-1);
                     finish(i, Completed, message, documentId);
                 } else {
-                    finish(i, Failed, message.isEmpty() ? translated("The server could not process the file")
-                                                        : message, -1);
+                    finish(i, Failed,
+                           message.isEmpty() ? UploadQueue::tr("The server could not process the file")
+                                             : message,
+                           -1);
                 }
                 break;
             }
@@ -295,14 +372,32 @@ void UploadQueue::finish(int index, Status status, const QString &message, int d
     entry.message = message;
     entry.documentId = documentId;
     entry.progress = status == Completed ? 1 : entry.progress;
+
+    const bool ofCurrentRun = entry.run == m_runId;
+    const QString fileName = entry.fileName;
+    const QString filePath = entry.filePath;
+    const bool temporary = entry.temporary;
+
+    if (ofCurrentRun) {
+        if (status == Completed)
+            ++m_runAdded;
+        else
+            ++m_runFailed;
+    }
+
     update(index, QVector<int>() << StatusRole << MessageRole << ProgressRole << DocumentIdRole);
     emit activeCountChanged();
+    emit progressChanged();
 
     if (status == Completed) {
-        if (entry.temporary)
-            QFile::remove(entry.filePath);
-        emit uploadCompleted(documentId, entry.fileName);
+        if (temporary)
+            QFile::remove(filePath);
+        emit uploadCompleted(documentId, fileName);
     } else {
-        emit uploadFailed(entry.fileName, message);
+        emit uploadFailed(fileName, message);
     }
+
+    // Whatever the handlers above did, the run is over once nothing is left to do.
+    if (activeCount() == 0)
+        emit runFinished(m_runAdded, m_runFailed);
 }

@@ -22,8 +22,8 @@ harbour-paperiton_autogen/
 install_manifest.txt
 documentation.list
 
-# Compiled translations, generated from the .ts files
-translations/*.qm
+# Compiled translations, generated from the .ts files next to the build
+*.qm
 
 # Editors
 .vscode/

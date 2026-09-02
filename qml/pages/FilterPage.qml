@@ -68,6 +68,11 @@ Page {
             }
 
             MenuItem {
+                text: qsTr("About")
+                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+            }
+
+            MenuItem {
                 text: qsTr("Clear all filters")
                 onClicked: {
                     page.documents.clearFilters()
@@ -80,7 +85,7 @@ Page {
             id: column
             width: page.width
 
-            PageHeader { title: qsTr("Filter") }
+            PageHeader { title: qsTr("Filters") }
 
             SectionHeader { text: qsTr("Views") }
 
@@ -171,14 +176,20 @@ Page {
                     width: column.width
                     onClicked: page.documents.tagId = model.itemId
 
-                    Row {
+                    // The count keeps to the page margin whatever its number of
+                    // digits, and the name gives way to it.
+                    Item {
                         x: Theme.horizontalPageMargin
                         width: parent.width - 2 * Theme.horizontalPageMargin
-                        anchors.verticalCenter: parent.verticalCenter
-                        spacing: Theme.paddingMedium
+                        height: parent.height
 
                         Rectangle {
-                            anchors.verticalCenter: parent.verticalCenter
+                            id: dot
+
+                            anchors {
+                                left: parent.left
+                                verticalCenter: parent.verticalCenter
+                            }
                             width: Theme.paddingMedium
                             height: width
                             radius: width / 2
@@ -186,20 +197,29 @@ Page {
                         }
 
                         Label {
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: parent.width - 2 * (Theme.paddingMedium + countLabel.width)
+                            id: countLabel
+
+                            anchors {
+                                right: parent.right
+                                verticalCenter: parent.verticalCenter
+                            }
+                            font.pixelSize: Theme.fontSizeExtraSmall
+                            color: Theme.secondaryColor
+                            text: model.documentCount > 0 ? model.documentCount : ""
+                        }
+
+                        Label {
+                            anchors {
+                                left: dot.right
+                                leftMargin: Theme.paddingMedium
+                                right: countLabel.left
+                                rightMargin: Theme.paddingMedium
+                                verticalCenter: parent.verticalCenter
+                            }
                             truncationMode: TruncationMode.Fade
                             text: model.name
                             color: page.documents.tagId === model.itemId ? Theme.highlightColor
                                                                          : Theme.primaryColor
-                        }
-
-                        Label {
-                            id: countLabel
-                            anchors.verticalCenter: parent.verticalCenter
-                            font.pixelSize: Theme.fontSizeExtraSmall
-                            color: Theme.secondaryColor
-                            text: model.documentCount > 0 ? model.documentCount : ""
                         }
                     }
                 }

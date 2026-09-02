@@ -1,906 +1,906 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="it" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Informazioni</translation>
     </message>
     <message>
         <source>Version %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Versione %1</translation>
     </message>
     <message>
         <source>A client for the documents of a Paperless-ngx server: search, filters, previews, uploads from the device or the camera, metadata, notes and the task queue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un client per i documenti di un server Paperless-ngx: ricerca, filtri, anteprime, caricamenti dal dispositivo o dalla fotocamera, metadati, note e coda delle operazioni.</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Dettagli</translation>
     </message>
     <message>
         <source>Author</source>
-        <translation type="unfinished"></translation>
+        <translation>Autore</translation>
     </message>
     <message>
         <source>Licence</source>
-        <translation type="unfinished"></translation>
+        <translation>Licenza</translation>
     </message>
     <message>
         <source>Links</source>
-        <translation type="unfinished"></translation>
+        <translation>Collegamenti</translation>
     </message>
     <message>
         <source>Source code</source>
-        <translation type="unfinished"></translation>
+        <translation>Codice sorgente</translation>
     </message>
     <message>
         <source>Report an issue</source>
-        <translation type="unfinished"></translation>
+        <translation>Segnala un problema</translation>
     </message>
     <message>
         <source>About Paperless-ngx</source>
-        <translation type="unfinished"></translation>
+        <translation>Informazioni su Paperless-ngx</translation>
     </message>
     <message>
         <source>Paperless-ngx is a separate project and is not affiliated with this app.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paperless-ngx è un progetto a sé e non è collegato a questa app.</translation>
     </message>
 </context>
 <context>
     <name>BulkEditPage</name>
     <message>
         <source>Edit one document</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica un documento</translation>
     </message>
     <message>
         <source>Edit %1 documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica %1 documenti</translation>
     </message>
     <message>
         <source>Apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Applica</translation>
     </message>
     <message>
         <source>Add tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi tag</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <source>Remove tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimuovi tag</translation>
     </message>
     <message>
         <source>Correspondent</source>
-        <translation type="unfinished"></translation>
+        <translation>Corrispondente</translation>
     </message>
     <message>
         <source>Unchanged</source>
-        <translation type="unfinished"></translation>
+        <translation>Invariato</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo</translation>
     </message>
 </context>
 <context>
     <name>CameraPage</name>
     <message>
         <source>The picture could not be saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Non è stato possibile salvare la foto.</translation>
     </message>
     <message>
         <source>One page captured</source>
-        <translation type="unfinished"></translation>
+        <translation>Una pagina acquisita</translation>
     </message>
     <message>
         <source>%1 pages captured</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 pagine acquisite</translation>
     </message>
     <message>
         <source>Place the document in the frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Inquadra il documento</translation>
     </message>
 </context>
 <context>
     <name>CoverPage</name>
     <message>
         <source>Paperiton</source>
-        <translation type="unfinished"></translation>
+        <translation>Paperiton</translation>
     </message>
     <message>
         <source>Not signed in</source>
-        <translation type="unfinished"></translation>
+        <translation>Accesso non effettuato</translation>
     </message>
     <message>
         <source>No documents yet</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun documento</translation>
     </message>
     <message>
         <source>uploading</source>
         <comment>goes under the number of files being uploaded</comment>
-        <translation type="unfinished"></translation>
+        <translation>in caricamento</translation>
     </message>
     <message>
         <source>in inbox</source>
         <comment>goes under the number of documents in the inbox</comment>
-        <translation type="unfinished"></translation>
+        <translation>in arrivo</translation>
     </message>
     <message>
         <source>documents</source>
         <comment>goes under the total number of documents</comment>
-        <translation type="unfinished"></translation>
+        <translation>documenti</translation>
     </message>
 </context>
 <context>
     <name>DocumentEditPage</name>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Titolo</translation>
     </message>
     <message>
         <source>Correspondent</source>
-        <translation type="unfinished"></translation>
+        <translation>Corrispondente</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Tag</translation>
     </message>
     <message>
         <source>Created</source>
-        <translation type="unfinished"></translation>
+        <translation>Data di creazione</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Non nota</translation>
     </message>
     <message>
         <source>Archive serial number</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero di serie d&apos;archivio</translation>
     </message>
     <message>
         <source>Custom fields</source>
-        <translation type="unfinished"></translation>
+        <translation>Campi personalizzati</translation>
     </message>
 </context>
 <context>
     <name>DocumentPage</name>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri</translation>
     </message>
     <message>
         <source>Open original file</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri il file originale</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Dettagli</translation>
     </message>
     <message>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Testo</translation>
     </message>
     <message>
         <source>Opening in another app</source>
-        <translation type="unfinished"></translation>
+        <translation>Apertura in un&apos;altra app</translation>
     </message>
     <message>
         <source>%1 was saved in Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 è stato salvato in Documenti</translation>
     </message>
     <message>
         <source>Changes saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifiche salvate</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica</translation>
     </message>
     <message>
         <source>Save on device</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva sul dispositivo</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna</translation>
     </message>
     <message>
         <source>Open archived PDF</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri il PDF archiviato</translation>
     </message>
     <message>
         <source>Downloading…</source>
-        <translation type="unfinished"></translation>
+        <translation>Scaricamento…</translation>
     </message>
     <message>
         <source>Tap the preview to open the document, press and hold to choose between the archived PDF and the original file</source>
-        <translation type="unfinished"></translation>
+        <translation>Tocca l&apos;anteprima per aprire il documento, tieni premuto per scegliere tra il PDF archiviato e il file originale</translation>
     </message>
     <message>
         <source>Tap the preview to open the document</source>
-        <translation type="unfinished"></translation>
+        <translation>Tocca l&apos;anteprima per aprire il documento</translation>
     </message>
     <message>
         <source>Notes (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Note (%1)</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Note</translation>
     </message>
     <message>
         <source>Created</source>
-        <translation type="unfinished"></translation>
+        <translation>Data di creazione</translation>
     </message>
     <message>
         <source>Correspondent</source>
-        <translation type="unfinished"></translation>
+        <translation>Corrispondente</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Archive serial number</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero di serie d&apos;archivio</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>File</translation>
     </message>
 </context>
 <context>
     <name>DocumentsPage</name>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Documenti</translation>
     </message>
     <message>
         <source>Search documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerca documenti</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna</translation>
     </message>
     <message>
         <source>No documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun documento</translation>
     </message>
     <message>
         <source>Nothing found</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun risultato</translation>
     </message>
     <message>
         <source>%1 selected</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 selezionati</translation>
     </message>
     <message>
         <source>Edit one document</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica un documento</translation>
     </message>
     <message>
         <source>Edit %1 documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica %1 documenti</translation>
     </message>
     <message>
         <source>Cancel selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Annulla la selezione</translation>
     </message>
     <message>
         <source>Uploads (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Caricamenti (%1)</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Carica</translation>
     </message>
     <message>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona</translation>
     </message>
     <message>
         <source>Could not load documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile caricare i documenti</translation>
     </message>
     <message>
         <source>Pull down to refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Tira giù per aggiornare</translation>
     </message>
 </context>
 <context>
     <name>FilterPage</name>
     <message>
         <source>All tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutti i tag</translation>
     </message>
     <message>
         <source>All correspondents</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutti i corrispondenti</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Impostazioni</translation>
     </message>
     <message>
         <source>Tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Operazioni</translation>
     </message>
     <message>
         <source>Clear all filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Azzera i filtri</translation>
     </message>
     <message>
         <source>Views</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizzazioni</translation>
     </message>
     <message>
         <source>All documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutti i documenti</translation>
     </message>
     <message>
         <source>Inbox</source>
-        <translation type="unfinished"></translation>
+        <translation>In arrivo</translation>
     </message>
     <message>
         <source>Uses filters this app does not support</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa filtri che questa app non supporta</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Tag</translation>
     </message>
     <message>
         <source>Correspondents</source>
-        <translation type="unfinished"></translation>
+        <translation>Corrispondenti</translation>
     </message>
     <message>
         <source>Filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtri</translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>Informazioni</translation>
     </message>
 </context>
 <context>
     <name>ImageViewPage</name>
     <message>
         <source>Could not show this file</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile mostrare questo file</translation>
     </message>
 </context>
 <context>
     <name>LoginPage</name>
     <message>
         <source>Sign in</source>
-        <translation type="unfinished"></translation>
+        <translation>Accedi</translation>
     </message>
     <message>
         <source>Server address</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo del server</translation>
     </message>
     <message>
         <source>User name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome utente</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Password</translation>
     </message>
     <message>
         <source>API token</source>
-        <translation type="unfinished"></translation>
+        <translation>Token API</translation>
     </message>
     <message>
         <source>Use an API token</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa un token API</translation>
     </message>
     <message>
         <source>Ignore certificate errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignora gli errori del certificato</translation>
     </message>
     <message>
         <source>Paperiton connects to a Paperless-ngx server that you already run.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paperiton si collega a un server Paperless-ngx che gestisci già.</translation>
     </message>
     <message>
         <source>https://paperless.example.org</source>
-        <translation type="unfinished"></translation>
+        <translation>https://paperless.example.org</translation>
     </message>
     <message>
         <source>This server signs in with %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo server usa %1 per l&apos;accesso.</translation>
     </message>
     <message>
         <source>Sign in with the web interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Accedi con l&apos;interfaccia web</translation>
     </message>
     <message>
         <source>Open the web interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri l&apos;interfaccia web</translation>
     </message>
     <message>
         <source>Sign in there the way you normally do, also with single sign-on or two-factor authentication, then copy the API token from your profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>Accedi come fai di solito, anche con single sign-on o autenticazione a due fattori, poi copia il token API dal tuo profilo.</translation>
     </message>
     <message>
         <source>Create one in the Paperless web interface under My Profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>Creane uno nell&apos;interfaccia web di Paperless, alla voce My Profile.</translation>
     </message>
     <message>
         <source>Only for a server with a self-signed certificate on your own network.</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo per un server con certificato autofirmato sulla tua rete.</translation>
     </message>
 </context>
 <context>
     <name>LookupPickerPage</name>
     <message>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Fatto</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <source>Nothing to choose from</source>
-        <translation type="unfinished"></translation>
+        <translation>Niente da scegliere</translation>
     </message>
 </context>
 <context>
     <name>NotesPage</name>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Note</translation>
     </message>
     <message>
         <source>New note</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuova nota</translation>
     </message>
     <message>
         <source>Write a note</source>
-        <translation type="unfinished"></translation>
+        <translation>Scrivi una nota</translation>
     </message>
     <message>
         <source>Add note</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi la nota</translation>
     </message>
     <message>
         <source>On this document</source>
-        <translation type="unfinished"></translation>
+        <translation>Su questo documento</translation>
     </message>
     <message>
         <source>Deleting</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminazione</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <source>No notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuna nota</translation>
     </message>
 </context>
 <context>
     <name>PaperlessApi</name>
     <message>
         <source>Not authorised. Check your credentials or API token.</source>
-        <translation type="unfinished"></translation>
+        <translation>Accesso non autorizzato. Controlla le credenziali o il token API.</translation>
     </message>
     <message>
         <source>Not found. Check the server address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Non trovato. Controlla l&apos;indirizzo del server.</translation>
     </message>
     <message>
         <source>The server reported an error (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Il server ha segnalato un errore (%1).</translation>
     </message>
     <message>
         <source>TLS handshake failed. For a self-signed certificate, enable &quot;Ignore certificate errors&quot; in the settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Negoziazione TLS non riuscita. Per un certificato autofirmato, attiva &quot;Ignora gli errori del certificato&quot; nelle impostazioni.</translation>
     </message>
     <message>
         <source>Server not found. Check the address and your connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Server non trovato. Controlla l&apos;indirizzo e la connessione.</translation>
     </message>
     <message>
         <source>The request timed out.</source>
-        <translation type="unfinished"></translation>
+        <translation>La richiesta è scaduta.</translation>
     </message>
     <message>
         <source>No server configured.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun server configurato.</translation>
     </message>
     <message>
         <source>The server did not return valid JSON.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il server non ha restituito un JSON valido.</translation>
     </message>
     <message>
         <source>Enter the address of your Paperless-ngx server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci l&apos;indirizzo del tuo server Paperless-ngx.</translation>
     </message>
     <message>
         <source>Enter your user name and password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci nome utente e password.</translation>
     </message>
     <message>
         <source>The server did not return an API token.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il server non ha restituito un token API.</translation>
     </message>
     <message>
         <source>Enter an API token.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci un token API.</translation>
     </message>
     <message>
         <source>The cache folder is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>La cartella della cache non è disponibile.</translation>
     </message>
     <message>
         <source>The folder %1 is not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>La cartella %1 non è disponibile.</translation>
     </message>
     <message>
         <source>Could not write to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile scrivere in %1.</translation>
     </message>
     <message>
         <source>Could not write to the cache folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile scrivere nella cartella della cache.</translation>
     </message>
     <message>
         <source>The file could not be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile leggere il file.</translation>
     </message>
 </context>
 <context>
     <name>SavePage</name>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva</translation>
     </message>
     <message>
         <source>Save on device</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva sul dispositivo</translation>
     </message>
     <message>
         <source>The file is saved in Documents, where the file manager and other apps can open it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il file viene salvato in Documenti, dove il gestore file e le altre app possono aprirlo.</translation>
     </message>
     <message>
         <source>Original file</source>
-        <translation type="unfinished"></translation>
+        <translation>File originale</translation>
     </message>
     <message>
         <source>The file as it was uploaded, instead of the archived PDF.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il file come è stato caricato, invece del PDF archiviato.</translation>
     </message>
     <message>
         <source>File name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome del file</translation>
     </message>
 </context>
 <context>
     <name>SettingsPage</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Impostazioni</translation>
     </message>
     <message>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Server</translation>
     </message>
     <message>
         <source>Sign out</source>
-        <translation type="unfinished"></translation>
+        <translation>Esci</translation>
     </message>
     <message>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo</translation>
     </message>
     <message>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Utente</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Documenti</translation>
     </message>
     <message>
         <source>Ignore certificate errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignora gli errori del certificato</translation>
     </message>
     <message>
         <source>Only for a server with a self-signed certificate on your own network.</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo per un server con certificato autofirmato sulla tua rete.</translation>
     </message>
     <message>
         <source>This account cannot read documents: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo account non può leggere i documenti: %1</translation>
     </message>
     <message>
         <source>Storage</source>
-        <translation type="unfinished"></translation>
+        <translation>Archiviazione</translation>
     </message>
     <message>
         <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Documents.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il token API è conservato nell&apos;archivio cifrato di Sailfish OS. I documenti che apri vengono scaricati nella cache privata dell&apos;app ed eliminati alla chiusura; &quot;Salva sul dispositivo&quot; ne conserva una copia in Documenti.</translation>
     </message>
     <message>
         <source>Secure storage reported: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;archivio sicuro ha segnalato: %1</translation>
     </message>
     <message>
         <source>Clear cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Svuota la cache</translation>
     </message>
     <message>
         <source>Clearing cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Svuotamento della cache</translation>
     </message>
     <message>
         <source>Signing out</source>
-        <translation type="unfinished"></translation>
+        <translation>Uscita</translation>
     </message>
 </context>
 <context>
     <name>TasksPage</name>
     <message>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>Completata</translation>
     </message>
     <message>
         <source>Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Non riuscita</translation>
     </message>
     <message>
         <source>Running</source>
-        <translation type="unfinished"></translation>
+        <translation>In corso</translation>
     </message>
     <message>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>In attesa</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna</translation>
     </message>
     <message>
         <source>Show all tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra tutte le operazioni</translation>
     </message>
     <message>
         <source>Show only failures</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra solo gli errori</translation>
     </message>
     <message>
         <source>Tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Operazioni</translation>
     </message>
     <message>
         <source>Failures only</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo errori</translation>
     </message>
     <message>
         <source>Open document</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri il documento</translation>
     </message>
     <message>
         <source>Acknowledge</source>
-        <translation type="unfinished"></translation>
+        <translation>Conferma</translation>
     </message>
     <message>
         <source>Could not load tasks</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile caricare le operazioni</translation>
     </message>
     <message>
         <source>Nothing in the queue</source>
-        <translation type="unfinished"></translation>
+        <translation>Niente in coda</translation>
     </message>
 </context>
 <context>
     <name>ThumbnailFetcher</name>
     <message>
         <source>Not signed in</source>
-        <translation type="unfinished"></translation>
+        <translation>Accesso non effettuato</translation>
     </message>
     <message>
         <source>Unsupported image format</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato immagine non supportato</translation>
     </message>
 </context>
 <context>
     <name>UploadPage</name>
     <message>
         <source>Waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>In attesa</translation>
     </message>
     <message>
         <source>Sending</source>
-        <translation type="unfinished"></translation>
+        <translation>Invio in corso</translation>
     </message>
     <message>
         <source>The server is processing the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Il server sta elaborando il file</translation>
     </message>
     <message>
         <source>Added as document %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiunto come documento %1</translation>
     </message>
     <message>
         <source>Added</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiunto</translation>
     </message>
     <message>
         <source>Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Non riuscito</translation>
     </message>
     <message>
         <source>Clear finished</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimuovi i completati</translation>
     </message>
     <message>
         <source>Scan with the camera</source>
-        <translation type="unfinished"></translation>
+        <translation>Scansiona con la fotocamera</translation>
     </message>
     <message>
         <source>Add files</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi file</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Carica</translation>
     </message>
     <message>
         <source>One file in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Un file in corso</translation>
     </message>
     <message>
         <source>%1 files in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 file in corso</translation>
     </message>
     <message>
         <source>Pull down to pick files from the device or to scan a document with the camera. Other apps can also share files with Paperiton.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tira giù per scegliere file dal dispositivo o per scansionare un documento con la fotocamera. Anche altre app possono condividere file con Paperiton.</translation>
     </message>
     <message>
         <source>Ready to upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Pronti da caricare</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimuovi</translation>
     </message>
     <message>
         <source>Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Titolo</translation>
     </message>
     <message>
         <source>Title on the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Titolo sul server</translation>
     </message>
     <message>
         <source>Correspondent</source>
-        <translation type="unfinished"></translation>
+        <translation>Corrispondente</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuno</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Tag</translation>
     </message>
     <message>
         <source>Upload %1 files</source>
-        <translation type="unfinished"></translation>
+        <translation>Carica %1 file</translation>
     </message>
     <message>
         <source>Queue</source>
-        <translation type="unfinished"></translation>
+        <translation>Coda</translation>
     </message>
     <message>
         <source>Open document</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri il documento</translation>
     </message>
     <message>
         <source>Try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Riprova</translation>
     </message>
     <message>
         <source>Select files</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona i file</translation>
     </message>
 </context>
 <context>
     <name>UploadQueue</name>
     <message>
         <source>Waiting for the server to process the file</source>
-        <translation type="unfinished"></translation>
+        <translation>In attesa che il server elabori il file</translation>
     </message>
     <message>
         <source>The server could not process the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Il server non ha potuto elaborare il file</translation>
     </message>
 </context>
 <context>
     <name>WebLoginPage</name>
     <message>
         <source>The server could not be asked for a token.</source>
-        <translation type="unfinished"></translation>
+        <translation>Non è stato possibile chiedere un token al server.</translation>
     </message>
     <message>
         <source>The server refused to create a token (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Il server ha rifiutato di creare un token (%1).</translation>
     </message>
     <message>
         <source>The server did not return an API token.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il server non ha restituito un token API.</translation>
     </message>
     <message>
         <source>Asking the server for an API token…</source>
-        <translation type="unfinished"></translation>
+        <translation>Richiesta di un token API al server…</translation>
     </message>
     <message>
         <source>Sign in as you would in a browser. Paperiton then asks the server for an API token, which replaces any token you created earlier.</source>
-        <translation type="unfinished"></translation>
+        <translation>Accedi come faresti in un browser. Paperiton chiede poi al server un token API, che sostituisce qualsiasi token creato in precedenza.</translation>
     </message>
 </context>
 <context>
     <name>harbour-paperiton</name>
     <message>
         <source>Paperiton</source>
-        <translation type="unfinished"></translation>
+        <translation>Paperiton</translation>
     </message>
     <message>
         <source>%1 was added to the archive</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 è stato aggiunto all&apos;archivio</translation>
     </message>
     <message>
         <source>%1 could not be uploaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Non è stato possibile caricare %1</translation>
     </message>
     <message>
         <source>Adding to Paperless</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiunta a Paperless</translation>
     </message>
     <message>
         <source>%1 (%2 of %3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (%2 di %3)</translation>
     </message>
     <message>
         <source>%1 files were added to the archive</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 file aggiunti all&apos;archivio</translation>
     </message>
 </context>
 </TS>

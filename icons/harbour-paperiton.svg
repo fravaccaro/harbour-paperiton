@@ -1,9 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="172" height="172" viewBox="0 0 172 172">
-  <g fill="#ffffff" fill-rule="evenodd">
-    <path d="M42 14h56a10 10 0 0 1 7.07 2.93l28 28A10 10 0 0 1 136 52v106a10 10 0 0 1-10 10H42a10 10 0 0 1-10-10V24a10 10 0 0 1 10-10zm0 14a4 4 0 0 0-4 4v126a4 4 0 0 0 4 4h84a4 4 0 0 0 4-4V58H98a8 8 0 0 1-8-8V28H42z"/>
-    <rect x="52" y="74" width="64" height="9" rx="4.5"/>
-    <rect x="52" y="96" width="64" height="9" rx="4.5"/>
-    <rect x="52" y="118" width="40" height="9" rx="4.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="172" height="172" viewBox="0 0 172 172">
+  <defs>
+    <!-- Outline only. Corners are rounded by stroking the same paint with a
+         round join, which grows the shape by half the stroke width. -->
+    <path id="tag" d="M0 0h66l34 26-34 26H0z"/>
+
+    <!-- Paperless-ngx hue 128, lightened at one end so the mark stays visible
+         on dark and on light ambiences. Runs top left to bottom right on
+         screen, which is almost straight down in the rotated tag frame. -->
+    <linearGradient id="tagFill" gradientUnits="userSpaceOnUse" x1="0" y1="-7" x2="7" y2="59">
+      <stop offset="0" stop-color="#2fa84f"/>
+      <stop offset="1" stop-color="#17541f"/>
+    </linearGradient>
+
+    <mask id="tagHole" maskUnits="userSpaceOnUse" x="-40" y="-40" width="220" height="160">
+      <rect x="-40" y="-40" width="220" height="160" fill="#ffffff"/>
+      <circle cx="20" cy="26" r="9" fill="#000000"/>
+    </mask>
+
+    <!-- Keeps a transparent gap between the sheet and the tag so the two
+         shapes stay separate at 86 px. -->
+    <mask id="sheetCut" maskUnits="userSpaceOnUse" x="-100" y="-100" width="400" height="400">
+      <rect x="-100" y="-100" width="400" height="400" fill="#ffffff"/>
+      <use xlink:href="#tag" transform="translate(40 92) rotate(-38)"
+           fill="#000000" stroke="#000000" stroke-width="24" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+
+  <g transform="translate(86 86) scale(1.156) translate(-78.9 -76)">
+    <rect x="16" y="12" width="72" height="96" rx="9" fill="#b9d8b4" mask="url(#sheetCut)"/>
+
+    <g transform="translate(40 92) rotate(-38)">
+      <g mask="url(#tagHole)">
+        <use xlink:href="#tag" fill="url(#tagFill)" stroke="url(#tagFill)"
+             stroke-width="14" stroke-linejoin="round"/>
+      </g>
+    </g>
   </g>
 </svg>

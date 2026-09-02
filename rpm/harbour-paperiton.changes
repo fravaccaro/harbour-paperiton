@@ -1,3 +1,14 @@
+* Wed Sep 02 2026 fravaccaro 0.5.1-1
+- Italian interface, and an Italian description where other apps offer to share
+  a file with Paperiton
+- An upload is followed by a notification with a progress bar and ends as one
+  summary, instead of a message per file
+- New About page, reached from the pulley menu of the filters page
+- New application icon: a tag over a sheet, in the green of Paperless-ngx
+- The cover carries the tag as a faded backdrop that follows the ambience, and
+  shows what is waiting: files being uploaded, documents in the inbox, or the
+  size of the archive
+
 * Tue Sep 01 2026 fravaccaro 0.5-1
 - Sign in through the web interface, so that single sign-on and two-factor
   authentication work; the API token is kept in Sailfish Secrets

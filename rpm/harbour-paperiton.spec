@@ -1,7 +1,7 @@
 Name:       harbour-paperiton
 
 Summary:    Paperless-ngx client for Sailfish OS
-Version:    0.5
+Version:    0.5.1
 Release:    1
 License:    GPLv3
 URL:        https://github.com/fravaccaro/harbour-paperiton
@@ -15,6 +15,7 @@ BuildRequires:  pkgconfig(Qt5Network)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
+BuildRequires:  qt5-qttools-linguist
 BuildRequires:  cmake
 
 %description
@@ -42,7 +43,7 @@ Links:
 %setup -q -n %{name}-%{version}
 
 %build
-%cmake
+%cmake -DAPP_VERSION=%{version}
 %make_build
 
 %install

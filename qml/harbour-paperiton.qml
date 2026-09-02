@@ -11,6 +11,10 @@ ApplicationWindow {
     // them: signed in, and not in the middle of a page transition.
     property var pendingShare: []
 
+    // Kept so that an upload run which added a single file can name it, the way
+    // each upload used to be announced.
+    property string lastAddedFileName
+
     initialPage: Settings.ready ? (Paperless.authenticated ? documentsPage : loginPage) : startPage
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
     allowedOrientations: defaultAllowedOrientations
@@ -70,10 +74,49 @@ ApplicationWindow {
         previewSummary: qsTr("Paperiton")
     }
 
+    // An upload keeps going once the page that started it is gone, so it is
+    // followed in the notification area, with a bar that fills as the run
+    // advances and a summary once it is over.
+    Notification {
+        id: uploadNotice
+
+        isTransient: false
+        urgency: Notification.Low
+        summary: qsTr("Adding to Paperless")
+    }
+
+    // The byte callbacks arrive many times a second, so the notification is
+    // republished on a timer rather than on every change.
+    Timer {
+        running: Uploads.activeCount > 0
+        interval: 1000
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: {
+            uploadNotice.body = Uploads.runTotal > 1
+                    ? qsTr("%1 (%2 of %3)").arg(Uploads.currentFileName)
+                                           .arg(Math.min(Uploads.runDone + 1, Uploads.runTotal))
+                                           .arg(Uploads.runTotal)
+                    : Uploads.currentFileName
+            uploadNotice.progress = Uploads.progress
+            uploadNotice.publish()
+        }
+    }
+
     Connections {
         target: Uploads
-        onUploadCompleted: app.notify(qsTr("%1 was added to the archive").arg(fileName))
+        onUploadCompleted: app.lastAddedFileName = fileName
+        // A file that could not be uploaded is reported on its own, since it
+        // names the file and what the server said about it.
         onUploadFailed: app.notify(qsTr("%1 could not be uploaded").arg(fileName))
+        onRunFinished: {
+            uploadNotice.close()
+
+            if (added === 1)
+                app.notify(qsTr("%1 was added to the archive").arg(app.lastAddedFileName))
+            else if (added > 1)
+                app.notify(qsTr("%1 files were added to the archive").arg(added))
+        }
     }
 
     Component {
