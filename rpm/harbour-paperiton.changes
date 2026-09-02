@@ -9,11 +9,11 @@
   anyone who wants to add a language
 - After the app has been used for a while, it asks once whether you want to
   support its development
-- New application icon: a tag on the Sailfish launcher shape, in the green of
-  Paperless-ngx
-- The cover carries the tag as a faded backdrop that follows the ambience, and
-  shows what is waiting: files being uploaded, documents in the inbox, or the
-  size of the archive
+- New application icon: the document on the Sailfish launcher shape, in the
+  green of Paperless-ngx
+- The cover carries the document as a faded backdrop that follows the ambience,
+  and shows what is waiting: files being uploaded, documents in the inbox, or
+  the size of the archive
 
 * Tue Sep 01 2026 fravaccaro 0.5-1
 - Sign in through the web interface, so that single sign-on and two-factor

@@ -18,9 +18,11 @@ CoverBackground {
     clip: true
 
     HighlightImage {
-        source: Qt.resolvedUrl("cover-tag.png")
+        source: Qt.resolvedUrl("cover-doc.png")
         color: Theme.primaryColor
-        sourceSize.width: cover.width * 0.8
+        // The sheet is taller than it is wide, so its height is what decides
+        // how much of the cover it takes.
+        sourceSize.height: cover.height * 0.65
         // The same alpha reads much heavier as a dark glyph on a light ambience.
         opacity: Theme.colorScheme === Theme.LightOnDark ? 0.13 : 0.08
 

@@ -6,10 +6,6 @@
   <defs>
     <path id="leaf" d="M84.277,0.3H43C19.417,0.3,0.3,19.418,0.3,43v41.277c0,0.786,0.637,1.423,1.423,1.423H43c23.583,0,42.7-19.118,42.7-42.7V1.723C85.7,0.937,85.063,0.3,84.277,0.3z"/>
 
-    <!-- Outline only. Corners are rounded by stroking the same paint with a
-         round join, which grows the shape by half the stroke width. -->
-    <path id="tag" d="M0 0h66l34 26-34 26H0z"/>
-
     <!-- Paperless-ngx green, hue 128, dark at the blunt corner and lighter
          towards the point, along the diagonal the template gradients use. -->
     <linearGradient id="body" gradientUnits="userSpaceOnUse"
@@ -18,19 +14,21 @@
       <stop offset="1" stop-color="#2fa84f"/>
     </linearGradient>
 
-    <mask id="tagHole" maskUnits="userSpaceOnUse" x="-40" y="-40" width="220" height="160">
-      <rect x="-40" y="-40" width="220" height="160" fill="#ffffff"/>
-      <circle cx="20" cy="26" r="9" fill="#000000"/>
-    </mask>
+    <!-- A sheet with a folded corner and three lines of text, drawn on a 172
+         canvas. Its bounding box runs 32,14 to 136,168, so the centre is at
+         84,91. -->
+    <g id="sheet" fill-rule="evenodd">
+      <path d="M42 14h56a10 10 0 0 1 7.07 2.93l28 28A10 10 0 0 1 136 52v106a10 10 0 0 1-10 10H42a10 10 0 0 1-10-10V24a10 10 0 0 1 10-10zm0 14a4 4 0 0 0-4 4v126a4 4 0 0 0 4 4h84a4 4 0 0 0 4-4V58H98a8 8 0 0 1-8-8V28H42z"/>
+      <rect x="52" y="74" width="64" height="9" rx="4.5"/>
+      <rect x="52" y="96" width="64" height="9" rx="4.5"/>
+      <rect x="52" y="118" width="40" height="9" rx="4.5"/>
+    </g>
   </defs>
 
   <use xlink:href="#leaf" fill="url(#body)"/>
 
-  <!-- Centred on the leaf: the glyph is 47.4 units wide at scale 1. -->
-  <g transform="translate(20.722 43.024) rotate(-38) scale(0.47)">
-    <g mask="url(#tagHole)">
-      <use xlink:href="#tag" fill="#ffffff" stroke="#ffffff"
-           stroke-width="14" stroke-linejoin="round"/>
-    </g>
+  <!-- Centred on the leaf: 84,91 of the sheet lands on 43,43 of the icon. -->
+  <g transform="translate(15.28 12.97) scale(0.33)">
+    <use xlink:href="#sheet" fill="#ffffff"/>
   </g>
 </svg>
