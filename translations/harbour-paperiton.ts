@@ -4,35 +4,7 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Version %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>A client for the documents of a Paperless-ngx server: search, filters, previews, uploads from the device or the camera, metadata, notes and the task queue.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Details</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Author</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Licence</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Links</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Source code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -45,6 +17,29 @@
     </message>
     <message>
         <source>Paperless-ngx is a separate project and is not affiliated with this app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Feedback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Questions, ideas and reports of what went wrong are welcome.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Who translated the app, and how to add your own language.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AskForSupport</name>
+    <message>
+        <source>Please take a moment to consider if you can contribute to this project in one way or another.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -133,6 +128,17 @@
     <message>
         <source>documents</source>
         <comment>goes under the total number of documents</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DetailsDrawer</name>
+    <message>
+        <source>show less</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show more</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -330,6 +336,17 @@
     </message>
 </context>
 <context>
+    <name>ExternalUrlPage</name>
+    <message>
+        <source>Swipe left to preview.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are using a mobile data connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FilterPage</name>
     <message>
         <source>All tags</source>
@@ -388,6 +405,13 @@
     <name>ImageViewPage</name>
     <message>
         <source>Could not show this file</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LicenseListPart</name>
+    <message>
+        <source>License text</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -505,6 +529,226 @@
     </message>
     <message>
         <source>No notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Opal.About</name>
+    <message>
+        <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Version %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Homepage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Changelog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Source Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Donations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>show license(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>News</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Changes since version %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>show details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thank you!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contributors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Acknowledgements</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please refer to &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download license texts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are using a mobile data connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>License(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Note: please check the source code for most accurate information.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Opal.About.Common</name>
+    <message>
+        <source>If you want to support my work, you can buy me a cup of coffee.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You can support this project by contributing, or by donating using any of these services.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your contributions to translations or code would be most welcome.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Opal.LinkHandler</name>
+    <message>
+        <source>Copied to clipboard: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Share link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Phone number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open externally</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Share</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy link</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No preview available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The page is taking too long to load.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PaperitonSupportDialog</name>
+    <message>
+        <source>Hi there!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thank you for using Paperiton. If it saves you some time, maybe you can give a little back?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thank you for your support!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Donate via Liberapay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send a tip, once or every month.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Help with translations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bring Paperiton to your language on Transifex.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Report issues on GitHub</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tell me what went wrong, or what is missing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Why support this app?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paperiton is free software under the GPLv3, written in spare time next to other projects.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Support keeps it working with new Paperless-ngx releases and new versions of Sailfish OS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other ways to help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Report what breaks, suggest what is missing, or tell other Paperless-ngx users about the app.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -670,6 +914,29 @@
     </message>
 </context>
 <context>
+    <name>SupportDialog</name>
+    <message>
+        <source>Hi there!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thank you for using my little app! Maybe you can contribute back?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Thank you for your support!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remind me later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Don&apos;t ask me again</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TasksPage</name>
     <message>
         <source>Done</source>
@@ -732,6 +999,17 @@
     </message>
     <message>
         <source>Unsupported image format</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TranslationsPage</name>
+    <message>
+        <source>Translations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The app is written in English. To add a language, or to improve one that is already there, join the project on Transifex.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

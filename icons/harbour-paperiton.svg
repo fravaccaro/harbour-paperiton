@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- The leaf outline is the launcher shape from the Jolla Sailfish Apps icon
+     template (icon-launcher-template.svg), CC BY 3.0. -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="172" height="172" viewBox="0 0 172 172">
+     width="512" height="512" viewBox="0 0 86 86">
   <defs>
+    <path id="leaf" d="M84.277,0.3H43C19.417,0.3,0.3,19.418,0.3,43v41.277c0,0.786,0.637,1.423,1.423,1.423H43c23.583,0,42.7-19.118,42.7-42.7V1.723C85.7,0.937,85.063,0.3,84.277,0.3z"/>
+
     <!-- Outline only. Corners are rounded by stroking the same paint with a
          round join, which grows the shape by half the stroke width. -->
     <path id="tag" d="M0 0h66l34 26-34 26H0z"/>
 
-    <!-- Paperless-ngx hue 128, lightened at one end so the mark stays visible
-         on dark and on light ambiences. Runs top left to bottom right on
-         screen, which is almost straight down in the rotated tag frame. -->
-    <linearGradient id="tagFill" gradientUnits="userSpaceOnUse" x1="0" y1="-7" x2="7" y2="59">
-      <stop offset="0" stop-color="#2fa84f"/>
-      <stop offset="1" stop-color="#17541f"/>
+    <!-- Paperless-ngx green, hue 128, dark at the blunt corner and lighter
+         towards the point, along the diagonal the template gradients use. -->
+    <linearGradient id="body" gradientUnits="userSpaceOnUse"
+                    x1="0.7169" y1="85.2831" x2="85.2831" y2="0.7169">
+      <stop offset="0" stop-color="#17541f"/>
+      <stop offset="1" stop-color="#2fa84f"/>
     </linearGradient>
 
     <mask id="tagHole" maskUnits="userSpaceOnUse" x="-40" y="-40" width="220" height="160">
       <rect x="-40" y="-40" width="220" height="160" fill="#ffffff"/>
       <circle cx="20" cy="26" r="9" fill="#000000"/>
     </mask>
-
-    <!-- Keeps a transparent gap between the sheet and the tag so the two
-         shapes stay separate at 86 px. -->
-    <mask id="sheetCut" maskUnits="userSpaceOnUse" x="-100" y="-100" width="400" height="400">
-      <rect x="-100" y="-100" width="400" height="400" fill="#ffffff"/>
-      <use xlink:href="#tag" transform="translate(40 92) rotate(-38)"
-           fill="#000000" stroke="#000000" stroke-width="24" stroke-linejoin="round"/>
-    </mask>
   </defs>
 
-  <g transform="translate(86 86) scale(1.156) translate(-78.9 -76)">
-    <rect x="16" y="12" width="72" height="96" rx="9" fill="#b9d8b4" mask="url(#sheetCut)"/>
+  <use xlink:href="#leaf" fill="url(#body)"/>
 
-    <g transform="translate(40 92) rotate(-38)">
-      <g mask="url(#tagHole)">
-        <use xlink:href="#tag" fill="url(#tagFill)" stroke="url(#tagFill)"
-             stroke-width="14" stroke-linejoin="round"/>
-      </g>
+  <!-- Centred on the leaf: the glyph is 47.4 units wide at scale 1. -->
+  <g transform="translate(20.722 43.024) rotate(-38) scale(0.47)">
+    <g mask="url(#tagHole)">
+      <use xlink:href="#tag" fill="#ffffff" stroke="#ffffff"
+           stroke-width="14" stroke-linejoin="round"/>
     </g>
   </g>
 </svg>

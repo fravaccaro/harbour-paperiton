@@ -1,5 +1,11 @@
 Name:       harbour-paperiton
 
+# The bundled Opal modules carry qmldir files, from which rpmbuild would
+# generate `Provides: qml(Opal.About)` and friends. Harbour forbids an
+# application package from providing QML modules, and nothing outside this
+# package imports them anyway.
+%define __provides_exclude_from ^%{_datadir}/.*$
+
 Summary:    Paperless-ngx client for Sailfish OS
 Version:    0.5.1
 Release:    1
@@ -16,7 +22,6 @@ BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 BuildRequires:  qt5-qttools-linguist
-BuildRequires:  cmake
 
 %description
 Paperiton works with the documents of a Paperless-ngx server: full text search,
@@ -43,11 +48,11 @@ Links:
 %setup -q -n %{name}-%{version}
 
 %build
-%cmake -DAPP_VERSION=%{version}
+%qmake5 "APP_VERSION=%{version}"
 %make_build
 
 %install
-%make_install
+%qmake5_install
 
 desktop-file-install --delete-original \
     --dir %{buildroot}%{_datadir}/applications \

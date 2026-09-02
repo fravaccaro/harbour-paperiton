@@ -3,8 +3,14 @@
   a file with Paperiton
 - An upload is followed by a notification with a progress bar and ends as one
   summary, instead of a message per file
-- New About page, reached from the pulley menu of the filters page
-- New application icon: a tag over a sheet, in the green of Paperless-ngx
+- New About page, reached from the pulley menu of the filters page, with the
+  licence, the people behind the app and where to send feedback
+- A page crediting the translators, and a link to the Transifex project for
+  anyone who wants to add a language
+- After the app has been used for a while, it asks once whether you want to
+  support its development
+- New application icon: a tag on the Sailfish launcher shape, in the green of
+  Paperless-ngx
 - The cover carries the tag as a faded backdrop that follows the ambience, and
   shows what is waiting: files being uploaded, documents in the inbox, or the
   size of the archive

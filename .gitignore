@@ -13,14 +13,20 @@ installroot/
 
 # In-source artefacts of "sfdk build"
 .sfdk/
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
+.qmake.stash
 Makefile
 harbour-paperiton
-harbour-paperiton_autogen/
-install_manifest.txt
+moc_*.cpp
+moc_*.h
+moc_predefs.h
+qrc_*.cpp
+*.o
+debugfiles.list
+debuglinks.list
+debugsourcefiles.list
+debugsources.list
 documentation.list
+elfbins.list
 
 # Compiled translations, generated from the .ts files next to the build
 *.qm

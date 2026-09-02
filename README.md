@@ -39,9 +39,7 @@ With the [Sailfish SDK](https://docs.sailfishos.org/Tools/Sailfish_SDK/Installat
 
 ```bash
 sfdk config target SailfishOS-4.6.0.13-aarch64
-sfdk cmake -B build -S .
-sfdk cmake --build build
-sfdk rpm
+sfdk build
 ```
 
 Deploy to a connected device:

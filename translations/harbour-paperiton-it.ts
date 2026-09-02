@@ -4,36 +4,8 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>About</source>
-        <translation>Informazioni</translation>
-    </message>
-    <message>
-        <source>Version %1</source>
-        <translation>Versione %1</translation>
-    </message>
-    <message>
         <source>A client for the documents of a Paperless-ngx server: search, filters, previews, uploads from the device or the camera, metadata, notes and the task queue.</source>
         <translation>Un client per i documenti di un server Paperless-ngx: ricerca, filtri, anteprime, caricamenti dal dispositivo o dalla fotocamera, metadati, note e coda delle operazioni.</translation>
-    </message>
-    <message>
-        <source>Details</source>
-        <translation>Dettagli</translation>
-    </message>
-    <message>
-        <source>Author</source>
-        <translation>Autore</translation>
-    </message>
-    <message>
-        <source>Licence</source>
-        <translation>Licenza</translation>
-    </message>
-    <message>
-        <source>Links</source>
-        <translation>Collegamenti</translation>
-    </message>
-    <message>
-        <source>Source code</source>
-        <translation>Codice sorgente</translation>
     </message>
     <message>
         <source>Report an issue</source>
@@ -46,6 +18,29 @@
     <message>
         <source>Paperless-ngx is a separate project and is not affiliated with this app.</source>
         <translation>Paperless-ngx è un progetto a sé e non è collegato a questa app.</translation>
+    </message>
+    <message>
+        <source>Feedback</source>
+        <translation>Feedback</translation>
+    </message>
+    <message>
+        <source>Questions, ideas and reports of what went wrong are welcome.</source>
+        <translation>Domande, idee e segnalazioni di ciò che non funziona sono benvenute.</translation>
+    </message>
+    <message>
+        <source>Translations</source>
+        <translation>Traduzioni</translation>
+    </message>
+    <message>
+        <source>Who translated the app, and how to add your own language.</source>
+        <translation>Chi ha tradotto l&apos;app e come aggiungere la tua lingua.</translation>
+    </message>
+</context>
+<context>
+    <name>AskForSupport</name>
+    <message>
+        <source>Please take a moment to consider if you can contribute to this project in one way or another.</source>
+        <translation>Prenditi un momento per valutare se puoi contribuire a questo progetto in un modo o nell&apos;altro.</translation>
     </message>
 </context>
 <context>
@@ -134,6 +129,17 @@
         <source>documents</source>
         <comment>goes under the total number of documents</comment>
         <translation>documenti</translation>
+    </message>
+</context>
+<context>
+    <name>DetailsDrawer</name>
+    <message>
+        <source>show less</source>
+        <translation>mostra meno</translation>
+    </message>
+    <message>
+        <source>show more</source>
+        <translation>mostra di più</translation>
     </message>
 </context>
 <context>
@@ -330,6 +336,17 @@
     </message>
 </context>
 <context>
+    <name>ExternalUrlPage</name>
+    <message>
+        <source>Swipe left to preview.</source>
+        <translation>Scorri a sinistra per l&apos;anteprima.</translation>
+    </message>
+    <message>
+        <source>You are using a mobile data connection.</source>
+        <translation>Stai usando una connessione dati mobile.</translation>
+    </message>
+</context>
+<context>
     <name>FilterPage</name>
     <message>
         <source>All tags</source>
@@ -389,6 +406,13 @@
     <message>
         <source>Could not show this file</source>
         <translation>Impossibile mostrare questo file</translation>
+    </message>
+</context>
+<context>
+    <name>LicenseListPart</name>
+    <message>
+        <source>License text</source>
+        <translation>Testo della licenza</translation>
     </message>
 </context>
 <context>
@@ -506,6 +530,228 @@
     <message>
         <source>No notes</source>
         <translation>Nessuna nota</translation>
+    </message>
+</context>
+<context>
+    <name>Opal.About</name>
+    <message>
+        <source>About</source>
+        <translation>Informazioni</translation>
+    </message>
+    <message>
+        <source>Version %1</source>
+        <translation>Versione %1</translation>
+    </message>
+    <message>
+        <source>Development</source>
+        <translation>Sviluppo</translation>
+    </message>
+    <message>
+        <source>show contributors</source>
+        <translation>mostra i collaboratori</translation>
+    </message>
+    <message>
+        <source>Homepage</source>
+        <translation>Sito web</translation>
+    </message>
+    <message>
+        <source>Changelog</source>
+        <translation>Registro modifiche</translation>
+    </message>
+    <message>
+        <source>Translations</source>
+        <translation>Traduzioni</translation>
+    </message>
+    <message>
+        <source>Source Code</source>
+        <translation>Codice sorgente</translation>
+    </message>
+    <message>
+        <source>Donations</source>
+        <translation>Donazioni</translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation>Licenza</translation>
+    </message>
+    <message numerus="yes">
+        <source>show license(s)</source>
+        <translation>
+            <numerusform>mostra la licenza</numerusform>
+            <numerusform>mostra le licenze</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>News</source>
+        <translation>Novità</translation>
+    </message>
+    <message>
+        <source>Changes since version %1</source>
+        <translation>Modifiche dalla versione %1</translation>
+    </message>
+    <message>
+        <source>show details</source>
+        <translation>mostra i dettagli</translation>
+    </message>
+    <message>
+        <source>Thank you!</source>
+        <translation>Grazie!</translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation>Dettagli</translation>
+    </message>
+    <message>
+        <source>Contributors</source>
+        <translation>Collaboratori</translation>
+    </message>
+    <message>
+        <source>Acknowledgements</source>
+        <translation>Riconoscimenti</translation>
+    </message>
+    <message>
+        <source>Please refer to &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
+        <translation>Fai riferimento a &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
+    </message>
+    <message>
+        <source>Download license texts</source>
+        <translation>Scarica i testi delle licenze</translation>
+    </message>
+    <message>
+        <source>You are using a mobile data connection.</source>
+        <translation>Stai usando una connessione dati mobile.</translation>
+    </message>
+    <message numerus="yes">
+        <source>License(s)</source>
+        <translation>
+            <numerusform>Licenza</numerusform>
+            <numerusform>Licenze</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Note: please check the source code for most accurate information.</source>
+        <translation>Nota: consulta il codice sorgente per le informazioni più accurate.</translation>
+    </message>
+</context>
+<context>
+    <name>Opal.About.Common</name>
+    <message>
+        <source>If you want to support my work, you can buy me a cup of coffee.</source>
+        <translation>Se vuoi sostenere il mio lavoro, puoi offrirmi un caffè.</translation>
+    </message>
+    <message>
+        <source>You can support this project by contributing, or by donating using any of these services.</source>
+        <translation>Puoi sostenere questo progetto contribuendo o donando tramite uno di questi servizi.</translation>
+    </message>
+    <message>
+        <source>Your contributions to translations or code would be most welcome.</source>
+        <translation>I tuoi contributi alle traduzioni o al codice sono i benvenuti.</translation>
+    </message>
+</context>
+<context>
+    <name>Opal.LinkHandler</name>
+    <message>
+        <source>Copied to clipboard: %1</source>
+        <translation>Copiato negli appunti: %1</translation>
+    </message>
+    <message>
+        <source>Share link</source>
+        <translation>Condividi il collegamento</translation>
+    </message>
+    <message>
+        <source>Phone number</source>
+        <translation>Numero di telefono</translation>
+    </message>
+    <message>
+        <source>External link</source>
+        <translation>Collegamento esterno</translation>
+    </message>
+    <message>
+        <source>Open in browser</source>
+        <translation>Apri nel browser</translation>
+    </message>
+    <message>
+        <source>Open externally</source>
+        <translation>Apri con un&apos;altra app</translation>
+    </message>
+    <message>
+        <source>Share</source>
+        <translation>Condividi</translation>
+    </message>
+    <message>
+        <source>Copy link</source>
+        <translation>Copia il collegamento</translation>
+    </message>
+    <message>
+        <source>Copy text</source>
+        <translation>Copia il testo</translation>
+    </message>
+    <message>
+        <source>No preview available.</source>
+        <translation>Nessuna anteprima disponibile.</translation>
+    </message>
+    <message>
+        <source>The page is taking too long to load.</source>
+        <translation>La pagina ci sta mettendo troppo a caricare.</translation>
+    </message>
+</context>
+<context>
+    <name>PaperitonSupportDialog</name>
+    <message>
+        <source>Hi there!</source>
+        <translation>Ciao!</translation>
+    </message>
+    <message>
+        <source>Thank you for using Paperiton. If it saves you some time, maybe you can give a little back?</source>
+        <translation>Grazie per usare Paperiton. Se ti fa risparmiare tempo, ti va di ricambiare?</translation>
+    </message>
+    <message>
+        <source>Thank you for your support!</source>
+        <translation>Grazie per il tuo sostegno!</translation>
+    </message>
+    <message>
+        <source>Donate via Liberapay</source>
+        <translation>Dona con Liberapay</translation>
+    </message>
+    <message>
+        <source>Send a tip, once or every month.</source>
+        <translation>Manda una mancia, una volta o ogni mese.</translation>
+    </message>
+    <message>
+        <source>Help with translations</source>
+        <translation>Aiuta con le traduzioni</translation>
+    </message>
+    <message>
+        <source>Bring Paperiton to your language on Transifex.</source>
+        <translation>Porta Paperiton nella tua lingua su Transifex.</translation>
+    </message>
+    <message>
+        <source>Report issues on GitHub</source>
+        <translation>Segnala problemi su GitHub</translation>
+    </message>
+    <message>
+        <source>Tell me what went wrong, or what is missing.</source>
+        <translation>Dimmi cosa non ha funzionato o cosa manca.</translation>
+    </message>
+    <message>
+        <source>Why support this app?</source>
+        <translation>Perché sostenere questa app?</translation>
+    </message>
+    <message>
+        <source>Paperiton is free software under the GPLv3, written in spare time next to other projects.</source>
+        <translation>Paperiton è software libero sotto GPLv3, scritto nel tempo libero accanto ad altri progetti.</translation>
+    </message>
+    <message>
+        <source>Support keeps it working with new Paperless-ngx releases and new versions of Sailfish OS.</source>
+        <translation>Il sostegno lo tiene al passo con le nuove versioni di Paperless-ngx e di Sailfish OS.</translation>
+    </message>
+    <message>
+        <source>Other ways to help</source>
+        <translation>Altri modi per dare una mano</translation>
+    </message>
+    <message>
+        <source>Report what breaks, suggest what is missing, or tell other Paperless-ngx users about the app.</source>
+        <translation>Segnala ciò che si rompe, proponi ciò che manca o parla dell&apos;app ad altri utenti di Paperless-ngx.</translation>
     </message>
 </context>
 <context>
@@ -670,6 +916,29 @@
     </message>
 </context>
 <context>
+    <name>SupportDialog</name>
+    <message>
+        <source>Hi there!</source>
+        <translation>Ciao!</translation>
+    </message>
+    <message>
+        <source>Thank you for using my little app! Maybe you can contribute back?</source>
+        <translation>Grazie per usare la mia piccola app! Ti va di contribuire?</translation>
+    </message>
+    <message>
+        <source>Thank you for your support!</source>
+        <translation>Grazie per il tuo sostegno!</translation>
+    </message>
+    <message>
+        <source>Remind me later</source>
+        <translation>Ricordamelo più tardi</translation>
+    </message>
+    <message>
+        <source>Don&apos;t ask me again</source>
+        <translation>Non chiedermelo più</translation>
+    </message>
+</context>
+<context>
     <name>TasksPage</name>
     <message>
         <source>Done</source>
@@ -733,6 +1002,17 @@
     <message>
         <source>Unsupported image format</source>
         <translation>Formato immagine non supportato</translation>
+    </message>
+</context>
+<context>
+    <name>TranslationsPage</name>
+    <message>
+        <source>Translations</source>
+        <translation>Traduzioni</translation>
+    </message>
+    <message>
+        <source>The app is written in English. To add a language, or to improve one that is already there, join the project on Transifex.</source>
+        <translation>L&apos;app è scritta in inglese. Per aggiungere una lingua, o migliorarne una già presente, unisciti al progetto su Transifex.</translation>
     </message>
 </context>
 <context>
