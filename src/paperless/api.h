@@ -55,7 +55,9 @@ public:
                   const JsonCallback &callback);
     void deleteResource(const QUrl &url, const JsonCallback &callback);
     QUrl apiUrl(const QString &path, const QUrlQuery &query) const;
-    QUrl documentFileUrl(int documentId, const QString &kind) const;
+    // Paperless serves the archived PDF from both the preview and the download
+    // endpoint; the file as it was uploaded needs original=true.
+    QUrl documentFileUrl(int documentId, const QString &kind, bool original = false) const;
 
     Q_INVOKABLE void login(const QString &serverUrl, const QString &username, const QString &password);
     Q_INVOKABLE void loginWithToken(const QString &serverUrl, const QString &token);
@@ -74,11 +76,10 @@ public:
     // Downloads a document into the private cache directory, where only this
     // app can read it, for viewing inside the app.
     Q_INVOKABLE void saveDocument(int documentId, const QString &fileName, bool original);
-    // Saves a document where the user keeps files, which is also the only way
-    // another app can open it: the cache directory is invisible outside this
-    // sandbox. The destination is "documents" or, by default, "downloads".
-    Q_INVOKABLE void exportDocument(int documentId, const QString &fileName, bool original,
-                                    const QString &destination = QString());
+    // Saves a document into ~/Documents, where the user keeps files and which is
+    // also the only way another app can open it: the cache directory is
+    // invisible outside this sandbox.
+    Q_INVOKABLE void exportDocument(int documentId, const QString &fileName, bool original);
     // Everything the app has written into the cache, including thumbnails and
     // the web view profile. Used when signing out.
     Q_INVOKABLE void clearCache();

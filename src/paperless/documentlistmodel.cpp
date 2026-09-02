@@ -1,6 +1,7 @@
 #include "documentlistmodel.h"
 
 #include "api.h"
+#include "staleness.h"
 
 #include <QDate>
 #include <QJsonArray>
@@ -42,7 +43,7 @@ void DocumentListModel::setApi(PaperlessApi *api)
 
 DocumentListModel::DocumentListModel(QObject *parent)
     : QAbstractListModel(parent)
-    , m_ordering(QStringLiteral("-created"))
+    , m_ordering(defaultOrdering())
     , m_tagId(-1)
     , m_correspondentId(-1)
     , m_totalCount(0)
@@ -201,18 +202,29 @@ void DocumentListModel::setFilters(const QVariantMap &filters)
 
 void DocumentListModel::clearFilters()
 {
-    if (m_tagId == -1 && m_correspondentId == -1 && m_searchQuery.isEmpty() && m_filters.isEmpty())
+    if (m_tagId == -1 && m_correspondentId == -1 && m_searchQuery.isEmpty() && m_filters.isEmpty()
+            && m_ordering == defaultOrdering()) {
         return;
+    }
 
     m_tagId = -1;
     m_correspondentId = -1;
     m_searchQuery.clear();
     m_filters.clear();
+    // A view can leave an order of its own behind, and clearing the filters
+    // means going back to the list the app opens with, newest first.
+    m_ordering = defaultOrdering();
     emit tagIdChanged();
     emit correspondentIdChanged();
     emit searchQueryChanged();
     emit filtersChanged();
+    emit orderingChanged();
     reload();
+}
+
+QString DocumentListModel::defaultOrdering()
+{
+    return QStringLiteral("-created");
 }
 
 void DocumentListModel::reload()
@@ -235,6 +247,14 @@ void DocumentListModel::reload()
 
     setErrorString(QString());
     fetchPage(1);
+}
+
+void DocumentListModel::reloadIfStale(int seconds)
+{
+    if (m_loading || !paperlessIsStale(m_loadedAt, seconds))
+        return;
+
+    reload();
 }
 
 void DocumentListModel::loadMore()
@@ -281,6 +301,9 @@ void DocumentListModel::fetchPage(int page)
         }
 
         setErrorString(QString());
+
+        if (page == 1)
+            m_loadedAt = QDateTime::currentDateTimeUtc();
 
         const QJsonObject root = document.object();
         const int total = root.value(QStringLiteral("count")).toInt();

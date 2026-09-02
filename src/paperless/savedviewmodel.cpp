@@ -1,6 +1,8 @@
 #include "savedviewmodel.h"
 
 #include "api.h"
+#include "documentlistmodel.h"
+#include "staleness.h"
 
 #include <QHash>
 #include <QJsonArray>
@@ -104,6 +106,25 @@ QString SavedViewModel::orderingFor(int index) const
     return m_entries.at(index).ordering;
 }
 
+bool SavedViewModel::matches(int index, const QVariantMap &filters, const QString &ordering) const
+{
+    if (index < 0 || index >= m_entries.count())
+        return false;
+
+    const Entry &entry = m_entries.at(index);
+    // A view that carries neither a rule this app understands nor a sort order
+    // is indistinguishable from the plain document list, so it claims nothing.
+    if (entry.filters.isEmpty() && entry.ordering.isEmpty())
+        return false;
+
+    // A view without an order of its own is shown in the order the list opens
+    // with, which is what applying it leaves behind.
+    const QString effectiveOrdering = entry.ordering.isEmpty()
+            ? DocumentListModel::defaultOrdering() : entry.ordering;
+
+    return entry.filters == filters && effectiveOrdering == ordering;
+}
+
 void SavedViewModel::setLoading(bool loading)
 {
     if (loading == m_loading)
@@ -170,6 +191,15 @@ void SavedViewModel::reload()
         beginResetModel();
         m_entries = entries;
         endResetModel();
+        m_loadedAt = QDateTime::currentDateTimeUtc();
         emit countChanged();
     }, true);
+}
+
+void SavedViewModel::reloadIfStale(int seconds)
+{
+    if (m_loading || !paperlessIsStale(m_loadedAt, seconds))
+        return;
+
+    reload();
 }

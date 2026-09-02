@@ -2,6 +2,7 @@
 #define PAPERLESS_LOOKUPMODEL_H
 
 #include <QAbstractListModel>
+#include <QDateTime>
 #include <QHash>
 #include <QString>
 #include <QVector>
@@ -40,6 +41,10 @@ public:
     int inboxTagId() const { return m_inboxTagId; }
 
     Q_INVOKABLE void reload();
+    // Reloads only when the names were last read more than that many seconds
+    // ago, which is how a page catches up with the server without asking twice
+    // for the same list in a row.
+    Q_INVOKABLE void reloadIfStale(int seconds);
     Q_INVOKABLE QString nameFor(int id) const;
     Q_INVOKABLE QString colorFor(int id) const;
     Q_INVOKABLE QString textColorFor(int id) const;
@@ -70,6 +75,7 @@ private:
     QString m_endpoint;
     QVector<Entry> m_entries;
     QVector<Entry> m_incoming;
+    QDateTime m_loadedAt;
     QHash<int, int> m_indexById;
     int m_generation;
     int m_inboxTagId;

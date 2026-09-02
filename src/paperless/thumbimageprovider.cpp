@@ -23,6 +23,10 @@ QString ThumbnailFetcher::cacheFilePath(const QString &kind, int documentId) con
 
 void ThumbnailFetcher::fetch(int requestId, const QString &kind, int documentId)
 {
+    // "original" is the download endpoint asked for the file as it was
+    // uploaded, which is the only version of an image that decodes here.
+    const bool original = kind == QLatin1String("original");
+    const QString endpoint = original ? QStringLiteral("download") : kind;
     const bool cacheable = kind == QLatin1String("thumb");
     const QString cachePath = cacheFilePath(kind, documentId);
 
@@ -40,7 +44,7 @@ void ThumbnailFetcher::fetch(int requestId, const QString &kind, int documentId)
         return;
     }
 
-    m_api->getData(m_api->documentFileUrl(documentId, kind),
+    m_api->getData(m_api->documentFileUrl(documentId, endpoint, original),
                    [this, requestId, cacheable, cachePath](const QByteArray &data, const QString &error) {
         if (!error.isEmpty()) {
             emit fetched(requestId, QImage(), error);

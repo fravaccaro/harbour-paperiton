@@ -15,8 +15,6 @@ Page {
     }
 
     property var selectedIds: []
-    property bool filtered: documents.tagId > 0 || documents.correspondentId > 0
-                            || documents.searchQuery !== "" || documents.ordering !== ""
 
     property var bulkOperations: []
     property int bulkIndex: -1
@@ -75,7 +73,15 @@ Page {
     }
 
     onStatusChanged: {
-        if (status === PageStatus.Active && documents.count === 0 && !documents.loading)
+        if (status !== PageStatus.Active)
+            return
+
+        // Opening a document drops the attachment, so it is put back every time
+        // this page becomes current again.
+        if (!pageStack.nextPage(page))
+            pageStack.pushAttached(Qt.resolvedUrl("FilterPage.qml"), { documents: documents })
+
+        if (documents.count === 0 && !documents.loading)
             documents.reload()
     }
 
@@ -105,10 +111,15 @@ Page {
         }
     }
 
-    Timer {
-        id: searchDelay
-        interval: 600
-        onTriggered: documents.searchQuery = searchField.text.trim()
+    // Coming back after a while should not show yesterday's list, but a reload
+    // empties the model and sends the view back to the top, so a short glance at
+    // the cover leaves the list as it was.
+    Connections {
+        target: app
+        onApplicationActiveChanged: {
+            if (app.applicationActive && Paperless.authenticated)
+                documents.reloadIfStale(300)
+        }
     }
 
     SilicaListView {
@@ -123,7 +134,7 @@ Page {
             PageHeader {
                 title: qsTr("Documents")
                 description: page.selectedIds.length > 0
-                             ? qsTr("%n selected", "", page.selectedIds.length) : page.filterSummary
+                             ? qsTr("%1 selected").arg(page.selectedIds.length) : page.filterSummary
             }
 
             Label {
@@ -149,17 +160,32 @@ Page {
                 }
                 onTextChanged: searchDelay.restart()
             }
+
+            // The header is a component of its own, so everything that reaches
+            // for the field has to live in here with it.
+            Timer {
+                id: searchDelay
+                interval: 600
+                onTriggered: documents.searchQuery = searchField.text.trim()
+            }
+
+            Connections {
+                target: documents
+                onSearchQueryChanged: {
+                    if (searchField.text === documents.searchQuery)
+                        return
+
+                    searchField.text = documents.searchQuery
+                    searchDelay.stop()
+                }
+            }
         }
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Settings")
-                visible: page.selectedIds.length === 0
-                onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
-            }
-
-            MenuItem {
-                text: qsTr("Edit %n document(s)", "", page.selectedIds.length)
+                text: page.selectedIds.length === 1
+                      ? qsTr("Edit one document")
+                      : qsTr("Edit %1 documents").arg(page.selectedIds.length)
                 visible: page.selectedIds.length > 0
                 onClicked: {
                     var dialog = pageStack.push(Qt.resolvedUrl("BulkEditPage.qml"), {
@@ -175,33 +201,6 @@ Page {
                 text: qsTr("Cancel selection")
                 visible: page.selectedIds.length > 0
                 onClicked: page.selectedIds = []
-            }
-
-            MenuItem {
-                text: qsTr("Clear filters")
-                visible: page.selectedIds.length === 0 && page.filtered
-                onClicked: {
-                    documents.clearFilters()
-                    searchField.text = ""
-                }
-            }
-
-            MenuItem {
-                text: qsTr("Views")
-                visible: page.selectedIds.length === 0
-                onClicked: pageStack.push(Qt.resolvedUrl("ViewsPage.qml"), { documents: documents })
-            }
-
-            MenuItem {
-                text: qsTr("Filter")
-                visible: page.selectedIds.length === 0
-                onClicked: pageStack.push(Qt.resolvedUrl("FilterPage.qml"), { documents: documents })
-            }
-
-            MenuItem {
-                text: qsTr("Tasks")
-                visible: page.selectedIds.length === 0
-                onClicked: pageStack.push(Qt.resolvedUrl("TasksPage.qml"))
             }
 
             MenuItem {

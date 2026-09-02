@@ -2,6 +2,7 @@
 #define PAPERLESS_SAVEDVIEWMODEL_H
 
 #include <QAbstractListModel>
+#include <QDateTime>
 #include <QString>
 #include <QVariantList>
 #include <QVariantMap>
@@ -34,10 +35,16 @@ public:
     bool isLoading() const { return m_loading; }
 
     Q_INVOKABLE void reload();
+    // Reloads only when the views were last read more than that many seconds
+    // ago, so opening the filter page repeatedly does not ask again each time.
+    Q_INVOKABLE void reloadIfStale(int seconds);
     // Query parameters for the view, plus an "ordering" entry when the view
     // defines a sort order.
     Q_INVOKABLE QVariantMap filtersFor(int index) const;
     Q_INVOKABLE QString orderingFor(int index) const;
+    // True when a document list queried with these parameters is showing this
+    // view, which is how the filter page marks the one in use.
+    Q_INVOKABLE bool matches(int index, const QVariantMap &filters, const QString &ordering) const;
 
 signals:
     void countChanged();
@@ -58,6 +65,7 @@ private:
 
     PaperlessApi *m_api;
     QVector<Entry> m_entries;
+    QDateTime m_loadedAt;
     bool m_loading;
 };
 

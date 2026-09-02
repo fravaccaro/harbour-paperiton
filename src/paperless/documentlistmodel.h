@@ -17,6 +17,8 @@ class DocumentListModel : public QAbstractListModel
     Q_PROPERTY(int tagId READ tagId WRITE setTagId NOTIFY tagIdChanged)
     Q_PROPERTY(int correspondentId READ correspondentId WRITE setCorrespondentId NOTIFY correspondentIdChanged)
     Q_PROPERTY(QString ordering READ ordering WRITE setOrdering NOTIFY orderingChanged)
+    // The order the list is in when no saved view asks for another one.
+    Q_PROPERTY(QString defaultOrdering READ defaultOrdering CONSTANT)
     // Extra query parameters, used for the inbox tag and for saved views.
     Q_PROPERTY(QVariantMap filters READ filters WRITE setFilters NOTIFY filtersChanged)
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
@@ -60,6 +62,7 @@ public:
 
     QString ordering() const { return m_ordering; }
     void setOrdering(const QString &ordering);
+    static QString defaultOrdering();
 
     QVariantMap filters() const { return m_filters; }
     void setFilters(const QVariantMap &filters);
@@ -70,6 +73,9 @@ public:
     QString errorString() const { return m_errorString; }
 
     Q_INVOKABLE void reload();
+    // Reloads only when the list was last read more than that many seconds ago,
+    // so returning to the app does not throw away a list the user is reading.
+    Q_INVOKABLE void reloadIfStale(int seconds);
     Q_INVOKABLE void loadMore();
     Q_INVOKABLE void clearFilters();
     Q_INVOKABLE QVariantMap get(int index) const;
@@ -108,6 +114,7 @@ private:
     static PaperlessApi *s_api;
 
     QVector<Entry> m_entries;
+    QDateTime m_loadedAt;
     QString m_searchQuery;
     QString m_ordering;
     QVariantMap m_filters;

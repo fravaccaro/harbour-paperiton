@@ -13,7 +13,12 @@ Page {
     // The viewfinder is only sensibly usable upright.
     allowedOrientations: Orientation.Portrait
 
+    readonly property bool viewfinderReady: viewfinderLoader.item !== null
+
     function capture() {
+        if (!page.viewfinderReady)
+            return
+
         var path = Uploads.captureFilePath("jpg")
         if (path === "") {
             page.errorMessage = qsTr("The picture could not be saved.")
@@ -21,37 +26,30 @@ Page {
         }
 
         page.errorMessage = ""
-        camera.imageCapture.captureToLocation(path)
+        viewfinderLoader.item.capture(path)
     }
 
+    // Building the camera pipeline takes seconds and holds the thread that asks
+    // for it, which froze the page transition when the camera was part of the
+    // page. It is now built after the transition, with the delay giving the busy
+    // indicator a frame of its own first.
     onStatusChanged: {
-        if (status === PageStatus.Active)
-            camera.start()
-        else if (status === PageStatus.Deactivating)
-            camera.stop()
-    }
-
-    Camera {
-        id: camera
-
-        captureMode: Camera.CaptureStillImage
-        focus {
-            focusMode: Camera.FocusContinuous
-            focusPointMode: Camera.FocusPointAuto
-        }
-
-        imageCapture {
-            onImageSaved: {
-                page.captureCount++
-                page.captured(path)
-            }
-
-            onCaptureFailed: page.errorMessage = message
+        if (status === PageStatus.Active) {
+            startDelay.start()
+        } else if (status === PageStatus.Deactivating) {
+            startDelay.stop()
+            viewfinderLoader.active = false
         }
     }
 
-    VideoOutput {
-        id: viewfinder
+    Timer {
+        id: startDelay
+        interval: 300
+        onTriggered: viewfinderLoader.active = true
+    }
+
+    Loader {
+        id: viewfinderLoader
 
         anchors {
             top: parent.top
@@ -59,15 +57,61 @@ Page {
             right: parent.right
             bottom: controls.top
         }
-        source: camera
-        fillMode: VideoOutput.PreserveAspectFit
-        orientation: 0
+        active: false
+        asynchronous: true
+        sourceComponent: viewfinderComponent
+    }
+
+    Component {
+        id: viewfinderComponent
+
+        VideoOutput {
+            readonly property bool captureReady: camera.imageCapture.ready
+            readonly property bool flashOn: camera.flash.mode !== Camera.FlashOff
+
+            function capture(path) {
+                camera.imageCapture.captureToLocation(path)
+            }
+
+            function toggleFlash() {
+                camera.flash.mode = flashOn ? Camera.FlashOff : Camera.FlashOn
+            }
+
+            source: camera
+            fillMode: VideoOutput.PreserveAspectFit
+            orientation: 0
+
+            Camera {
+                id: camera
+
+                captureMode: Camera.CaptureStillImage
+                focus {
+                    focusMode: Camera.FocusContinuous
+                    focusPointMode: Camera.FocusPointAuto
+                }
+
+                imageCapture {
+                    onImageSaved: {
+                        page.captureCount++
+                        page.captured(path)
+                    }
+
+                    onCaptureFailed: page.errorMessage = message
+                }
+            }
+        }
+    }
+
+    BusyIndicator {
+        anchors.centerIn: viewfinderLoader
+        size: BusyIndicatorSize.Large
+        running: !page.viewfinderReady
     }
 
     Label {
         anchors {
             horizontalCenter: parent.horizontalCenter
-            top: viewfinder.top
+            top: viewfinderLoader.top
             topMargin: Theme.paddingLarge
         }
         width: page.width - 2 * Theme.horizontalPageMargin
@@ -78,8 +122,10 @@ Page {
         text: {
             if (page.errorMessage !== "")
                 return page.errorMessage
-            if (page.captureCount > 0)
-                return qsTr("%n page(s) captured", "", page.captureCount)
+            if (page.captureCount === 1)
+                return qsTr("One page captured")
+            if (page.captureCount > 1)
+                return qsTr("%1 pages captured").arg(page.captureCount)
             return qsTr("Place the document in the frame")
         }
     }
@@ -96,15 +142,16 @@ Page {
 
         IconButton {
             anchors.verticalCenter: parent.verticalCenter
-            icon.source: "image://theme/icon-camera-flash-" + (camera.flash.mode === Camera.FlashOff ? "off" : "on")
-            onClicked: camera.flash.mode = camera.flash.mode === Camera.FlashOff ? Camera.FlashOn
-                                                                                 : Camera.FlashOff
+            enabled: page.viewfinderReady
+            icon.source: "image://theme/icon-camera-flash-"
+                         + (page.viewfinderReady && viewfinderLoader.item.flashOn ? "on" : "off")
+            onClicked: viewfinderLoader.item.toggleFlash()
         }
 
         IconButton {
             anchors.verticalCenter: parent.verticalCenter
             icon.source: "image://theme/icon-camera-shutter"
-            enabled: camera.imageCapture.ready
+            enabled: page.viewfinderReady && viewfinderLoader.item.captureReady
             onClicked: page.capture()
         }
 

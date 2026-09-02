@@ -11,7 +11,7 @@ X-DBusActivatable=true
 [X-Sailjail]
 OrganizationName=org.frapps.paperiton
 ApplicationName=harbour-paperiton
-Permissions=Internet;Downloads;Documents;Pictures;Camera;Secrets;WebView
+Permissions=Internet;Documents;Pictures;Camera;Secrets;WebView
 ExecDBus=harbour-paperiton
 
 [X-Share Method upload]

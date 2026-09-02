@@ -18,11 +18,16 @@ Page {
 
     property var pdfComponent: null
     property bool openAfterExport: false
+    property bool openedOriginal: false
 
     allowedOrientations: Orientation.All
 
-    // The preview endpoint serves the archived PDF, the download endpoint the
-    // file as it was consumed.
+    // Paperless keeps the file as it was uploaded and, for most documents, an
+    // archived PDF next to it.
+    property bool hasArchive: !!details.archived_file_name
+    property bool hasOriginal: !!details.original_file_name
+    property int noteCount: details.notes ? details.notes.length : 0
+
     function fileName(original) {
         var name = original ? (details.original_file_name || details.archived_file_name)
                             : (details.archived_file_name || details.original_file_name)
@@ -41,10 +46,17 @@ Page {
     }
 
     // Downloads into the private cache, from where only this app can read the
-    // file; it is deleted again when the app quits.
+    // file; it is deleted again when the app quits. Without an explicit choice
+    // the version that renders best is used: an image shows as an image, while
+    // everything else is read from the archived PDF.
     function open(original) {
         page.errorMessage = ""
         page.statusMessage = ""
+
+        if (original === undefined)
+            original = isImage() || !hasArchive
+
+        page.openedOriginal = original
         Paperless.saveDocument(documentId, fileName(original), original)
     }
 
@@ -58,8 +70,7 @@ Page {
                                                       ? details.original_file_name : ""
                                     })
         dialog.accepted.connect(function() {
-            Paperless.exportDocument(page.documentId, dialog.fileName, dialog.original,
-                                     dialog.destination)
+            Paperless.exportDocument(page.documentId, dialog.fileName, dialog.original)
         })
     }
 
@@ -87,7 +98,7 @@ Page {
         // no other app can read the cache directory.
         page.statusMessage = qsTr("Opening in another app")
         page.openAfterExport = true
-        Paperless.exportDocument(documentId, fileName(true), true)
+        Paperless.exportDocument(documentId, fileName(page.openedOriginal), page.openedOriginal)
     }
 
     function formatDate(value) {
@@ -140,11 +151,18 @@ Page {
             if (documentId !== page.documentId)
                 return
             page.saving = false
-            page.statusMessage = qsTr("Saved to %1").arg(filePath)
+            page.statusMessage = ""
+
+            // An export made only to hand the file over says nothing; the other
+            // app appearing is the answer.
             if (page.openAfterExport) {
                 page.openAfterExport = false
                 Qt.openUrlExternally(Paperless.fileUrl(filePath))
+                return
             }
+
+            app.notify(qsTr("%1 was saved in Documents")
+                       .arg(filePath.substring(filePath.lastIndexOf("/") + 1)))
         }
 
         onDocumentSaveFailed: {
@@ -179,14 +197,6 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Notes")
-                onClicked: pageStack.push(Qt.resolvedUrl("NotesPage.qml"), {
-                                              documentId: page.documentId,
-                                              documentTitle: page.documentTitle
-                                          })
-            }
-
-            MenuItem {
                 text: qsTr("Edit")
                 visible: app.allowed("change_document")
                 enabled: !page.loadingDetails
@@ -203,18 +213,6 @@ Page {
             }
 
             MenuItem {
-                text: qsTr("Open")
-                enabled: !page.saving
-                onClicked: page.open(false)
-            }
-
-            MenuItem {
-                text: qsTr("Open original file")
-                enabled: !page.saving
-                onClicked: page.open(true)
-            }
-
-            MenuItem {
                 text: qsTr("Save on device")
                 enabled: !page.saving && !page.loadingDetails
                 onClicked: page.saveOnDevice()
@@ -228,6 +226,12 @@ Page {
                     Paperless.fetchDocument(page.documentId)
                 }
             }
+
+            MenuItem {
+                text: qsTr("Open")
+                enabled: !page.saving
+                onClicked: page.open()
+            }
         }
 
         Column {
@@ -240,9 +244,18 @@ Page {
                 description: page.formatDate(page.created)
             }
 
-            Item {
+            BackgroundItem {
+                id: previewItem
+
                 width: parent.width
                 height: Math.round(page.height * 0.4)
+                enabled: !page.saving
+
+                onClicked: page.open()
+                onPressAndHold: {
+                    if (page.hasArchive && page.hasOriginal)
+                        versionMenu.show(previewItem)
+                }
 
                 Image {
                     id: preview
@@ -253,9 +266,9 @@ Page {
                     asynchronous: true
                     cache: true
                     fillMode: Image.PreserveAspectFit
-                    // Paperless archives images as PDF, so the original file is
-                    // the only preview that decodes here.
-                    source: page.isImage() ? "image://paperless/download/" + page.documentId
+                    // Paperless archives images as PDF, so the file as it was
+                    // uploaded is the only preview that decodes here.
+                    source: page.isImage() ? "image://paperless/original/" + page.documentId
                                            : "image://paperless/thumb/" + page.documentId
                 }
 
@@ -264,11 +277,19 @@ Page {
                     size: BusyIndicatorSize.Medium
                     running: preview.status === Image.Loading
                 }
+            }
 
-                MouseArea {
-                    anchors.fill: parent
-                    enabled: !page.saving
+            ContextMenu {
+                id: versionMenu
+
+                MenuItem {
+                    text: qsTr("Open archived PDF")
                     onClicked: page.open(false)
+                }
+
+                MenuItem {
+                    text: qsTr("Open original file")
+                    onClicked: page.open(true)
                 }
             }
 
@@ -279,7 +300,14 @@ Page {
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.secondaryColor
                 wrapMode: Text.WordWrap
-                text: page.saving ? qsTr("Downloading…") : qsTr("Tap the preview to open the document")
+                text: {
+                    if (page.saving)
+                        return qsTr("Downloading…")
+                    if (page.hasArchive && page.hasOriginal)
+                        return qsTr("Tap the preview to open the document, press and hold to "
+                                    + "choose between the archived PDF and the original file")
+                    return qsTr("Tap the preview to open the document")
+                }
             }
 
             Flow {
@@ -331,6 +359,34 @@ Page {
                 color: Theme.secondaryHighlightColor
                 font.pixelSize: Theme.fontSizeExtraSmall
                 text: page.statusMessage
+            }
+
+            BackgroundItem {
+                width: parent.width
+                enabled: !page.loadingDetails
+
+                onClicked: pageStack.push(Qt.resolvedUrl("NotesPage.qml"), {
+                                              documentId: page.documentId,
+                                              documentTitle: page.documentTitle
+                                          })
+
+                Label {
+                    x: Theme.horizontalPageMargin
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: parent.highlighted ? Theme.highlightColor : Theme.primaryColor
+                    text: page.noteCount > 0 ? qsTr("Notes (%1)").arg(page.noteCount)
+                                             : qsTr("Notes")
+                }
+
+                Image {
+                    anchors {
+                        right: parent.right
+                        rightMargin: Theme.horizontalPageMargin
+                        verticalCenter: parent.verticalCenter
+                    }
+                    source: "image://theme/icon-m-right?"
+                            + (parent.highlighted ? Theme.highlightColor : Theme.primaryColor)
+                }
             }
 
             SectionHeader { text: qsTr("Details") }

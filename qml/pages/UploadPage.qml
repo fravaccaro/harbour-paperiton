@@ -115,8 +115,13 @@ Page {
 
             PageHeader {
                 title: qsTr("Upload")
-                description: Uploads.activeCount > 0 ? qsTr("%n file(s) in progress", "", Uploads.activeCount)
-                                                     : ""
+                description: {
+                    if (Uploads.activeCount === 0)
+                        return ""
+                    if (Uploads.activeCount === 1)
+                        return qsTr("One file in progress")
+                    return qsTr("%1 files in progress").arg(Uploads.activeCount)
+                }
             }
 
             Label {

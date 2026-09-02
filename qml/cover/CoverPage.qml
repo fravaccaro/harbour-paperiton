@@ -24,11 +24,15 @@ CoverBackground {
             text: {
                 if (!Paperless.authenticated)
                     return qsTr("Not signed in")
-                if (Uploads.activeCount > 0)
-                    return qsTr("Uploading %n file(s)", "", Uploads.activeCount)
+                if (Uploads.activeCount === 1)
+                    return qsTr("Uploading one file")
+                if (Uploads.activeCount > 1)
+                    return qsTr("Uploading %1 files").arg(Uploads.activeCount)
                 if (Paperless.totalDocuments === 0)
                     return qsTr("No documents yet")
-                return qsTr("%n document(s)", "", Paperless.totalDocuments)
+                if (Paperless.totalDocuments === 1)
+                    return qsTr("One document")
+                return qsTr("%1 documents").arg(Paperless.totalDocuments)
             }
         }
     }

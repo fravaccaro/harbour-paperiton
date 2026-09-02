@@ -63,7 +63,7 @@ Page {
                 text: qsTr("The API token is kept in the encrypted storage of Sailfish OS. "
                            + "Documents you open are downloaded to the private cache of the app "
                            + "and deleted again when the app closes; \"Save on device\" keeps a "
-                           + "copy in Downloads or in Documents.")
+                           + "copy in Documents.")
             }
 
             Label {

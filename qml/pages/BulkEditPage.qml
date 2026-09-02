@@ -40,7 +40,9 @@ Dialog {
             spacing: Theme.paddingMedium
 
             DialogHeader {
-                title: qsTr("Edit %n document(s)", "", dialog.documentCount)
+                title: dialog.documentCount === 1
+                       ? qsTr("Edit one document")
+                       : qsTr("Edit %1 documents").arg(dialog.documentCount)
                 acceptText: qsTr("Apply")
             }
 

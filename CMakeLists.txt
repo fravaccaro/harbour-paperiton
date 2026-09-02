@@ -34,6 +34,7 @@ add_executable(harbour-paperiton
     src/paperless/customfieldsmodel.cpp
     src/paperless/savedviewmodel.h
     src/paperless/savedviewmodel.cpp
+    src/paperless/staleness.h
 )
 
 target_compile_definitions(harbour-paperiton PRIVATE
@@ -82,7 +83,6 @@ add_custom_target(distfiles
         qml/pages/StartPage.qml
         qml/pages/TasksPage.qml
         qml/pages/UploadPage.qml
-        qml/pages/ViewsPage.qml
         qml/pages/WebLoginPage.qml
         rpm/harbour-paperiton.changes.in
         rpm/harbour-paperiton.changes.run.in

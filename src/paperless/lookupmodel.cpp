@@ -1,6 +1,7 @@
 #include "lookupmodel.h"
 
 #include "api.h"
+#include "staleness.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -131,6 +132,14 @@ void LookupModel::reload()
     fetchPage(1);
 }
 
+void LookupModel::reloadIfStale(int seconds)
+{
+    if (m_loading || !paperlessIsStale(m_loadedAt, seconds))
+        return;
+
+    reload();
+}
+
 void LookupModel::fetchPage(int page)
 {
     if (!m_api->isAuthenticated())
@@ -198,6 +207,7 @@ void LookupModel::fetchPage(int page)
         }
 
         m_incoming.clear();
+        m_loadedAt = QDateTime::currentDateTimeUtc();
         emit countChanged();
         setReady(true);
     });

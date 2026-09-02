@@ -203,9 +203,13 @@ QUrl PaperlessApi::apiUrl(const QString &path, const QUrlQuery &query) const
     return m_config->apiUrl(path, query);
 }
 
-QUrl PaperlessApi::documentFileUrl(int documentId, const QString &kind) const
+QUrl PaperlessApi::documentFileUrl(int documentId, const QString &kind, bool original) const
 {
-    return m_config->apiUrl(QStringLiteral("documents/%1/%2").arg(documentId).arg(kind));
+    QUrlQuery query;
+    if (original)
+        query.addQueryItem(QStringLiteral("original"), QStringLiteral("true"));
+
+    return m_config->apiUrl(QStringLiteral("documents/%1/%2").arg(documentId).arg(kind), query);
 }
 
 void PaperlessApi::dispatch(const QUrl &url, const RequestContext &context,
@@ -573,15 +577,11 @@ void PaperlessApi::saveDocument(int documentId, const QString &fileName, bool or
                      false, false);
 }
 
-void PaperlessApi::exportDocument(int documentId, const QString &fileName, bool original,
-                                  const QString &destination)
+void PaperlessApi::exportDocument(int documentId, const QString &fileName, bool original)
 {
-    const QStandardPaths::StandardLocation location =
-            destination == QLatin1String("documents") ? QStandardPaths::DocumentsLocation
-                                                      : QStandardPaths::DownloadLocation;
-
     downloadDocument(documentId, fileName, original,
-                     QStandardPaths::writableLocation(location), true, true);
+                     QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                     true, true);
 }
 
 void PaperlessApi::downloadDocument(int documentId, const QString &fileName, bool original,
@@ -604,8 +604,7 @@ void PaperlessApi::downloadDocument(int documentId, const QString &fileName, boo
 
     emit documentSaveStarted(documentId);
 
-    const QUrl url = documentFileUrl(documentId, original ? QStringLiteral("download")
-                                                          : QStringLiteral("preview"));
+    const QUrl url = documentFileUrl(documentId, QStringLiteral("download"), original);
     getData(url, [this, documentId, directory, name, unique, exported]
             (const QByteArray &data, const QString &error) {
         if (!error.isEmpty()) {

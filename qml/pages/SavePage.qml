@@ -10,7 +10,6 @@ Dialog {
 
     readonly property string fileName: nameField.text.trim()
     readonly property bool original: originalSwitch.checked
-    readonly property string destination: folderCombo.currentIndex === 1 ? "documents" : "downloads"
 
     allowedOrientations: Orientation.All
 
@@ -35,16 +34,14 @@ Dialog {
                 title: qsTr("Save on device")
             }
 
-            ComboBox {
-                id: folderCombo
-
-                label: qsTr("Folder")
-                currentIndex: 0
-
-                menu: ContextMenu {
-                    MenuItem { text: qsTr("Downloads") }
-                    MenuItem { text: qsTr("Documents") }
-                }
+            Label {
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2 * Theme.horizontalPageMargin
+                wrapMode: Text.WordWrap
+                color: Theme.secondaryHighlightColor
+                font.pixelSize: Theme.fontSizeSmall
+                text: qsTr("The file is saved in Documents, where the file manager and other "
+                           + "apps can open it.")
             }
 
             TextSwitch {
