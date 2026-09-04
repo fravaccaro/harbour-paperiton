@@ -24,8 +24,8 @@ documents on the phone.
 - Watch the task queue of the server and acknowledge failures
 - Open a document inside the app: it is downloaded into the private cache
   directory, which is emptied when the app closes and when you sign out.
-  "Save on device" keeps a copy in `~/Documents`, under a name you choose, and
-  that is also the only place another application can read a document from
+  "Save on device" keeps a copy of the archived PDF in `~/Downloads`, which is
+  also the only place another application can read a document from
 - Self-signed certificates can be accepted explicitly
 
 ## Requirements
@@ -86,16 +86,24 @@ documents, camera captures and the web view profile, and the matching
 `~/.local/share` directory, which is unused. No other application can read
 these paths, so documents are shown by `qml/pages/PdfViewPage.qml`, which wraps
 the viewer of the Documents application, and by `qml/pages/ImageViewPage.qml`.
-When that viewer is missing, the app falls back to a copy in `~/Documents`.
+When that viewer is missing, the app falls back to a copy in `~/Downloads`.
 `documents/` and `captures/` are removed when the app starts and when it quits,
 and signing out removes the whole cache.
 
 ## Permissions
 
-`Internet` for the API, `Documents` for keeping a copy of a document where
-another application can open it and for picking files to upload,
-`Pictures` for pictures to upload, `Camera` for scanning, `Secrets` for the API
-token and `WebView` for signing in through the web interface of the server.
+`Internet` for the API, `Downloads` for keeping a copy of a document where
+another application can open it and for reading files that arrived from
+elsewhere, `Documents` and `Pictures` for the files kept there,
+`RemovableMedia` for files on a memory card, `MediaIndexing` because the file
+picker lists what the media index knows about, `Camera` for scanning, `Secrets`
+for the API token and `WebView` for signing in through the web interface of the
+server.
+
+Without `MediaIndexing` the picker has no index to read and shows nothing, and
+without a permission for the directory a file sits in, a file picked or shared
+from there cannot be read at all: the sandbox hides every one of the common
+directories unless a permission names it.
 
 ## Licence
 

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="it" sourcelanguage="en">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="it" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -210,8 +212,8 @@
         <translation>Apertura in un&apos;altra app</translation>
     </message>
     <message>
-        <source>%1 was saved in Documents</source>
-        <translation>%1 è stato salvato in Documenti</translation>
+        <source>%1 was saved in Downloads</source>
+        <translation>%1 è stato salvato in Download</translation>
     </message>
     <message>
         <source>Changes saved</source>
@@ -574,7 +576,10 @@
     </message>
     <message numerus="yes">
         <source>show license(s)</source>
-        <translation><numerusform>mostra licenza</numerusform><numerusform>mostra licenze</numerusform><numerusform>mostra licenze</numerusform></translation>
+        <translation>
+            <numerusform>mostra licenza</numerusform>
+            <numerusform>mostra licenze</numerusform>
+        </translation>
     </message>
     <message>
         <source>News</source>
@@ -618,7 +623,10 @@
     </message>
     <message numerus="yes">
         <source>License(s)</source>
-        <translation><numerusform>mostra licenza</numerusform><numerusform>mostra licenze</numerusform><numerusform>mostra licenze</numerusform></translation>
+        <translation>
+            <numerusform>mostra licenza</numerusform>
+            <numerusform>mostra licenze</numerusform>
+        </translation>
     </message>
     <message>
         <source>Note: please check the source code for most accurate information.</source>
@@ -818,33 +826,6 @@
     </message>
 </context>
 <context>
-    <name>SavePage</name>
-    <message>
-        <source>Save</source>
-        <translation>Salva</translation>
-    </message>
-    <message>
-        <source>Save on device</source>
-        <translation>Salva sul dispositivo</translation>
-    </message>
-    <message>
-        <source>The file is saved in Documents, where the file manager and other apps can open it.</source>
-        <translation>Il file viene salvato in Documenti, dove il gestore file e le altre app possono aprirlo.</translation>
-    </message>
-    <message>
-        <source>Original file</source>
-        <translation>File originale</translation>
-    </message>
-    <message>
-        <source>The file as it was uploaded, instead of the archived PDF.</source>
-        <translation>Il file come è stato caricato, invece del PDF archiviato.</translation>
-    </message>
-    <message>
-        <source>File name</source>
-        <translation>Nome del file</translation>
-    </message>
-</context>
-<context>
     <name>SettingsPage</name>
     <message>
         <source>Settings</source>
@@ -887,8 +868,8 @@
         <translation>Archiviazione</translation>
     </message>
     <message>
-        <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Documents.</source>
-        <translation>Il token API è conservato nell&apos;archivio cifrato di Sailfish OS. I documenti che apri vengono scaricati nella cache privata dell&apos;app ed eliminati alla chiusura; &quot;Salva sul dispositivo&quot; ne conserva una copia in Documenti.</translation>
+        <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Downloads.</source>
+        <translation>Il token API è conservato nell&apos;archivio cifrato di Sailfish OS. I documenti che apri vengono scaricati nella cache privata dell&apos;app ed eliminati alla chiusura; &quot;Salva sul dispositivo&quot; ne conserva una copia in Download.</translation>
     </message>
     <message>
         <source>Secure storage reported: %1</source>

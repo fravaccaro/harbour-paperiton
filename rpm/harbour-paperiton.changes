@@ -1,4 +1,17 @@
 * Wed Sep 02 2026 fravaccaro 0.5.1-1
+- The Upload button works again: files picked in the app and files shared with
+  it now reach the server instead of staying on the page
+- A finished upload names the document it created again, so it can be opened
+  from the queue, and the queue and the task list show what the server said
+  about a file it could not take
+- Documents filed on the same day now keep a fixed order, so refreshing the
+  list no longer shows some documents twice while hiding others
+- Signing out returns to the sign-in page instead of leaving the settings in
+  front, also when the page is left while the countdown runs
+- Picking a file to upload and receiving one from another app work again: the
+  app now asks for the permissions the file picker and those files need
+- "Save on device" puts the archived PDF straight into Downloads, without
+  asking for a name first
 - Italian interface, and an Italian description where other apps offer to share
   a file with Paperiton
 - An upload is followed by a notification with a progress bar and ends as one

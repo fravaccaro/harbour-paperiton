@@ -13,6 +13,11 @@ Page {
     property int documentTypeId: -1
     property var tagIds: []
 
+    // The title typed for a single file. It is kept here because the field it
+    // is typed in sits in the header of the list, which QML makes a component
+    // of its own: the functions below cannot reach an id inside it.
+    property string pendingTitle
+
     allowedOrientations: Orientation.All
 
     function addFile(path, temporary) {
@@ -29,8 +34,8 @@ Page {
 
     function metadata() {
         var data = {}
-        if (pending.count === 1 && titleField.text.trim() !== "")
-            data.title = titleField.text.trim()
+        if (pending.count === 1 && page.pendingTitle.trim() !== "")
+            data.title = page.pendingTitle.trim()
         if (page.correspondentId > 0)
             data.correspondent = page.correspondentId
         if (page.documentTypeId > 0)
@@ -47,7 +52,6 @@ Page {
             Uploads.enqueue(entry.filePath, data, entry.temporary)
             pending.remove(0)
         }
-        titleField.text = ""
     }
 
     function statusText(status, message, documentId) {
@@ -166,11 +170,14 @@ Page {
                 }
 
                 TextField {
-                    id: titleField
                     width: parent.width
                     visible: pending.count === 1
                     label: qsTr("Title")
                     placeholderText: qsTr("Title on the server")
+                    onTextChanged: page.pendingTitle = text
+                    // A title names one file, so it goes away with the file it
+                    // named and when a second one joins it.
+                    onVisibleChanged: if (!visible) text = ""
                     EnterKey.iconSource: "image://theme/icon-m-enter-close"
                     EnterKey.onClicked: focus = false
                 }

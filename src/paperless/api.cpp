@@ -574,7 +574,7 @@ void PaperlessApi::saveDocument(int documentId, const QString &fileName, bool or
 void PaperlessApi::exportDocument(int documentId, const QString &fileName, bool original)
 {
     downloadDocument(documentId, fileName, original,
-                     QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                     QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
                      true, true);
 }
 

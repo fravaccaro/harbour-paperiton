@@ -1,6 +1,7 @@
 #include "uploadqueue.h"
 
 #include "api.h"
+#include "taskfields.h"
 
 #include <QDateTime>
 #include <QDir>
@@ -346,10 +347,9 @@ void UploadQueue::pollTasks()
                 if (m_entries.at(i).taskId != taskId)
                     continue;
 
-                const QString message = task.value(QStringLiteral("result")).toString();
+                const QString message = paperlessTaskMessage(task);
                 if (status == QLatin1String("SUCCESS")) {
-                    const int documentId = task.value(QStringLiteral("related_document")).toInt(-1);
-                    finish(i, Completed, message, documentId);
+                    finish(i, Completed, message, paperlessTaskDocumentId(task));
                 } else {
                     finish(i, Failed,
                            message.isEmpty() ? UploadQueue::tr("The server could not process the file")

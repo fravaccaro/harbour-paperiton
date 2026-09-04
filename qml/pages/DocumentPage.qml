@@ -60,18 +60,13 @@ Page {
         Paperless.saveDocument(documentId, fileName(original), original)
     }
 
+    // The archived PDF under the name the server keeps for it. A document
+    // without an archive has only the file it was uploaded as, and asking for
+    // the archived version returns that instead.
     function saveOnDevice() {
         page.errorMessage = ""
         page.statusMessage = ""
-
-        var dialog = pageStack.push(Qt.resolvedUrl("SavePage.qml"), {
-                                        archivedName: fileName(false),
-                                        originalName: details.original_file_name
-                                                      ? details.original_file_name : ""
-                                    })
-        dialog.accepted.connect(function() {
-            Paperless.exportDocument(page.documentId, dialog.fileName, dialog.original)
-        })
+        Paperless.exportDocument(page.documentId, fileName(false), false)
     }
 
     function view(path) {
@@ -161,7 +156,7 @@ Page {
                 return
             }
 
-            app.notify(qsTr("%1 was saved in Documents")
+            app.notify(qsTr("%1 was saved in Downloads")
                        .arg(filePath.substring(filePath.lastIndexOf("/") + 1)))
         }
 

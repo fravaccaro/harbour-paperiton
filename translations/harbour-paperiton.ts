@@ -212,10 +212,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 was saved in Documents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Changes saved</source>
         <translation type="unfinished"></translation>
     </message>
@@ -273,6 +269,10 @@
     </message>
     <message>
         <source>File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 was saved in Downloads</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -826,33 +826,6 @@
     </message>
 </context>
 <context>
-    <name>SavePage</name>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save on device</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The file is saved in Documents, where the file manager and other apps can open it.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Original file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The file as it was uploaded, instead of the archived PDF.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>File name</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>SettingsPage</name>
     <message>
         <source>Settings</source>
@@ -895,10 +868,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Documents.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Secure storage reported: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -912,6 +881,10 @@
     </message>
     <message>
         <source>Signing out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Downloads.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

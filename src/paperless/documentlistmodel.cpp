@@ -32,6 +32,21 @@ int optionalId(const QJsonValue &value)
     return value.isDouble() ? value.toInt() : -1;
 }
 
+// The server sorts documents by a plain date, so documents of the same day have
+// no fixed order, and a page is a slice of that order: between two requests a
+// document can move across a page boundary, appear twice and push another out
+// of the list entirely. The id settles every tie.
+QString orderingWithTiebreak(const QString &ordering)
+{
+    if (ordering.isEmpty() || ordering == QStringLiteral("id")
+            || ordering == QStringLiteral("-id")) {
+        return ordering;
+    }
+
+    return ordering + (ordering.startsWith(QLatin1Char('-')) ? QStringLiteral(",-id")
+                                                             : QStringLiteral(",id"));
+}
+
 }
 
 PaperlessApi *DocumentListModel::s_api = nullptr;
@@ -288,7 +303,9 @@ void DocumentListModel::fetchPage(int page)
     QUrlQuery query;
     query.addQueryItem(QStringLiteral("page"), QString::number(page));
     query.addQueryItem(QStringLiteral("page_size"), QString::number(m_pageSize));
-    query.addQueryItem(QStringLiteral("ordering"), m_ordering);
+    // The tiebreaker only widens the query; m_ordering stays the field the user
+    // chose, which is what a saved view is recognised by.
+    query.addQueryItem(QStringLiteral("ordering"), orderingWithTiebreak(m_ordering));
     if (!m_searchQuery.isEmpty())
         query.addQueryItem(QStringLiteral("query"), m_searchQuery);
     if (m_tagId > 0)

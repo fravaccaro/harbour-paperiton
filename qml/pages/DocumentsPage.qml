@@ -77,8 +77,9 @@ Page {
             return
 
         // Opening a document drops the attachment, so it is put back every time
-        // this page becomes current again.
-        if (!pageStack.nextPage(page))
+        // this page becomes current again. Not while signed out, since this page
+        // is then on its way off the stack and a second change would collide.
+        if (Paperless.authenticated && !pageStack.nextPage(page))
             pageStack.pushAttached(Qt.resolvedUrl("FilterPage.qml"), { documents: documents })
 
         if (documents.count === 0 && !documents.loading)

@@ -1,6 +1,7 @@
 #include "tasklistmodel.h"
 
 #include "api.h"
+#include "taskfields.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -149,12 +150,12 @@ void TaskListModel::reload()
             entry.id = task.value(QStringLiteral("id")).toInt();
             entry.taskId = task.value(QStringLiteral("task_id")).toString();
             entry.name = taskName(task);
-            entry.fileName = task.value(QStringLiteral("task_file_name")).toString();
+            entry.fileName = paperlessTaskFileName(task);
             entry.status = task.value(QStringLiteral("status")).toString().toUpper();
-            entry.result = task.value(QStringLiteral("result")).toString();
+            entry.result = paperlessTaskMessage(task);
             entry.created = QDateTime::fromString(task.value(QStringLiteral("date_created")).toString(),
                                                   Qt::ISODate);
-            entry.documentId = task.value(QStringLiteral("related_document")).toInt(-1);
+            entry.documentId = paperlessTaskDocumentId(task);
             entry.acknowledged = task.value(QStringLiteral("acknowledged")).toBool();
 
             if (m_failedOnly && entry.status != QLatin1String("FAILURE"))

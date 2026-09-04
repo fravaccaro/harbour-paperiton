@@ -55,6 +55,26 @@ ApplicationWindow {
         onTriggered: app.takePendingShare()
     }
 
+    // Signing out has to leave every page that shows the archive behind. The
+    // remorse runs its callback right away when the page starts deactivating, so
+    // the request can arrive in the middle of a page change, which the stack
+    // refuses. Hence it is taken on a later pass of the event loop, and again
+    // until the stack is idle.
+    function showLogin() {
+        loginNavigation.restart()
+    }
+
+    Timer {
+        id: loginNavigation
+        interval: 100
+        onTriggered: {
+            if (pageStack.busy)
+                restart()
+            else
+                pageStack.replaceAbove(null, loginPage)
+        }
+    }
+
     // Work that finishes away from the page in front of the user. A notice is
     // drawn inside the window, so it only reaches someone who is looking at the
     // app; from the cover or the background the notification area does.
@@ -150,7 +170,7 @@ ApplicationWindow {
             if (Paperless.authenticated)
                 app.takePendingShare()
             else
-                pageStack.replaceAbove(null, loginPage)
+                app.showLogin()
         }
     }
 

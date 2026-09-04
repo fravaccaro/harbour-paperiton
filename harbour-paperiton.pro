@@ -42,6 +42,7 @@ HEADERS += \
     src/paperless/savedviewmodel.h \
     src/paperless/secretsstore.h \
     src/paperless/staleness.h \
+    src/paperless/taskfields.h \
     src/paperless/tasklistmodel.h \
     src/paperless/thumbimageprovider.h \
     src/paperless/uploadqueue.h
@@ -77,7 +78,6 @@ DISTFILES += \
     qml/pages/LookupPickerPage.qml \
     qml/pages/NotesPage.qml \
     qml/pages/PdfViewPage.qml \
-    qml/pages/SavePage.qml \
     qml/pages/SettingsPage.qml \
     qml/pages/StartPage.qml \
     qml/pages/TasksPage.qml \
