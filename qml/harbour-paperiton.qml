@@ -76,6 +76,14 @@ ApplicationWindow {
         pageStack.push(Qt.resolvedUrl("pages/UploadPage.qml"), { filePaths: files })
     }
 
+    // PROBE
+    Timer {
+        running: true
+        interval: 10000
+        onTriggered: pageStack.push(Qt.resolvedUrl("pages/WebLoginPage.qml"),
+                                    { serverUrl: Settings.serverUrl })
+    }
+
     Timer {
         id: uploadRetry
         interval: 200

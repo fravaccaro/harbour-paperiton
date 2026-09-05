@@ -458,31 +458,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Server address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>API token</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use an API token</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ignore certificate errors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Paperiton connects to a Paperless-ngx server that you already run.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -498,6 +478,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>User name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>API token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Open the web interface</source>
         <translation type="unfinished"></translation>
     </message>
@@ -506,15 +498,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Use an API token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Create one in the Paperless web interface under My Profile.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Only for a server with a self-signed certificate on your own network.</source>
+        <source>Ignore certificate errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Exit</source>
+        <source>Only for a server with a self-signed certificate on your own network.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1169,7 +1165,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sign in as you would in a browser. Paperiton then asks the server for an API token, which replaces any token you created earlier.</source>
+        <source>Sign in as you would in a browser. Paperiton then takes the API token of your account from the server.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

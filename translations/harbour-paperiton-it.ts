@@ -458,32 +458,12 @@
         <translation>Accedi</translation>
     </message>
     <message>
-        <source>Server address</source>
-        <translation>Indirizzo del server</translation>
-    </message>
-    <message>
-        <source>User name</source>
-        <translation>Nome utente</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation>Password</translation>
-    </message>
-    <message>
-        <source>API token</source>
-        <translation>Token API</translation>
-    </message>
-    <message>
-        <source>Use an API token</source>
-        <translation>Usa un token API</translation>
-    </message>
-    <message>
-        <source>Ignore certificate errors</source>
-        <translation>Ignora gli errori del certificato</translation>
-    </message>
-    <message>
         <source>Paperiton connects to a Paperless-ngx server that you already run.</source>
         <translation>Paperiton si collega a un server Paperless-ngx che gestisci già.</translation>
+    </message>
+    <message>
+        <source>Server address</source>
+        <translation>Indirizzo del server</translation>
     </message>
     <message>
         <source>https://paperless.example.org</source>
@@ -498,6 +478,18 @@
         <translation>Accedi con l&apos;interfaccia web</translation>
     </message>
     <message>
+        <source>User name</source>
+        <translation>Nome utente</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Password</translation>
+    </message>
+    <message>
+        <source>API token</source>
+        <translation>Token API</translation>
+    </message>
+    <message>
         <source>Open the web interface</source>
         <translation>Apri l&apos;interfaccia web</translation>
     </message>
@@ -506,16 +498,20 @@
         <translation>Accedi come fai di solito, anche con single sign-on o autenticazione a due fattori, poi copia il token API dal tuo profilo.</translation>
     </message>
     <message>
+        <source>Use an API token</source>
+        <translation>Usa un token API</translation>
+    </message>
+    <message>
         <source>Create one in the Paperless web interface under My Profile.</source>
         <translation>Creane uno nell&apos;interfaccia web di Paperless, alla voce My Profile.</translation>
     </message>
     <message>
-        <source>Only for a server with a self-signed certificate on your own network.</source>
-        <translation>Solo per un server con certificato autofirmato sulla tua rete.</translation>
+        <source>Ignore certificate errors</source>
+        <translation>Ignora gli errori del certificato</translation>
     </message>
     <message>
-        <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <source>Only for a server with a self-signed certificate on your own network.</source>
+        <translation>Solo per un server con certificato autofirmato sulla tua rete.</translation>
     </message>
 </context>
 <context>
@@ -1169,8 +1165,8 @@
         <translation>Richiesta di un token API al server…</translation>
     </message>
     <message>
-        <source>Sign in as you would in a browser. Paperiton then asks the server for an API token, which replaces any token you created earlier.</source>
-        <translation>Accedi come faresti in un browser. Paperiton chiede poi al server un token API, che sostituisce qualsiasi token creato in precedenza.</translation>
+        <source>Sign in as you would in a browser. Paperiton then takes the API token of your account from the server.</source>
+        <translation>Accedi come faresti in un browser. Paperiton prende poi dal server il token API del tuo account.</translation>
     </message>
 </context>
 <context>

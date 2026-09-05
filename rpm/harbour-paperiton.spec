@@ -7,7 +7,7 @@ Name:       harbour-paperiton
 %define __provides_exclude_from ^%{_datadir}/.*$
 
 Summary:    Paperless-ngx client for Sailfish OS
-Version:    0.5.5
+Version:    0.5.6
 Release:    3
 License:    GPLv3
 URL:        https://github.com/fravaccaro/harbour-paperiton
