@@ -31,6 +31,9 @@ class DocumentListModel : public QAbstractListModel
     Q_PROPERTY(bool loading READ isLoading NOTIFY loadingChanged)
     Q_PROPERTY(bool canLoadMore READ canLoadMore NOTIFY canLoadMoreChanged)
     Q_PROPERTY(QString errorString READ errorString NOTIFY errorStringChanged)
+    // The server could not make sense of the search term, which is what half a
+    // term looks like while it is still being typed.
+    Q_PROPERTY(bool searchRejected READ searchRejected NOTIFY searchRejectedChanged)
 
 public:
     enum Roles {
@@ -73,9 +76,11 @@ public:
     bool isLoading() const { return m_request != NoRequest; }
     bool canLoadMore() const;
     QString errorString() const { return m_errorString; }
+    bool searchRejected() const { return m_searchRejected; }
 
-    // Throws the list away and reads it again from the top. For a query that
-    // describes another set of documents, and for a refresh the user asked for.
+    // Reads the list again from the top for a query that describes another set
+    // of documents, and for a refresh the user asked for. What is on screen
+    // stays there until the new list arrives to take its place.
     Q_INVOKABLE void reload();
     // Reads the first page again and merges it into the list in place, so the
     // documents that arrived since are picked up without the list blanking or
@@ -102,6 +107,7 @@ signals:
     void loadingChanged();
     void canLoadMoreChanged();
     void errorStringChanged();
+    void searchRejectedChanged();
     // A request that failed over a list which still holds documents: the
     // documents stay on screen, so the reason is told instead of shown.
     void loadFailed(const QString &error);
@@ -127,7 +133,7 @@ private:
     // reply from being applied to a list that has meanwhile become another one.
     enum Request {
         NoRequest,
-        ReloadRequest,
+        ReplaceRequest,
         RefreshRequest,
         PageRequest
     };
@@ -141,12 +147,16 @@ private:
     bool changeFilters(const QVariantMap &filters);
 
     void fetchPage(int page, Request kind);
-    void applyReload(const QVector<Entry> &entries);
+    void applyReplace(const QVector<Entry> &entries);
     void applyRefresh(const QVector<Entry> &entries);
     void applyPage(const QVector<Entry> &entries);
     void setRequest(Request request);
     void setErrorString(const QString &error);
+    void setSearchRejected(bool rejected);
     void reportError(const QString &error);
+    // Leaves the rows alone, but makes the list forget that anything is being
+    // asked for: replies to the old query are turned away when they arrive.
+    void invalidate();
     void clear();
     bool hasFilters() const;
     QUrl pageUrl(int page) const;
@@ -168,6 +178,7 @@ private:
     // Set when the server had nothing left to add below what is already held,
     // so the end of the list is not asked for over and over.
     bool m_endReached;
+    bool m_searchRejected;
     QString m_errorString;
 };
 

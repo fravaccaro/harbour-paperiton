@@ -78,6 +78,7 @@ DocumentListModel::DocumentListModel(PaperlessApi *api, QObject *parent)
     , m_generation(0)
     , m_request(NoRequest)
     , m_endReached(false)
+    , m_searchRejected(false)
 {
     // The list belongs to a server and an account: signing out has to leave
     // nothing of the previous one behind, and signing in starts a fresh list.
@@ -184,6 +185,15 @@ void DocumentListModel::setErrorString(const QString &error)
 
     m_errorString = error;
     emit errorStringChanged();
+}
+
+void DocumentListModel::setSearchRejected(bool rejected)
+{
+    if (rejected == m_searchRejected)
+        return;
+
+    m_searchRejected = rejected;
+    emit searchRejectedChanged();
 }
 
 void DocumentListModel::reportError(const QString &error)
@@ -314,12 +324,17 @@ QString DocumentListModel::defaultOrdering()
     return QStringLiteral("-created");
 }
 
-void DocumentListModel::clear()
+void DocumentListModel::invalidate()
 {
-    // Whatever is in flight describes the list being thrown away.
     ++m_generation;
     m_loadedAt = QDateTime();
     m_endReached = false;
+    setRequest(NoRequest);
+}
+
+void DocumentListModel::clear()
+{
+    invalidate();
 
     if (!m_entries.isEmpty()) {
         beginResetModel();
@@ -334,13 +349,19 @@ void DocumentListModel::clear()
     }
 
     setErrorString(QString());
-    setRequest(NoRequest);
+    setSearchRejected(false);
 }
 
 void DocumentListModel::reload()
 {
-    clear();
-    fetchPage(1, ReloadRequest);
+    // The documents on screen are the answer to the previous query, and they
+    // stay until the answer to this one arrives to replace them. A search term
+    // the server cannot parse, which is what a half-typed one is, then costs
+    // the user nothing.
+    invalidate();
+    setErrorString(QString());
+    setSearchRejected(false);
+    fetchPage(1, ReplaceRequest);
 }
 
 void DocumentListModel::refresh()
@@ -385,6 +406,14 @@ QUrl DocumentListModel::pageUrl(int page) const
     // The tiebreaker only widens the query; m_ordering stays the field the user
     // chose, which is what a saved view is recognised by.
     query.addQueryItem(QStringLiteral("ordering"), orderingWithTiebreak(m_ordering));
+    // Without this the server sends every field it has, and the text it read
+    // out of the documents is by far the largest of them: a page of 25 comes to
+    // several megabytes of words this list has no use for, which the phone then
+    // spends the better part of a second parsing. A server too old to know the
+    // parameter ignores it and answers as it always did.
+    query.addQueryItem(QStringLiteral("fields"), QStringLiteral(
+                           "id,title,created,added,correspondent,document_type,tags,"
+                           "original_file_name,archive_serial_number,page_count"));
     if (!m_searchQuery.isEmpty())
         query.addQueryItem(QStringLiteral("query"), m_searchQuery);
     if (m_tagId > 0)
@@ -407,13 +436,26 @@ void DocumentListModel::fetchPage(int page, Request kind)
 
     const int generation = m_generation;
     m_api->getJson(pageUrl(page), [this, generation, page, kind](const QJsonDocument &document,
-                                                                 const QString &error) {
+                                                                 const QString &error, int status) {
         // The query this reply answers is no longer the query the list is for.
         if (generation != m_generation)
             return;
 
         if (!error.isEmpty()) {
-            reportError(error);
+            // A search the server refuses to parse is not a failure but a term
+            // that is not finished yet: the documents stay and the field says
+            // so. Anything else that goes wrong while replacing the list does
+            // mean the documents on screen answer a question nobody is asking,
+            // so they go and the reason takes their place.
+            if (status == 400 && !m_searchQuery.isEmpty()) {
+                setSearchRejected(true);
+            } else if (kind == ReplaceRequest) {
+                clear();
+                setErrorString(error);
+            } else {
+                reportError(error);
+            }
+
             setRequest(NoRequest);
             return;
         }
@@ -448,6 +490,7 @@ void DocumentListModel::fetchPage(int page, Request kind)
         }
 
         setErrorString(QString());
+        setSearchRejected(false);
 
         const bool totalChanged = total != m_totalCount;
         m_totalCount = total;
@@ -461,8 +504,8 @@ void DocumentListModel::fetchPage(int page, Request kind)
         // a binding that reacts to the change and asks for another page is
         // turned away rather than let in on a half-updated list.
         switch (kind) {
-        case ReloadRequest:
-            applyReload(entries);
+        case ReplaceRequest:
+            applyReplace(entries);
             break;
         case RefreshRequest:
             applyRefresh(entries);
@@ -481,16 +524,23 @@ void DocumentListModel::fetchPage(int page, Request kind)
     });
 }
 
-void DocumentListModel::applyReload(const QVector<Entry> &entries)
+void DocumentListModel::applyReplace(const QVector<Entry> &entries)
 {
-    // Nothing was kept, so the list is simply what came back.
-    if (entries.isEmpty())
+    // The list is now the first page of the new query, and nothing of the old
+    // one is kept: it described other documents in another order. Asking the
+    // same question twice, which is what a pull to refresh often is, changes
+    // nothing and is left alone.
+    if (m_entries == entries)
         return;
 
-    beginInsertRows(QModelIndex(), m_entries.count(), m_entries.count() + entries.count() - 1);
-    m_entries += entries;
-    endInsertRows();
-    emit countChanged();
+    const int before = m_entries.count();
+
+    beginResetModel();
+    m_entries = entries;
+    endResetModel();
+
+    if (m_entries.count() != before)
+        emit countChanged();
 }
 
 void DocumentListModel::applyRefresh(const QVector<Entry> &head)

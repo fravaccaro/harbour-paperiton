@@ -21,6 +21,10 @@ Page {
 
     property var selectedIds: []
 
+    // The field is asked for from the pulley menu rather than standing above
+    // the documents all the time.
+    property bool searchVisible: false
+
     property var bulkOperations: []
     property int bulkIndex: -1
     property string bulkError
@@ -161,6 +165,7 @@ Page {
             SearchField {
                 id: searchField
                 width: parent.width
+                visible: page.searchVisible
                 // A search runs inside whatever the list is narrowed to, so the
                 // field says which documents are being searched.
                 placeholderText: page.filterSummary !== ""
@@ -174,6 +179,17 @@ Page {
                     focus = false
                 }
                 onTextChanged: searchDelay.restart()
+            }
+
+            // The term is not one the server can search for yet, so the
+            // documents found by the last one that was are still listed.
+            Label {
+                x: Theme.horizontalPageMargin
+                width: parent.width - 2 * Theme.horizontalPageMargin
+                visible: page.searchVisible && Documents.searchRejected
+                font.pixelSize: Theme.fontSizeExtraSmall
+                color: Theme.secondaryHighlightColor
+                text: qsTr("Incomplete search term")
             }
 
             // The header is a component of its own, so everything that reaches
@@ -192,6 +208,23 @@ Page {
 
                     searchField.text = Documents.searchQuery
                     searchDelay.stop()
+                }
+            }
+
+            // Showing the field is a request to type in it, and hiding it is
+            // how a search is called off.
+            Connections {
+                target: page
+                onSearchVisibleChanged: {
+                    if (page.searchVisible) {
+                        searchField.forceActiveFocus()
+                        return
+                    }
+
+                    searchDelay.stop()
+                    searchField.text = ""
+                    searchField.focus = false
+                    Documents.searchQuery = ""
                 }
             }
         }
@@ -223,6 +256,12 @@ Page {
                                               : qsTr("Upload")
                 visible: page.selectedIds.length === 0 && app.allowed("add_document")
                 onClicked: pageStack.push(Qt.resolvedUrl("UploadPage.qml"))
+            }
+
+            MenuItem {
+                text: page.searchVisible ? qsTr("Hide search") : qsTr("Search")
+                visible: page.selectedIds.length === 0
+                onClicked: page.searchVisible = !page.searchVisible
             }
 
             MenuItem {

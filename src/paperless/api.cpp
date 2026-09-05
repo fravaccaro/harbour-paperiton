@@ -302,18 +302,18 @@ void PaperlessApi::send(QNetworkReply *reply, const DataCallback &callback, int 
             const QString message = describeFailure(reply, status, payload);
             if (!context.quiet)
                 setLastError(message);
-            callback(QByteArray(), message);
+            callback(QByteArray(), message, status);
             return;
         }
 
-        callback(payload, QString());
+        callback(payload, QString(), status);
     });
 }
 
 void PaperlessApi::getData(const QUrl &url, const DataCallback &callback)
 {
     if (m_config->serverUrl().isEmpty()) {
-        callback(QByteArray(), PaperlessApi::tr("No server configured."));
+        callback(QByteArray(), PaperlessApi::tr("No server configured."), 0);
         return;
     }
 
@@ -323,28 +323,38 @@ void PaperlessApi::getData(const QUrl &url, const DataCallback &callback)
 namespace {
 
 // Shared by every request that expects a JSON document back.
+QString readJson(const QByteArray &data, const QString &error, QJsonDocument *document)
+{
+    if (!error.isEmpty())
+        return error;
+
+    // Successful deletes and acknowledgements answer with an empty body.
+    if (data.trimmed().isEmpty())
+        return QString();
+
+    QJsonParseError parseError;
+    *document = QJsonDocument::fromJson(data, &parseError);
+    if (parseError.error != QJsonParseError::NoError)
+        return PaperlessApi::tr("The server did not return valid JSON.");
+
+    return QString();
+}
+
 PaperlessApi::DataCallback jsonReader(const PaperlessApi::JsonCallback &callback)
 {
-    return [callback](const QByteArray &data, const QString &error) {
-        if (!error.isEmpty()) {
-            callback(QJsonDocument(), error);
-            return;
-        }
+    return [callback](const QByteArray &data, const QString &error, int) {
+        QJsonDocument document;
+        const QString failure = readJson(data, error, &document);
+        callback(document, failure);
+    };
+}
 
-        // Successful deletes and acknowledgements answer with an empty body.
-        if (data.trimmed().isEmpty()) {
-            callback(QJsonDocument(), QString());
-            return;
-        }
-
-        QJsonParseError parseError;
-        const QJsonDocument document = QJsonDocument::fromJson(data, &parseError);
-        if (parseError.error != QJsonParseError::NoError) {
-            callback(QJsonDocument(), PaperlessApi::tr("The server did not return valid JSON."));
-            return;
-        }
-
-        callback(document, QString());
+PaperlessApi::DataCallback jsonReader(const PaperlessApi::JsonStatusCallback &callback)
+{
+    return [callback](const QByteArray &data, const QString &error, int status) {
+        QJsonDocument document;
+        const QString failure = readJson(data, error, &document);
+        callback(document, failure, status);
     };
 }
 
@@ -354,6 +364,18 @@ void PaperlessApi::getJson(const QUrl &url, const JsonCallback &callback, bool q
 {
     if (m_config->serverUrl().isEmpty()) {
         callback(QJsonDocument(), PaperlessApi::tr("No server configured."));
+        return;
+    }
+
+    RequestContext context;
+    context.quiet = quiet;
+    dispatch(url, context, jsonReader(callback), MaxRedirects);
+}
+
+void PaperlessApi::getJson(const QUrl &url, const JsonStatusCallback &callback, bool quiet)
+{
+    if (m_config->serverUrl().isEmpty()) {
+        callback(QJsonDocument(), PaperlessApi::tr("No server configured."), 0);
         return;
     }
 
@@ -447,7 +469,7 @@ void PaperlessApi::login(const QString &serverUrl, const QString &username, cons
     context.authorized = false;
 
     dispatch(QUrl(normalized + QStringLiteral("/api/token/")), context,
-             [this, normalized, username](const QByteArray &data, const QString &error) {
+             [this, normalized, username](const QByteArray &data, const QString &error, int) {
         if (!error.isEmpty()) {
             emit loginFailed(error);
             return;
@@ -486,7 +508,8 @@ void PaperlessApi::loginWithToken(const QString &serverUrl, const QString &token
     RequestContext context;
     context.token = cleanToken;
 
-    dispatch(url, context, [this, normalized, cleanToken](const QByteArray &, const QString &error) {
+    dispatch(url, context, [this, normalized, cleanToken](const QByteArray &, const QString &error,
+                                                          int) {
         if (!error.isEmpty()) {
             emit loginFailed(error);
             return;
@@ -519,7 +542,7 @@ void PaperlessApi::detectSignInOptions(const QString &serverUrl)
     context.quiet = true;
 
     dispatch(QUrl(normalized + QStringLiteral("/accounts/login/")), context,
-             [this](const QByteArray &data, const QString &error) {
+             [this](const QByteArray &data, const QString &error, int) {
         if (!error.isEmpty()) {
             emit signInOptionsDetected(QStringList(), true);
             return;
@@ -600,7 +623,7 @@ void PaperlessApi::downloadDocument(int documentId, const QString &fileName, boo
 
     const QUrl url = documentFileUrl(documentId, QStringLiteral("download"), original);
     getData(url, [this, documentId, directory, name, unique, exported]
-            (const QByteArray &data, const QString &error) {
+            (const QByteArray &data, const QString &error, int) {
         if (!error.isEmpty()) {
             emit documentSaveFailed(documentId, error);
             return;
@@ -720,7 +743,7 @@ void PaperlessApi::uploadDocument(const QString &filePath, const QVariantMap &me
     QFile *file = new QFile(filePath);
     if (!file->open(QIODevice::ReadOnly)) {
         delete file;
-        callback(QByteArray(), PaperlessApi::tr("The file could not be read."));
+        callback(QByteArray(), PaperlessApi::tr("The file could not be read."), 0);
         return;
     }
 
@@ -758,9 +781,9 @@ void PaperlessApi::uploadDocument(const QString &filePath, const QVariantMap &me
     context.progress = progress;
 
     const QUrl url = m_config->apiUrl(QStringLiteral("documents/post_document"));
-    dispatch(url, context, [callback](const QByteArray &data, const QString &error) {
+    dispatch(url, context, [callback](const QByteArray &data, const QString &error, int status) {
         if (!error.isEmpty()) {
-            callback(QByteArray(), error);
+            callback(QByteArray(), error, status);
             return;
         }
 
@@ -768,7 +791,7 @@ void PaperlessApi::uploadDocument(const QString &filePath, const QVariantMap &me
         QByteArray taskId = data.trimmed();
         if (taskId.startsWith('"') && taskId.endsWith('"'))
             taskId = taskId.mid(1, taskId.length() - 2);
-        callback(taskId, QString());
+        callback(taskId, QString(), status);
     }, MaxRedirects);
 }
 

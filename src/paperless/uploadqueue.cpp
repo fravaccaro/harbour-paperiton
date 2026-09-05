@@ -300,7 +300,7 @@ void UploadQueue::upload(int index)
     const QVariantMap metadata = m_entries.at(index).metadata;
 
     m_api->uploadDocument(filePath, metadata,
-                          [this, id](const QByteArray &taskId, const QString &error) {
+                          [this, id](const QByteArray &taskId, const QString &error, int) {
         m_busy = false;
 
         const int index = indexOfId(id);

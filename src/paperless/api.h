@@ -32,8 +32,12 @@ class PaperlessApi : public QObject
     Q_PROPERTY(bool permissionsKnown READ permissionsKnown NOTIFY permissionsChanged)
 
 public:
-    typedef std::function<void(const QByteArray &data, const QString &error)> DataCallback;
+    typedef std::function<void(const QByteArray &data, const QString &error, int status)> DataCallback;
     typedef std::function<void(const QJsonDocument &json, const QString &error)> JsonCallback;
+    // For callers to which a particular refusal is not a failure: an unfinished
+    // search query comes back as 400 and is not worth reporting as an error.
+    typedef std::function<void(const QJsonDocument &json, const QString &error,
+                               int status)> JsonStatusCallback;
     typedef std::function<void(qint64 sent, qint64 total)> ProgressCallback;
 
     explicit PaperlessApi(Config *config, QObject *parent = nullptr);
@@ -50,6 +54,7 @@ public:
 
     // Generic helpers used by the models and the image provider.
     void getJson(const QUrl &url, const JsonCallback &callback, bool quiet = false);
+    void getJson(const QUrl &url, const JsonStatusCallback &callback, bool quiet = false);
     void getData(const QUrl &url, const DataCallback &callback);
     void sendJson(const QByteArray &verb, const QUrl &url, const QJsonObject &body,
                   const JsonCallback &callback);
