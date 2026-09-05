@@ -14,6 +14,10 @@ Paperiton is a native [Paperless-ngx](https://docs.paperless-ngx.com/) client fo
 
 ## Donate
 
+The SailfishOS Community Team is on Liberapay:
+
+[![Liberapay receiving](https://img.shields.io/liberapay/receives/SailfishOScommunityTeam?logo=liberapay&label=SailfishOSCommunity)](https://liberapay.com/SailfishOScommunityTeam)
+
 [![Liberapay receiving](https://img.shields.io/liberapay/receives/fravaccaro?logo=liberapay&label=fravaccaro)](https://liberapay.com/fravaccaro)
 
 ## Features
