@@ -1,22 +1,18 @@
+import Opal.About 1.0 as A
 import QtQuick 2.0
 import Sailfish.Silica 1.0 as S
-import Opal.About 1.0 as A
 
 A.AboutPageBase {
     id: page
 
     allowedOrientations: S.Orientation.All
-
     appName: "Paperiton"
     appIcon: Qt.resolvedUrl("../../appicon.png")
     appVersion: Qt.application.version
-    description: qsTr("A client for the documents of a Paperless-ngx server: search, "
-                      + "filters, previews, uploads from the device or the camera, "
-                      + "metadata, notes and the task queue.")
+    description: qsTr("A client for the documents of a Paperless-ngx server: search, " + "filters, previews, uploads from the device or the camera, " + "metadata, notes and the task queue.")
     authors: ["fravaccaro"]
     homepageUrl: "https://fravaccaro.github.io/paperiton/"
     sourcesUrl: "https://github.com/fravaccaro/harbour-paperiton"
-
     donations.text: donations.defaultTextCoffee
     donations.services: [
         A.DonationService {
@@ -24,7 +20,6 @@ A.AboutPageBase {
             url: "https://liberapay.com/fravaccaro"
         }
     ]
-
     extraSections: [
         A.InfoSection {
             title: qsTr("Feedback")
@@ -48,8 +43,7 @@ A.AboutPageBase {
         },
         A.InfoSection {
             title: "Paperless-ngx"
-            text: qsTr("Paperless-ngx is a separate project and is not affiliated with "
-                       + "this app.")
+            text: qsTr("Paperless-ngx is a separate project and is not affiliated with " + "this app.")
             buttons: [
                 A.InfoButton {
                     text: qsTr("About Paperless-ngx")
@@ -62,4 +56,5 @@ A.AboutPageBase {
     licenses: A.License {
         spdxId: "GPL-3.0-or-later"
     }
+
 }

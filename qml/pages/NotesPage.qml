@@ -6,57 +6,60 @@ Page {
 
     property int documentId
     property string documentTitle
-
     property var notes: []
     property bool loading: true
     property string errorMessage
 
-    allowedOrientations: Orientation.All
-
     function authorOf(note) {
         if (!note.user)
-            return ""
+            return "";
+
         if (typeof note.user === "object")
-            return note.user.username || ""
-        return ""
+            return note.user.username || "";
+
+        return "";
     }
 
     function timeOf(note) {
         if (!note.created)
-            return ""
-        var created = new Date(note.created)
-        return isNaN(created.getTime()) ? "" : Qt.formatDateTime(created, Qt.DefaultLocaleShortDate)
+            return "";
+
+        var created = new Date(note.created);
+        return isNaN(created.getTime()) ? "" : Qt.formatDateTime(created, Qt.DefaultLocaleShortDate);
     }
 
     function subtitleOf(note) {
-        var parts = []
-        var author = authorOf(note)
+        var parts = [];
+        var author = authorOf(note);
         if (author !== "")
-            parts.push(author)
-        var time = timeOf(note)
+            parts.push(author);
+
+        var time = timeOf(note);
         if (time !== "")
-            parts.push(time)
-        return parts.join("  \u00b7  ")
+            parts.push(time);
+
+        return parts.join("  \u00b7  ");
     }
 
+    allowedOrientations: Orientation.All
     Component.onCompleted: Paperless.fetchNotes(documentId)
 
     Connections {
         target: Paperless
-
         onNotesFetched: {
             if (documentId !== page.documentId)
-                return
-            page.notes = notes
-            page.loading = false
-            page.errorMessage = ""
-        }
+                return ;
 
+            page.notes = notes;
+            page.loading = false;
+            page.errorMessage = "";
+        }
         onNotesFailed: {
             if (documentId !== page.documentId)
-                return
-            page.loading = false
-            page.errorMessage = error
+                return ;
+
+            page.loading = false;
+            page.errorMessage = error;
         }
     }
 
@@ -70,10 +73,19 @@ Page {
             MenuItem {
                 text: qsTr("Refresh")
                 onClicked: {
-                    page.loading = true
-                    Paperless.fetchNotes(page.documentId)
+                    page.loading = true;
+                    Paperless.fetchNotes(page.documentId);
                 }
             }
+
+        }
+
+        ViewPlaceholder {
+            enabled: !page.loading && page.notes.length === 0 && page.errorMessage === ""
+            text: qsTr("No notes")
+        }
+
+        VerticalScrollDecorator {
         }
 
         header: Column {
@@ -87,6 +99,7 @@ Page {
 
             TextArea {
                 id: noteField
+
                 width: parent.width
                 label: qsTr("New note")
                 placeholderText: qsTr("Write a note")
@@ -97,10 +110,10 @@ Page {
                 text: qsTr("Add note")
                 enabled: noteField.text.trim() !== "" && app.allowed("add_note")
                 onClicked: {
-                    page.loading = true
-                    Paperless.addNote(page.documentId, noteField.text.trim())
-                    noteField.text = ""
-                    noteField.focus = false
+                    page.loading = true;
+                    Paperless.addNote(page.documentId, noteField.text.trim());
+                    noteField.text = "";
+                    noteField.focus = false;
                 }
             }
 
@@ -118,31 +131,26 @@ Page {
                 text: qsTr("On this document")
                 visible: page.notes.length > 0
             }
+
         }
 
         delegate: ListItem {
             id: item
 
+            function remove() {
+                remorseAction(qsTr("Deleting"), function() {
+                    page.loading = true;
+                    Paperless.deleteNote(page.documentId, modelData.id);
+                });
+            }
+
             width: listView.width
             contentHeight: noteColumn.height + Theme.paddingLarge
 
-            function remove() {
-                remorseAction(qsTr("Deleting"), function() {
-                    page.loading = true
-                    Paperless.deleteNote(page.documentId, modelData.id)
-                })
-            }
-
-            menu: ContextMenu {
-                MenuItem {
-                    text: qsTr("Delete")
-                    visible: app.allowed("delete_note")
-                    onClicked: item.remove()
-                }
-            }
-
             Column {
                 id: noteColumn
+
+                spacing: Theme.paddingSmall / 2
 
                 anchors {
                     left: parent.left
@@ -151,7 +159,6 @@ Page {
                     rightMargin: Theme.horizontalPageMargin
                     verticalCenter: parent.verticalCenter
                 }
-                spacing: Theme.paddingSmall / 2
 
                 Label {
                     width: parent.width
@@ -167,15 +174,20 @@ Page {
                     color: Theme.secondaryColor
                     text: page.subtitleOf(modelData)
                 }
+
             }
+
+            menu: ContextMenu {
+                MenuItem {
+                    text: qsTr("Delete")
+                    visible: app.allowed("delete_note")
+                    onClicked: item.remove()
+                }
+
+            }
+
         }
 
-        ViewPlaceholder {
-            enabled: !page.loading && page.notes.length === 0 && page.errorMessage === ""
-            text: qsTr("No notes")
-        }
-
-        VerticalScrollDecorator {}
     }
 
     BusyIndicator {
@@ -183,4 +195,5 @@ Page {
         size: BusyIndicatorSize.Large
         running: page.loading && page.notes.length === 0
     }
+
 }

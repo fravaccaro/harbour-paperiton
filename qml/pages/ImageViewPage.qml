@@ -23,8 +23,8 @@ Page {
             width: Math.max(flickable.width, image.width * image.scale)
             height: Math.max(flickable.height, image.height * image.scale)
             pinch.target: image
-            pinch.minimumScale: 1.0
-            pinch.maximumScale: 6.0
+            pinch.minimumScale: 1
+            pinch.maximumScale: 6
             pinch.dragAxis: Pinch.NoDrag
 
             Image {
@@ -38,6 +38,7 @@ Page {
                 transformOrigin: Item.Center
                 source: page.source
             }
+
         }
 
         BusyIndicator {
@@ -50,11 +51,19 @@ Page {
             enabled: image.status === Image.Error
             text: qsTr("Could not show this file")
         }
+
     }
 
     PageHeader {
         title: page.title
-        opacity: flickable.moving ? 0.0 : 1.0
-        Behavior on opacity { FadeAnimation {} }
+        opacity: flickable.moving ? 0 : 1
+
+        Behavior on opacity {
+            FadeAnimation {
+            }
+
+        }
+
     }
+
 }

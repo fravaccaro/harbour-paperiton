@@ -474,7 +474,7 @@
         <translation>Questo server usa %1 per l&apos;accesso.</translation>
     </message>
     <message>
-        <source>Sign in with the web interface</source>
+        <source>Sign in via the web interface</source>
         <translation>Accedi con l&apos;interfaccia web</translation>
     </message>
     <message>
@@ -500,6 +500,18 @@
     <message>
         <source>Use an API token</source>
         <translation>Usa un token API</translation>
+    </message>
+    <message>
+        <source>Use the web interface</source>
+        <translation>Usa l&apos;interfaccia web</translation>
+    </message>
+    <message>
+        <source>For single sign-on and two-factor authentication.</source>
+        <translation>Per il single sign-on e l&apos;autenticazione a due fattori.</translation>
+    </message>
+    <message>
+        <source>The server opens inside the app. Paperiton takes the API token of your account once you are signed in.</source>
+        <translation>Il server si apre nell&apos;app. Una volta effettuato l&apos;accesso, Paperiton prende il token API del tuo account.</translation>
     </message>
     <message>
         <source>Create one in the Paperless web interface under My Profile.</source>
@@ -859,69 +871,6 @@
     <message>
         <source>The file could not be read.</source>
         <translation>Impossibile leggere il file.</translation>
-    </message>
-</context>
-<context>
-    <name>SettingsPage</name>
-    <message>
-        <source>Settings</source>
-        <translation>Impostazioni</translation>
-    </message>
-    <message>
-        <source>Server</source>
-        <translation>Server</translation>
-    </message>
-    <message>
-        <source>Sign out</source>
-        <translation>Esci</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Indirizzo</translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation>Utente</translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation>Documenti</translation>
-    </message>
-    <message>
-        <source>Ignore certificate errors</source>
-        <translation>Ignora gli errori del certificato</translation>
-    </message>
-    <message>
-        <source>Only for a server with a self-signed certificate on your own network.</source>
-        <translation>Solo per un server con certificato autofirmato sulla tua rete.</translation>
-    </message>
-    <message>
-        <source>This account cannot read documents: %1</source>
-        <translation>Questo account non può leggere i documenti: %1</translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation>Archiviazione</translation>
-    </message>
-    <message>
-        <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Downloads.</source>
-        <translation>Il token API è conservato nell&apos;archivio cifrato di Sailfish OS. I documenti che apri vengono scaricati nella cache privata dell&apos;app ed eliminati alla chiusura; &quot;Salva sul dispositivo&quot; ne conserva una copia in Download.</translation>
-    </message>
-    <message>
-        <source>Secure storage reported: %1</source>
-        <translation>L&apos;archivio sicuro ha segnalato: %1</translation>
-    </message>
-    <message>
-        <source>Clear cache</source>
-        <translation>Svuota la cache</translation>
-    </message>
-    <message>
-        <source>Clearing cache</source>
-        <translation>Svuotamento della cache</translation>
-    </message>
-    <message>
-        <source>Signing out</source>
-        <translation>Uscita</translation>
     </message>
 </context>
 <context>

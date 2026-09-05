@@ -1,10 +1,9 @@
-import QtQuick 2.0
 import Opal.SupportMe 1.0
+import QtQuick 2.0
 
 SupportDialog {
     greeting: qsTr("Hi there!")
-    hook: qsTr("Thank you for using Paperiton. If it saves you some time, "
-               + "maybe you can give a little back?")
+    hook: qsTr("Thank you for using Paperiton. If it saves you some time, " + "maybe you can give a little back?")
     goodbye: qsTr("Thank you for your support!")
 
     SupportAction {
@@ -32,22 +31,22 @@ SupportDialog {
         title: qsTr("Why support this app?")
 
         DetailsParagraph {
-            text: qsTr("Paperiton is free software under the GPLv3, written in spare time "
-                       + "next to other projects.")
+            text: qsTr("Paperiton is free software under the GPLv3, written in spare time " + "next to other projects.")
         }
 
         DetailsParagraph {
-            text: qsTr("Support keeps it working with new Paperless-ngx releases and new "
-                       + "versions of Sailfish OS.")
+            text: qsTr("Support keeps it working with new Paperless-ngx releases and new " + "versions of Sailfish OS.")
         }
+
     }
 
     DetailsDrawer {
         title: qsTr("Other ways to help")
 
         DetailsParagraph {
-            text: qsTr("Report what breaks, suggest what is missing, or tell other "
-                       + "Paperless-ngx users about the app.")
+            text: qsTr("Report what breaks, suggest what is missing, or tell other " + "Paperless-ngx users about the app.")
         }
+
     }
+
 }

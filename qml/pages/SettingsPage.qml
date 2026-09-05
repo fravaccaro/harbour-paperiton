@@ -10,13 +10,31 @@ Page {
         anchors.fill: parent
         contentHeight: column.height + Theme.paddingLarge
 
+
+        PullDownMenu {
+            MenuItem {
+                
+                text: qsTr("Sign out")
+                onClicked: signOutRemorse.execute(qsTr("Signing out"), function() {
+                    Paperless.logout();
+                })
+            }
+
+
+        }
+
         Column {
             id: column
+
             width: page.width
 
-            PageHeader { title: qsTr("Settings") }
+            PageHeader {
+                title: qsTr("Settings")
+            }
 
-            SectionHeader { text: qsTr("Server") }
+            SectionHeader {
+                text: qsTr("Server")
+            }
 
             DetailItem {
                 label: qsTr("Address")
@@ -52,7 +70,9 @@ Page {
                 text: qsTr("This account cannot read documents: %1").arg(Paperless.accessWarning)
             }
 
-            SectionHeader { text: qsTr("Storage") }
+            SectionHeader {
+                text: qsTr("Storage")
+            }
 
             Label {
                 x: Theme.horizontalPageMargin
@@ -60,10 +80,7 @@ Page {
                 wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.secondaryColor
-                text: qsTr("The API token is kept in the encrypted storage of Sailfish OS. "
-                           + "Documents you open are downloaded to the private cache of the app "
-                           + "and deleted again when the app closes; \"Save on device\" keeps a "
-                           + "copy in Downloads.")
+                text: qsTr("The API token is kept in the encrypted storage of Sailfish OS. " + "Documents you open are downloaded to the private cache of the app " + "and deleted again when the app closes; \"Save on device\" keeps a " + "copy in Downloads.")
             }
 
             Label {
@@ -84,8 +101,9 @@ Page {
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: qsTr("Clear cache")
-                onClicked: cacheRemorse.execute(qsTr("Clearing cache"),
-                                                function() { Paperless.clearCache() })
+                onClicked: cacheRemorse.execute(qsTr("Clearing cache"), function() {
+                    Paperless.clearCache();
+                })
             }
 
             Item {
@@ -93,16 +111,19 @@ Page {
                 height: Theme.paddingLarge
             }
 
-            Button {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("Sign out")
-                onClicked: signOutRemorse.execute(qsTr("Signing out"), function() { Paperless.logout() })
-            }
+
+
+        RemorsePopup {
+            id: signOutRemorse
         }
 
-        RemorsePopup { id: signOutRemorse }
-        RemorsePopup { id: cacheRemorse }
+        RemorsePopup {
+            id: cacheRemorse
+        }
 
-        VerticalScrollDecorator {}
+        VerticalScrollDecorator {
+        }
+
     }
+
 }

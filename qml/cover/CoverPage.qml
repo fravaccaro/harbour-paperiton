@@ -7,12 +7,9 @@ CoverBackground {
     // The server counts the documents under each tag itself, so the number is
     // read off the inbox tag rather than by listing the inbox a second time.
     readonly property int inboxCount: Paperless.authenticated ? Tags.inboxDocumentCount : 0
-
     readonly property bool uploading: Uploads.activeCount > 0
     readonly property bool showInbox: !uploading && inboxCount > 0
-    readonly property int headline: uploading ? Uploads.activeCount
-                                              : showInbox ? inboxCount
-                                                          : Paperless.totalDocuments
+    readonly property int headline: uploading ? Uploads.activeCount : showInbox ? inboxCount : Paperless.totalDocuments
 
     clip: true
 
@@ -31,16 +28,18 @@ CoverBackground {
             bottom: parent.bottom
             bottomMargin: -height * 0.22
         }
+
     }
 
     Column {
+        spacing: Theme.paddingSmall
+
         anchors {
             left: parent.left
             right: parent.right
             verticalCenter: parent.verticalCenter
             margins: Theme.paddingMedium
         }
-        spacing: Theme.paddingSmall
 
         Label {
             width: parent.width
@@ -56,10 +55,12 @@ CoverBackground {
             visible: Paperless.authenticated && cover.headline > 0
             text: cover.headline
             color: Theme.highlightColor
+
             font {
                 pixelSize: Theme.fontSizeHuge
                 family: Theme.fontFamilyHeading
             }
+
         }
 
         Label {
@@ -70,33 +71,39 @@ CoverBackground {
             font.pixelSize: Theme.fontSizeExtraSmall
             text: {
                 if (!Paperless.authenticated)
-                    return qsTr("Not signed in")
+                    return qsTr("Not signed in");
+
                 if (cover.uploading)
-                    return qsTr("uploading", "goes under the number of files being uploaded")
+                    return qsTr("uploading", "goes under the number of files being uploaded");
+
                 if (cover.showInbox)
-                    return qsTr("in inbox", "goes under the number of documents in the inbox")
+                    return qsTr("in inbox", "goes under the number of documents in the inbox");
+
                 if (Paperless.totalDocuments === 0)
-                    return qsTr("No documents yet")
-                return qsTr("documents", "goes under the total number of documents")
+                    return qsTr("No documents yet");
+
+                return qsTr("documents", "goes under the total number of documents");
             }
         }
+
     }
 
     BusyIndicator {
+        size: BusyIndicatorSize.Small
+        running: cover.uploading
+
         anchors {
             horizontalCenter: parent.horizontalCenter
             bottom: parent.bottom
             bottomMargin: Theme.paddingLarge
         }
-        size: BusyIndicatorSize.Small
-        running: cover.uploading
+
     }
 
     // Offered only to someone who could act on it: signed in, and allowed by the
     // server to add documents, which is the rule the pulley menu follows too.
     CoverActionList {
-        enabled: Paperless.authenticated
-                 && __silica_applicationwindow_instance.allowed("add_document")
+        enabled: Paperless.authenticated && __silica_applicationwindow_instance.allowed("add_document")
 
         CoverAction {
             iconSource: "image://theme/icon-cover-new"
@@ -104,6 +111,7 @@ CoverBackground {
             // is reached by the name Silica gives it.
             onTriggered: __silica_applicationwindow_instance.openUpload()
         }
+
     }
 
     // The number shown here is the one from the last time the tags were read,
@@ -112,7 +120,9 @@ CoverBackground {
         target: Qt.application
         onActiveChanged: {
             if (!Qt.application.active && Paperless.authenticated)
-                Tags.reloadIfStale(120)
+                Tags.reloadIfStale(120);
+
         }
     }
+
 }

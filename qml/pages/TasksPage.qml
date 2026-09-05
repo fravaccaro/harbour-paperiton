@@ -4,26 +4,26 @@ import Sailfish.Silica 1.0
 Page {
     id: page
 
-    allowedOrientations: Orientation.All
-
     function statusText(status) {
         switch (status.toUpperCase()) {
         case "SUCCESS":
-            return qsTr("Done")
+            return qsTr("Done");
         case "FAILURE":
-            return qsTr("Failed")
+            return qsTr("Failed");
         case "STARTED":
-            return qsTr("Running")
+            return qsTr("Running");
         case "PENDING":
-            return qsTr("Waiting")
+            return qsTr("Waiting");
         default:
-            return status
+            return status;
         }
     }
 
+    allowedOrientations: Orientation.All
     onStatusChanged: {
         if (status === PageStatus.Active)
-            Tasks.reload()
+            Tasks.reload();
+
     }
 
     SilicaListView {
@@ -42,6 +42,16 @@ Page {
                 text: Tasks.failedOnly ? qsTr("Show all tasks") : qsTr("Show only failures")
                 onClicked: Tasks.failedOnly = !Tasks.failedOnly
             }
+
+        }
+
+        ViewPlaceholder {
+            enabled: Tasks.count === 0 && !Tasks.loading
+            text: Tasks.errorString !== "" ? qsTr("Could not load tasks") : qsTr("Nothing in the queue")
+            hintText: Tasks.errorString
+        }
+
+        VerticalScrollDecorator {
         }
 
         header: PageHeader {
@@ -55,24 +65,9 @@ Page {
             width: listView.width
             contentHeight: Theme.itemSizeLarge
 
-            menu: ContextMenu {
-                MenuItem {
-                    text: qsTr("Open document")
-                    visible: model.documentId > 0
-                    onClicked: pageStack.push(Qt.resolvedUrl("DocumentPage.qml"), {
-                                                  documentId: model.documentId,
-                                                  documentTitle: model.fileName
-                                              })
-                }
-
-                MenuItem {
-                    text: qsTr("Acknowledge")
-                    visible: !model.acknowledged
-                    onClicked: Tasks.acknowledge(index)
-                }
-            }
-
             Column {
+                spacing: Theme.paddingSmall / 2
+
                 anchors {
                     left: parent.left
                     leftMargin: Theme.horizontalPageMargin
@@ -80,7 +75,6 @@ Page {
                     rightMargin: Theme.horizontalPageMargin
                     verticalCenter: parent.verticalCenter
                 }
-                spacing: Theme.paddingSmall / 2
 
                 Label {
                     width: parent.width
@@ -94,27 +88,41 @@ Page {
                     wrapMode: Text.WordWrap
                     maximumLineCount: 2
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    color: model.status.toUpperCase() === "FAILURE" ? Theme.errorColor
-                                                                    : Theme.secondaryColor
+                    color: model.status.toUpperCase() === "FAILURE" ? Theme.errorColor : Theme.secondaryColor
                     text: {
-                        var parts = [page.statusText(model.status)]
+                        var parts = [page.statusText(model.status)];
                         if (model.created && !isNaN(model.created.getTime()))
-                            parts.push(Qt.formatDateTime(model.created, Qt.DefaultLocaleShortDate))
+                            parts.push(Qt.formatDateTime(model.created, Qt.DefaultLocaleShortDate));
+
                         if (model.result !== "")
-                            parts.push(model.result)
-                        return parts.join("  \u00b7  ")
+                            parts.push(model.result);
+
+                        return parts.join("  \u00b7  ");
                     }
                 }
+
             }
+
+            menu: ContextMenu {
+                MenuItem {
+                    text: qsTr("Open document")
+                    visible: model.documentId > 0
+                    onClicked: pageStack.push(Qt.resolvedUrl("DocumentPage.qml"), {
+                        "documentId": model.documentId,
+                        "documentTitle": model.fileName
+                    })
+                }
+
+                MenuItem {
+                    text: qsTr("Acknowledge")
+                    visible: !model.acknowledged
+                    onClicked: Tasks.acknowledge(index)
+                }
+
+            }
+
         }
 
-        ViewPlaceholder {
-            enabled: Tasks.count === 0 && !Tasks.loading
-            text: Tasks.errorString !== "" ? qsTr("Could not load tasks") : qsTr("Nothing in the queue")
-            hintText: Tasks.errorString
-        }
-
-        VerticalScrollDecorator {}
     }
 
     BusyIndicator {
@@ -122,4 +130,5 @@ Page {
         size: BusyIndicatorSize.Large
         running: Tasks.loading && Tasks.count === 0
     }
+
 }

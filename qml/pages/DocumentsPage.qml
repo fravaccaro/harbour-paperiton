@@ -6,93 +6,94 @@ Page {
 
     // What the list is narrowed to, in the words the user picked it by.
     readonly property string filterSummary: {
-        var parts = []
+        var parts = [];
         if (SavedViews.count > 0 && Object.keys(Documents.filters).length > 0) {
-            var viewName = SavedViews.nameMatching(Documents.filters, Documents.ordering)
+            var viewName = SavedViews.nameMatching(Documents.filters, Documents.ordering);
             if (viewName !== "")
-                parts.push(viewName)
+                parts.push(viewName);
+
         }
         if (Documents.tagId > 0 && Tags.ready)
-            parts.push(Tags.nameFor(Documents.tagId))
+            parts.push(Tags.nameFor(Documents.tagId));
+
         if (Documents.correspondentId > 0 && Correspondents.ready)
-            parts.push(Correspondents.nameFor(Documents.correspondentId))
-        return parts.join("  \u00b7  ")
+            parts.push(Correspondents.nameFor(Documents.correspondentId));
+
+        return parts.join("  \u00b7  ");
     }
-
     property var selectedIds: []
-
     // The field is asked for from the pulley menu rather than standing above
     // the documents all the time.
     property bool searchVisible: false
-
     property var bulkOperations: []
     property int bulkIndex: -1
     property string bulkError
 
-    allowedOrientations: Orientation.All
-
     function runBulk(operations) {
-        bulkError = ""
-        bulkOperations = operations
-        bulkIndex = -1
-        nextBulkOperation()
+        bulkError = "";
+        bulkOperations = operations;
+        bulkIndex = -1;
+        nextBulkOperation();
     }
 
     function nextBulkOperation() {
-        bulkIndex++
+        bulkIndex++;
         if (bulkIndex >= bulkOperations.length) {
-            bulkIndex = -1
-            selectedIds = []
-            Documents.reload()
-            return
+            bulkIndex = -1;
+            selectedIds = [];
+            Documents.reload();
+            return ;
         }
-
-        var operation = bulkOperations[bulkIndex]
-        Paperless.bulkEdit(selectedIds, operation.method, operation.parameters)
+        var operation = bulkOperations[bulkIndex];
+        Paperless.bulkEdit(selectedIds, operation.method, operation.parameters);
     }
 
     function startSelection(documentId) {
-        selectedIds = [documentId]
+        selectedIds = [documentId];
     }
 
     function toggleSelection(documentId) {
-        var ids = selectedIds.slice()
-        var at = ids.indexOf(documentId)
+        var ids = selectedIds.slice();
+        var at = ids.indexOf(documentId);
         if (at >= 0)
-            ids.splice(at, 1)
+            ids.splice(at, 1);
         else
-            ids.push(documentId)
-        selectedIds = ids
+            ids.push(documentId);
+        selectedIds = ids;
     }
 
     function isSelected(documentId) {
-        return selectedIds.indexOf(documentId) >= 0
+        return selectedIds.indexOf(documentId) >= 0;
     }
 
     function subtitle(created, correspondentId, lookupsReady) {
-        var parts = []
+        var parts = [];
         if (created && !isNaN(created.getTime()))
-            parts.push(Qt.formatDate(created, Qt.DefaultLocaleShortDate))
+            parts.push(Qt.formatDate(created, Qt.DefaultLocaleShortDate));
+
         if (lookupsReady && correspondentId > 0) {
-            var name = Correspondents.nameFor(correspondentId)
+            var name = Correspondents.nameFor(correspondentId);
             if (name !== "")
-                parts.push(name)
+                parts.push(name);
+
         }
-        return parts.join("  \u00b7  ")
+        return parts.join("  \u00b7  ");
     }
 
+    allowedOrientations: Orientation.All
     onStatusChanged: {
         if (status !== PageStatus.Active)
-            return
+            return ;
 
         // Opening a document drops the attachment, so it is put back every time
         // this page becomes current again. Not while signed out, since this page
         // is then on its way off the stack and a second change would collide.
         if (Paperless.authenticated && !pageStack.nextPage(page))
-            pageStack.pushAttached(Qt.resolvedUrl("FilterPage.qml"))
+            pageStack.pushAttached(Qt.resolvedUrl("FilterPage.qml"));
 
         if (Documents.count === 0 && !Documents.loading)
-            Documents.reload()
+            Documents.reload();
+
     }
 
     // A new document belongs at the top of the list, and merging it in leaves
@@ -111,22 +112,19 @@ Page {
 
     Connections {
         target: Paperless
-
         // Deleting is answered for here for the whole app: the document page
         // leaves itself when it worked, and says nothing when it did not.
         onDocumentDeleteFailed: app.notify(error)
-
         onBulkEditFinished: {
             if (page.bulkIndex < 0)
-                return
+                return ;
 
             if (error !== "") {
-                page.bulkIndex = -1
-                page.bulkError = error
-                return
+                page.bulkIndex = -1;
+                page.bulkError = error;
+                return ;
             }
-
-            page.nextBulkOperation()
+            page.nextBulkOperation();
         }
     }
 
@@ -137,7 +135,8 @@ Page {
         target: app
         onApplicationActiveChanged: {
             if (app.applicationActive && Paperless.authenticated)
-                Documents.refreshIfStale(300)
+                Documents.refreshIfStale(300);
+
         }
     }
 
@@ -146,14 +145,90 @@ Page {
 
         anchors.fill: parent
         model: Documents
+        // Reaching the end is noticed while the view is laying itself out, and
+        // the model must not be asked for anything in the middle of that, so the
+        // next page is asked for once the layout has settled.
+        onAtYEndChanged: {
+            if (atYEnd)
+                loadMoreDelay.restart();
+
+        }
+
+        PullDownMenu {
+            MenuItem {
+                text: page.selectedIds.length === 1 ? qsTr("Edit one document") : qsTr("Edit %1 documents").arg(page.selectedIds.length)
+                visible: page.selectedIds.length > 0
+                onClicked: {
+                    var dialog = pageStack.push(Qt.resolvedUrl("BulkEditPage.qml"), {
+                        "documentCount": page.selectedIds.length
+                    });
+                    dialog.accepted.connect(function() {
+                        page.runBulk(dialog.operations());
+                    });
+                }
+            }
+
+            MenuItem {
+                text: page.selectedIds.length === 1 ? qsTr("Delete one document") : qsTr("Delete %1 documents").arg(page.selectedIds.length)
+                visible: page.selectedIds.length > 0 && app.allowed("delete_document")
+                onClicked: deleteRemorse.execute(qsTr("Deleting"), function() {
+                    page.runBulk([{
+                        "method": "delete",
+                        "parameters": {
+                        }
+                    }]);
+                })
+            }
+
+            MenuItem {
+                text: qsTr("Cancel selection")
+                visible: page.selectedIds.length > 0
+                onClicked: page.selectedIds = []
+            }
+
+            MenuItem {
+                text: Uploads.activeCount > 0 ? qsTr("Uploads (%1)").arg(Uploads.activeCount) : qsTr("Upload")
+                visible: page.selectedIds.length === 0 && app.allowed("add_document")
+                onClicked: pageStack.push(Qt.resolvedUrl("UploadPage.qml"))
+            }
+
+            MenuItem {
+                text: qsTr("Refresh")
+                visible: page.selectedIds.length === 0
+                onClicked: Documents.reload()
+            }
+
+            MenuItem {
+                text: page.searchVisible ? qsTr("Hide search") : qsTr("Search")
+                visible: page.selectedIds.length === 0
+                onClicked: page.searchVisible = !page.searchVisible
+            }
+
+        }
+
+        ViewPlaceholder {
+            enabled: !Documents.loading && Documents.count === 0
+            text: {
+                if (Documents.errorString !== "")
+                    return qsTr("Could not load documents");
+
+                if (Documents.searchQuery !== "" || Documents.tagId > 0 || Documents.correspondentId > 0 || Object.keys(Documents.filters).length > 0)
+                    return qsTr("Nothing found");
+
+                return qsTr("No documents");
+            }
+            hintText: Documents.errorString !== "" ? Documents.errorString : qsTr("Pull down to refresh")
+        }
+
+        VerticalScrollDecorator {
+        }
 
         header: Column {
             width: listView.width
 
             PageHeader {
                 title: qsTr("Documents")
-                description: page.selectedIds.length > 0
-                             ? qsTr("%1 selected").arg(page.selectedIds.length) : page.filterSummary
+                description: page.selectedIds.length > 0 ? qsTr("%1 selected").arg(page.selectedIds.length) : page.filterSummary
             }
 
             Label {
@@ -168,19 +243,18 @@ Page {
 
             SearchField {
                 id: searchField
+
                 width: parent.width
                 visible: page.searchVisible
                 // A search runs inside whatever the list is narrowed to, so the
                 // field says which documents are being searched.
-                placeholderText: page.filterSummary !== ""
-                                 ? qsTr("Search in %1").arg(page.filterSummary)
-                                 : qsTr("Search documents")
+                placeholderText: page.filterSummary !== "" ? qsTr("Search in %1").arg(page.filterSummary) : qsTr("Search documents")
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                 EnterKey.iconSource: "image://theme/icon-m-enter-close"
                 EnterKey.onClicked: {
-                    searchDelay.stop()
-                    Documents.searchQuery = text.trim()
-                    focus = false
+                    searchDelay.stop();
+                    Documents.searchQuery = text.trim();
+                    focus = false;
                 }
                 onTextChanged: searchDelay.restart()
             }
@@ -200,6 +274,7 @@ Page {
             // for the field has to live in here with it.
             Timer {
                 id: searchDelay
+
                 interval: 600
                 onTriggered: Documents.searchQuery = searchField.text.trim()
             }
@@ -208,10 +283,10 @@ Page {
                 target: Documents
                 onSearchQueryChanged: {
                     if (searchField.text === Documents.searchQuery)
-                        return
+                        return ;
 
-                    searchField.text = Documents.searchQuery
-                    searchDelay.stop()
+                    searchField.text = Documents.searchQuery;
+                    searchDelay.stop();
                 }
             }
 
@@ -221,70 +296,16 @@ Page {
                 target: page
                 onSearchVisibleChanged: {
                     if (page.searchVisible) {
-                        searchField.forceActiveFocus()
-                        return
+                        searchField.forceActiveFocus();
+                        return ;
                     }
-
-                    searchDelay.stop()
-                    searchField.text = ""
-                    searchField.focus = false
-                    Documents.searchQuery = ""
-                }
-            }
-        }
-
-        PullDownMenu {
-            MenuItem {
-                text: page.selectedIds.length === 1
-                      ? qsTr("Edit one document")
-                      : qsTr("Edit %1 documents").arg(page.selectedIds.length)
-                visible: page.selectedIds.length > 0
-                onClicked: {
-                    var dialog = pageStack.push(Qt.resolvedUrl("BulkEditPage.qml"), {
-                                                    documentCount: page.selectedIds.length
-                                                })
-                    dialog.accepted.connect(function() {
-                        page.runBulk(dialog.operations())
-                    })
+                    searchDelay.stop();
+                    searchField.text = "";
+                    searchField.focus = false;
+                    Documents.searchQuery = "";
                 }
             }
 
-            MenuItem {
-                text: page.selectedIds.length === 1
-                      ? qsTr("Delete one document")
-                      : qsTr("Delete %1 documents").arg(page.selectedIds.length)
-                visible: page.selectedIds.length > 0 && app.allowed("delete_document")
-                onClicked: deleteRemorse.execute(qsTr("Deleting"), function() {
-                    page.runBulk([{ "method": "delete", "parameters": {} }])
-                })
-            }
-
-            MenuItem {
-                text: qsTr("Cancel selection")
-                visible: page.selectedIds.length > 0
-                onClicked: page.selectedIds = []
-            }
-
-            MenuItem {
-                text: Uploads.activeCount > 0 ? qsTr("Uploads (%1)").arg(Uploads.activeCount)
-                                              : qsTr("Upload")
-                visible: page.selectedIds.length === 0 && app.allowed("add_document")
-                onClicked: pageStack.push(Qt.resolvedUrl("UploadPage.qml"))
-            }
-
-
-            MenuItem {
-                text: qsTr("Refresh")
-                visible: page.selectedIds.length === 0
-                onClicked: Documents.reload()
-            }
-
-
-            MenuItem {
-                text: page.searchVisible ? qsTr("Hide search") : qsTr("Search")
-                visible: page.selectedIds.length === 0
-                onClicked: page.searchVisible = !page.searchVisible
-            }
         }
 
         delegate: ListItem {
@@ -295,44 +316,23 @@ Page {
 
             contentHeight: Theme.itemSizeLarge
             highlighted: down || selected
-
-            menu: ContextMenu {
-                MenuItem {
-                    text: qsTr("Select")
-                    visible: page.selectedIds.length === 0 && app.allowed("change_document")
-                    onClicked: page.startSelection(model.documentId)
-                }
-
-                MenuItem {
-                    text: qsTr("Delete")
-                    visible: page.selectedIds.length === 0 && app.allowed("delete_document")
-                    onClicked: {
-                        // The row is gone by the time the countdown runs out, so
-                        // which document it was has to be kept.
-                        var id = model.documentId
-                        item.remorseAction(qsTr("Deleting"), function() {
-                            Paperless.deleteDocument(id)
-                        })
-                    }
-                }
-            }
-
             onClicked: {
                 if (page.selectedIds.length > 0) {
-                    page.toggleSelection(model.documentId)
-                    return
+                    page.toggleSelection(model.documentId);
+                    return ;
                 }
-
                 pageStack.push(Qt.resolvedUrl("DocumentPage.qml"), {
-                                   documentId: model.documentId,
-                                   documentTitle: model.title,
-                                   created: model.created,
-                                   correspondentId: model.correspondentId,
-                                   tagIds: model.tagIds
-                               })
+                    "documentId": model.documentId,
+                    "documentTitle": model.title,
+                    "created": model.created,
+                    "correspondentId": model.correspondentId,
+                    "tagIds": model.tagIds
+                });
             }
 
             Row {
+                spacing: Theme.paddingMedium
+
                 anchors {
                     left: parent.left
                     leftMargin: Theme.horizontalPageMargin
@@ -340,7 +340,6 @@ Page {
                     rightMargin: Theme.horizontalPageMargin
                     verticalCenter: parent.verticalCenter
                 }
-                spacing: Theme.paddingMedium
 
                 Rectangle {
                     id: thumbnailFrame
@@ -358,7 +357,7 @@ Page {
                         fillMode: Image.PreserveAspectCrop
                         verticalAlignment: Image.AlignTop
                         source: model.thumbnailSource
-                        opacity: item.selected ? Theme.opacityLow : 1.0
+                        opacity: item.selected ? Theme.opacityLow : 1
                     }
 
                     Image {
@@ -366,6 +365,7 @@ Page {
                         visible: item.selected
                         source: "image://theme/icon-s-installed?" + Theme.highlightColor
                     }
+
                 }
 
                 Column {
@@ -402,14 +402,41 @@ Page {
                                 height: width
                                 radius: width / 2
                                 color: {
-                                    var tagColor = Tags.colorFor(modelData)
-                                    return tagColor !== "" ? tagColor : Theme.secondaryColor
+                                    var tagColor = Tags.colorFor(modelData);
+                                    return tagColor !== "" ? tagColor : Theme.secondaryColor;
                                 }
                             }
+
                         }
+
+                    }
+
+                }
+
+            }
+
+            menu: ContextMenu {
+                MenuItem {
+                    text: qsTr("Select")
+                    visible: page.selectedIds.length === 0 && app.allowed("change_document")
+                    onClicked: page.startSelection(model.documentId)
+                }
+
+                MenuItem {
+                    text: qsTr("Delete")
+                    visible: page.selectedIds.length === 0 && app.allowed("delete_document")
+                    onClicked: {
+                        // The row is gone by the time the countdown runs out, so
+                        // which document it was has to be kept.
+                        var id = model.documentId;
+                        item.remorseAction(qsTr("Deleting"), function() {
+                            Paperless.deleteDocument(id);
+                        });
                     }
                 }
+
             }
+
         }
 
         footer: Item {
@@ -421,43 +448,23 @@ Page {
                 size: BusyIndicatorSize.Small
                 running: Documents.loading && Documents.count > 0
             }
+
         }
 
-        // Reaching the end is noticed while the view is laying itself out, and
-        // the model must not be asked for anything in the middle of that, so the
-        // next page is asked for once the layout has settled.
-        onAtYEndChanged: {
-            if (atYEnd)
-                loadMoreDelay.restart()
-        }
-
-        ViewPlaceholder {
-            enabled: !Documents.loading && Documents.count === 0
-            text: {
-                if (Documents.errorString !== "")
-                    return qsTr("Could not load documents")
-                if (Documents.searchQuery !== "" || Documents.tagId > 0
-                        || Documents.correspondentId > 0
-                        || Object.keys(Documents.filters).length > 0) {
-                    return qsTr("Nothing found")
-                }
-                return qsTr("No documents")
-            }
-            hintText: Documents.errorString !== "" ? Documents.errorString
-                                                   : qsTr("Pull down to refresh")
-        }
-
-        VerticalScrollDecorator {}
     }
 
-    RemorsePopup { id: deleteRemorse }
+    RemorsePopup {
+        id: deleteRemorse
+    }
 
     Timer {
         id: loadMoreDelay
+
         interval: 0
         onTriggered: {
             if (listView.atYEnd)
-                Documents.loadMore()
+                Documents.loadMore();
+
         }
     }
 
@@ -466,4 +473,5 @@ Page {
         size: BusyIndicatorSize.Large
         running: Documents.loading && Documents.count === 0
     }
+
 }

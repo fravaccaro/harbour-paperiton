@@ -1,89 +1,92 @@
 import QtQuick 2.0
-import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
+import Sailfish.Silica 1.0
 import harbour.paperiton 1.0
 
 Page {
     id: page
 
-    // The window looks for this page by name, so that a request to add files
-    // which arrives from outside the pages returns to it instead of opening a
-    // second copy of it.
-    objectName: "uploadPage"
-
     // Files handed over by another app; the picker and the camera add more.
     property var filePaths: []
-
     property int correspondentId: -1
     property int documentTypeId: -1
     property var tagIds: []
-
     // The title typed for a single file. It is kept here because the field it
     // is typed in sits in the header of the list, which QML makes a component
     // of its own: the functions below cannot reach an id inside it.
     property string pendingTitle
 
-    allowedOrientations: Orientation.All
-
     function addFile(path, temporary) {
         // Every file passes through here, whichever way it arrived, so this is
         // where one the server would refuse is turned down.
         if (!Uploads.accepts(path)) {
-            app.notify(qsTr("%1 is not a PDF, a picture or a text file").arg(baseName(path)))
-            return
+            app.notify(qsTr("%1 is not a PDF, a picture or a text file").arg(baseName(path)));
+            return ;
         }
-
         for (var i = 0; i < pending.count; ++i) {
             if (pending.get(i).filePath === path)
-                return
+                return ;
+
         }
-        pending.append({ "filePath": path, "temporary": temporary === true })
+        pending.append({
+            "filePath": path,
+            "temporary": temporary === true
+        });
     }
 
     function baseName(path) {
-        return path.substring(path.lastIndexOf("/") + 1)
+        return path.substring(path.lastIndexOf("/") + 1);
     }
 
     function metadata() {
-        var data = {}
+        var data = {
+        };
         if (pending.count === 1 && page.pendingTitle.trim() !== "")
-            data.title = page.pendingTitle.trim()
+            data.title = page.pendingTitle.trim();
+
         if (page.correspondentId > 0)
-            data.correspondent = page.correspondentId
+            data.correspondent = page.correspondentId;
+
         if (page.documentTypeId > 0)
-            data.document_type = page.documentTypeId
+            data.document_type = page.documentTypeId;
+
         if (page.tagIds.length > 0)
-            data.tags = page.tagIds
-        return data
+            data.tags = page.tagIds;
+
+        return data;
     }
 
     function startUpload() {
-        var data = page.metadata()
+        var data = page.metadata();
         while (pending.count > 0) {
-            var entry = pending.get(0)
-            Uploads.enqueue(entry.filePath, data, entry.temporary)
-            pending.remove(0)
+            var entry = pending.get(0);
+            Uploads.enqueue(entry.filePath, data, entry.temporary);
+            pending.remove(0);
         }
     }
 
     function statusText(status, message, documentId) {
         switch (status) {
         case UploadQueue.Waiting:
-            return qsTr("Waiting")
+            return qsTr("Waiting");
         case UploadQueue.Uploading:
-            return qsTr("Sending")
+            return qsTr("Sending");
         case UploadQueue.Processing:
-            return qsTr("The server is processing the file")
+            return qsTr("The server is processing the file");
         case UploadQueue.Completed:
-            return documentId > 0 ? qsTr("Added as document %1").arg(documentId) : qsTr("Added")
+            return documentId > 0 ? qsTr("Added as document %1").arg(documentId) : qsTr("Added");
         default:
-            return message !== "" ? message : qsTr("Failed")
+            return message !== "" ? message : qsTr("Failed");
         }
     }
 
+    // The window looks for this page by name, so that a request to add files
+    // which arrives from outside the pages returns to it instead of opening a
+    // second copy of it.
+    objectName: "uploadPage"
+    allowedOrientations: Orientation.All
     Component.onCompleted: {
-        for (var i = 0; i < filePaths.length; ++i)
-            addFile(filePaths[i], false)
+        for (var i = 0; i < filePaths.length; ++i) addFile(filePaths[i], false)
     }
 
     ListModel {
@@ -106,23 +109,26 @@ Page {
             MenuItem {
                 text: qsTr("Scan with the camera")
                 onClicked: {
-                    var camera = pageStack.push(Qt.resolvedUrl("CameraPage.qml"))
+                    var camera = pageStack.push(Qt.resolvedUrl("CameraPage.qml"));
                     camera.captured.connect(function(filePath) {
-                        page.addFile(filePath, true)
-                    })
+                        page.addFile(filePath, true);
+                    });
                 }
             }
 
             MenuItem {
                 text: qsTr("Add files")
                 onClicked: {
-                    var picker = pageStack.push(pickerDialog)
+                    var picker = pageStack.push(pickerDialog);
                     picker.accepted.connect(function() {
-                        for (var i = 0; i < picker.selectedContent.count; ++i)
-                            page.addFile(picker.selectedContent.get(i).filePath, false)
-                    })
+                        for (var i = 0; i < picker.selectedContent.count; ++i) page.addFile(picker.selectedContent.get(i).filePath, false)
+                    });
                 }
             }
+
+        }
+
+        VerticalScrollDecorator {
         }
 
         header: Column {
@@ -133,10 +139,12 @@ Page {
                 title: qsTr("Upload")
                 description: {
                     if (Uploads.activeCount === 0)
-                        return ""
+                        return "";
+
                     if (Uploads.activeCount === 1)
-                        return qsTr("One file in progress")
-                    return qsTr("%1 files in progress").arg(Uploads.activeCount)
+                        return qsTr("One file in progress");
+
+                    return qsTr("%1 files in progress").arg(Uploads.activeCount);
                 }
             }
 
@@ -147,16 +155,16 @@ Page {
                 wrapMode: Text.WordWrap
                 color: Theme.secondaryHighlightColor
                 font.pixelSize: Theme.fontSizeSmall
-                text: qsTr("Pull down to pick files from the device or to scan a document with the camera. "
-                           + "Other apps can also share files with Paperiton. Paperless takes PDFs, "
-                           + "pictures and plain text files.")
+                text: qsTr("Pull down to pick files from the device or to scan a document with the camera. " + "Other apps can also share files with Paperiton. Paperless takes PDFs, " + "pictures and plain text files.")
             }
 
             Column {
                 width: parent.width
                 visible: pending.count > 0
 
-                SectionHeader { text: qsTr("Ready to upload") }
+                SectionHeader {
+                    text: qsTr("Ready to upload")
+                }
 
                 Repeater {
                     model: pending
@@ -165,13 +173,6 @@ Page {
                         width: parent.width
                         contentHeight: Theme.itemSizeSmall
 
-                        menu: ContextMenu {
-                            MenuItem {
-                                text: qsTr("Remove")
-                                onClicked: pending.remove(index)
-                            }
-                        }
-
                         Label {
                             x: Theme.horizontalPageMargin
                             width: parent.width - 2 * Theme.horizontalPageMargin
@@ -179,7 +180,17 @@ Page {
                             truncationMode: TruncationMode.Fade
                             text: page.baseName(model.filePath)
                         }
+
+                        menu: ContextMenu {
+                            MenuItem {
+                                text: qsTr("Remove")
+                                onClicked: pending.remove(index)
+                            }
+
+                        }
+
                     }
+
                 }
 
                 TextField {
@@ -190,57 +201,58 @@ Page {
                     onTextChanged: page.pendingTitle = text
                     // A title names one file, so it goes away with the file it
                     // named and when a second one joins it.
-                    onVisibleChanged: if (!visible) text = ""
+                    onVisibleChanged: {
+                        if (!visible)
+                            text = "";
+
+                    }
                     EnterKey.iconSource: "image://theme/icon-m-enter-close"
                     EnterKey.onClicked: focus = false
                 }
 
                 ValueButton {
                     label: qsTr("Correspondent")
-                    value: page.correspondentId > 0 && Correspondents.ready
-                           ? Correspondents.nameFor(page.correspondentId) : qsTr("None")
+                    value: page.correspondentId > 0 && Correspondents.ready ? Correspondents.nameFor(page.correspondentId) : qsTr("None")
                     onClicked: {
                         var picker = pageStack.push(Qt.resolvedUrl("LookupPickerPage.qml"), {
-                                                        lookup: Correspondents,
-                                                        heading: qsTr("Correspondent"),
-                                                        selectedId: page.correspondentId
-                                                    })
+                            "lookup": Correspondents,
+                            "heading": qsTr("Correspondent"),
+                            "selectedId": page.correspondentId
+                        });
                         picker.accepted.connect(function() {
-                            page.correspondentId = picker.selectedId
-                        })
+                            page.correspondentId = picker.selectedId;
+                        });
                     }
                 }
 
                 ValueButton {
                     label: qsTr("Type")
-                    value: page.documentTypeId > 0 && DocumentTypes.ready
-                           ? DocumentTypes.nameFor(page.documentTypeId) : qsTr("None")
+                    value: page.documentTypeId > 0 && DocumentTypes.ready ? DocumentTypes.nameFor(page.documentTypeId) : qsTr("None")
                     onClicked: {
                         var picker = pageStack.push(Qt.resolvedUrl("LookupPickerPage.qml"), {
-                                                        lookup: DocumentTypes,
-                                                        heading: qsTr("Type"),
-                                                        selectedId: page.documentTypeId
-                                                    })
+                            "lookup": DocumentTypes,
+                            "heading": qsTr("Type"),
+                            "selectedId": page.documentTypeId
+                        });
                         picker.accepted.connect(function() {
-                            page.documentTypeId = picker.selectedId
-                        })
+                            page.documentTypeId = picker.selectedId;
+                        });
                     }
                 }
 
                 ValueButton {
                     label: qsTr("Tags")
-                    value: page.tagIds.length > 0 && Tags.ready ? Tags.namesFor(page.tagIds).join(", ")
-                                                                : qsTr("None")
+                    value: page.tagIds.length > 0 && Tags.ready ? Tags.namesFor(page.tagIds).join(", ") : qsTr("None")
                     onClicked: {
                         var picker = pageStack.push(Qt.resolvedUrl("LookupPickerPage.qml"), {
-                                                        lookup: Tags,
-                                                        heading: qsTr("Tags"),
-                                                        multiple: true,
-                                                        selectedIds: page.tagIds
-                                                    })
+                            "lookup": Tags,
+                            "heading": qsTr("Tags"),
+                            "multiple": true,
+                            "selectedIds": page.tagIds
+                        });
                         picker.accepted.connect(function() {
-                            page.tagIds = picker.selectedIds
-                        })
+                            page.tagIds = picker.selectedIds;
+                        });
                     }
                 }
 
@@ -259,12 +271,14 @@ Page {
                     width: parent.width
                     height: Theme.paddingLarge
                 }
+
             }
 
             SectionHeader {
                 text: qsTr("Queue")
                 visible: Uploads.count > 0
             }
+
         }
 
         delegate: ListItem {
@@ -273,31 +287,9 @@ Page {
             width: listView.width
             contentHeight: Theme.itemSizeLarge
 
-            menu: ContextMenu {
-                MenuItem {
-                    text: qsTr("Open document")
-                    visible: model.documentId > 0
-                    onClicked: pageStack.push(Qt.resolvedUrl("DocumentPage.qml"), {
-                                                  documentId: model.documentId,
-                                                  documentTitle: model.title !== "" ? model.title
-                                                                                    : model.fileName
-                                              })
-                }
-
-                MenuItem {
-                    text: qsTr("Try again")
-                    visible: model.status === UploadQueue.Failed
-                    onClicked: Uploads.retry(index)
-                }
-
-                MenuItem {
-                    text: qsTr("Remove")
-                    visible: model.status !== UploadQueue.Uploading
-                    onClicked: Uploads.remove(index)
-                }
-            }
-
             Column {
+                spacing: Theme.paddingSmall / 2
+
                 anchors {
                     left: parent.left
                     leftMargin: Theme.horizontalPageMargin
@@ -305,7 +297,6 @@ Page {
                     rightMargin: Theme.horizontalPageMargin
                     verticalCenter: parent.verticalCenter
                 }
-                spacing: Theme.paddingSmall / 2
 
                 Label {
                     width: parent.width
@@ -330,10 +321,35 @@ Page {
                     maximumValue: 1
                     value: model.progress
                 }
+
             }
+
+            menu: ContextMenu {
+                MenuItem {
+                    text: qsTr("Open document")
+                    visible: model.documentId > 0
+                    onClicked: pageStack.push(Qt.resolvedUrl("DocumentPage.qml"), {
+                        "documentId": model.documentId,
+                        "documentTitle": model.title !== "" ? model.title : model.fileName
+                    })
+                }
+
+                MenuItem {
+                    text: qsTr("Try again")
+                    visible: model.status === UploadQueue.Failed
+                    onClicked: Uploads.retry(index)
+                }
+
+                MenuItem {
+                    text: qsTr("Remove")
+                    visible: model.status !== UploadQueue.Uploading
+                    onClicked: Uploads.remove(index)
+                }
+
+            }
+
         }
 
-        VerticalScrollDecorator {}
     }
 
     Component {
@@ -356,5 +372,7 @@ Page {
             _maskedAcceptDestination: page
             acceptDestinationAction: PageStackAction.Pop
         }
+
     }
+
 }

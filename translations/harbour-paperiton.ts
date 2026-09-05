@@ -474,7 +474,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Sign in with the web interface</source>
+        <source>Sign in via the web interface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -499,6 +499,18 @@
     </message>
     <message>
         <source>Use an API token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use the web interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For single sign-on and two-factor authentication.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The server opens inside the app. Paperiton takes the API token of your account once you are signed in.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -858,69 +870,6 @@
     </message>
     <message>
         <source>The file could not be read.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SettingsPage</name>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sign out</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Documents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ignore certificate errors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Only for a server with a self-signed certificate on your own network.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This account cannot read documents: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Storage</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Secure storage reported: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear cache</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clearing cache</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Signing out</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Downloads.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

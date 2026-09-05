@@ -1,6 +1,9 @@
 * Sat Sep 05 2026 fravaccaro 0.5.6-1
 - Signing in with the web interface works: the token is taken from the account
   profile instead of a script whose answer never came back
+- The API token and the web interface are two separate choices on the sign-in
+  page, each showing only what it needs, instead of the web interface hiding
+  behind the token option
 
 * Sat Sep 05 2026 fravaccaro 0.5.5-1
 - Documents can be deleted

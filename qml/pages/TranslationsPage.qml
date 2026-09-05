@@ -1,6 +1,6 @@
+import Opal.LinkHandler 1.0 as L
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import Opal.LinkHandler 1.0 as L
 
 Page {
     id: page
@@ -13,10 +13,13 @@ Page {
 
         Column {
             id: column
+
             width: page.width
             spacing: Theme.paddingMedium
 
-            PageHeader { title: qsTr("Translations") }
+            PageHeader {
+                title: qsTr("Translations")
+            }
 
             DetailItem {
                 label: "Italiano"
@@ -37,8 +40,12 @@ Page {
                 text: "Transifex"
                 onClicked: L.LinkHandler.openOrCopyUrl("https://explore.transifex.com/fravaccaro/paperiton", text)
             }
+
         }
 
-        VerticalScrollDecorator {}
+        VerticalScrollDecorator {
+        }
+
     }
+
 }

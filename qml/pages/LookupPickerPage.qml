@@ -11,27 +11,35 @@ Dialog {
     property int selectedId: -1
     property var selectedIds: []
 
-    allowedOrientations: Orientation.All
-
     function isSelected(itemId) {
-        return multiple ? selectedIds.indexOf(itemId) >= 0 : selectedId === itemId
+        return multiple ? selectedIds.indexOf(itemId) >= 0 : selectedId === itemId;
     }
 
     function toggle(itemId) {
-        var ids = selectedIds.slice()
-        var at = ids.indexOf(itemId)
+        var ids = selectedIds.slice();
+        var at = ids.indexOf(itemId);
         if (at >= 0)
-            ids.splice(at, 1)
+            ids.splice(at, 1);
         else
-            ids.push(itemId)
-        selectedIds = ids
+            ids.push(itemId);
+        selectedIds = ids;
     }
+
+    allowedOrientations: Orientation.All
 
     SilicaListView {
         id: listView
 
         anchors.fill: parent
         model: dialog.lookup
+
+        ViewPlaceholder {
+            enabled: dialog.lookup && dialog.lookup.count === 0 && !dialog.lookup.loading
+            text: qsTr("Nothing to choose from")
+        }
+
+        VerticalScrollDecorator {
+        }
 
         header: Column {
             width: listView.width
@@ -44,10 +52,9 @@ Dialog {
             BackgroundItem {
                 width: parent.width
                 visible: !dialog.multiple
-
                 onClicked: {
-                    dialog.selectedId = -1
-                    dialog.accept()
+                    dialog.selectedId = -1;
+                    dialog.accept();
                 }
 
                 Label {
@@ -56,20 +63,21 @@ Dialog {
                     text: qsTr("None")
                     color: dialog.selectedId <= 0 ? Theme.highlightColor : Theme.primaryColor
                 }
+
             }
+
         }
 
         delegate: BackgroundItem {
             id: item
 
             width: listView.width
-
             onClicked: {
                 if (dialog.multiple) {
-                    dialog.toggle(model.itemId)
+                    dialog.toggle(model.itemId);
                 } else {
-                    dialog.selectedId = model.itemId
-                    dialog.accept()
+                    dialog.selectedId = model.itemId;
+                    dialog.accept();
                 }
             }
 
@@ -93,26 +101,21 @@ Dialog {
                     width: parent.width - x - selectedIcon.width - Theme.paddingMedium
                     truncationMode: TruncationMode.Fade
                     text: model.name
-                    color: dialog.isSelected(model.itemId) ? Theme.highlightColor
-                                                           : (item.highlighted ? Theme.highlightColor
-                                                                               : Theme.primaryColor)
+                    color: dialog.isSelected(model.itemId) ? Theme.highlightColor : (item.highlighted ? Theme.highlightColor : Theme.primaryColor)
                 }
 
                 Image {
                     id: selectedIcon
+
                     anchors.verticalCenter: parent.verticalCenter
                     visible: dialog.multiple && dialog.isSelected(model.itemId)
                     source: "image://theme/icon-s-installed?" + Theme.highlightColor
                 }
+
             }
+
         }
 
-        ViewPlaceholder {
-            enabled: dialog.lookup && dialog.lookup.count === 0 && !dialog.lookup.loading
-            text: qsTr("Nothing to choose from")
-        }
-
-        VerticalScrollDecorator {}
     }
 
     BusyIndicator {
@@ -120,4 +123,5 @@ Dialog {
         size: BusyIndicatorSize.Large
         running: dialog.lookup && dialog.lookup.loading && dialog.lookup.count === 0
     }
+
 }

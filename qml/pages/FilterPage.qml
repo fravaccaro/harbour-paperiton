@@ -2,60 +2,51 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
+    // A view that names no order gets the order the list opens
+    // with, rather than whichever order the previous view asked for.
+
     id: page
 
-    allowedOrientations: Orientation.All
+    // Which entry of the Views section the document list is currently showing.
+    // A search runs inside a view, so it does not change which one that is.
+    readonly property bool showingAll: Documents.tagId <= 0 && Documents.correspondentId <= 0 && Documents.ordering === Documents.defaultOrdering && Object.keys(Documents.filters).length === 0
+    readonly property bool showingInbox: Tags.inboxTagId > 0 && Documents.tagId === Tags.inboxTagId && Documents.correspondentId <= 0 && Documents.ordering === Documents.defaultOrdering && Object.keys(Documents.filters).length === 0
+    // Whether there is anything for "Clear all filters" to clear. Showing all
+    // documents covers everything it resets apart from the search term.
+    readonly property bool anyFilterApplied: !showingAll || Documents.searchQuery !== ""
 
     // Every choice on this page narrows the list and then shows it: this page is
     // attached to the list and is navigated away from, never popped.
     function apply(changes) {
-        Documents.applyFilters(changes)
-        pageStack.navigateBack()
+        Documents.applyFilters(changes);
+        pageStack.navigateBack();
     }
 
     // A view replaces the whole selection, tag and correspondent included. The
     // search stays: a view is where to search, not what to search for.
     function applyView(filters, ordering, tagId) {
         apply({
-                  correspondentId: -1,
-                  tagId: tagId,
-                  // A view that names no order gets the order the list opens
-                  // with, rather than whichever order the previous view asked for.
-                  ordering: ordering === "" ? Documents.defaultOrdering : ordering,
-                  filters: filters
-              })
+            "correspondentId": -1,
+            "tagId": tagId,
+            "ordering": ordering === "" ? Documents.defaultOrdering : ordering,
+            "filters": filters
+        });
     }
-
-    // Which entry of the Views section the document list is currently showing.
-    // A search runs inside a view, so it does not change which one that is.
-    readonly property bool showingAll: Documents.tagId <= 0 && Documents.correspondentId <= 0
-                                       && Documents.ordering === Documents.defaultOrdering
-                                       && Object.keys(Documents.filters).length === 0
-
-    readonly property bool showingInbox: Tags.inboxTagId > 0
-                                         && Documents.tagId === Tags.inboxTagId
-                                         && Documents.correspondentId <= 0
-                                         && Documents.ordering === Documents.defaultOrdering
-                                         && Object.keys(Documents.filters).length === 0
-
-    // Whether there is anything for "Clear all filters" to clear. Showing all
-    // documents covers everything it resets apart from the search term.
-    readonly property bool anyFilterApplied: !showingAll || Documents.searchQuery !== ""
 
     function showingView(index) {
-        return Documents.tagId <= 0 && Documents.correspondentId <= 0
-                && SavedViews.matches(index, Documents.filters, Documents.ordering)
+        return Documents.tagId <= 0 && Documents.correspondentId <= 0 && SavedViews.matches(index, Documents.filters, Documents.ordering);
     }
 
+    allowedOrientations: Orientation.All
     // The names and the views are held for the whole run of the app, so opening
     // this page is the moment to catch up with what the server has meanwhile.
     onStatusChanged: {
         if (status !== PageStatus.Active)
-            return
+            return ;
 
-        SavedViews.reloadIfStale(300)
-        Tags.reloadIfStale(300)
-        Correspondents.reloadIfStale(300)
+        SavedViews.reloadIfStale(300);
+        Tags.reloadIfStale(300);
+        Correspondents.reloadIfStale(300);
     }
 
     SilicaFlickable {
@@ -63,12 +54,11 @@ Page {
         contentHeight: column.height + Theme.paddingLarge
 
         PullDownMenu {
-
             MenuItem {
                 text: qsTr("About")
                 onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
-            
+
             MenuItem {
                 text: qsTr("Settings")
                 onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
@@ -79,28 +69,34 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("TasksPage.qml"))
             }
 
-
             MenuItem {
                 text: qsTr("Clear all filters")
                 enabled: page.anyFilterApplied
                 onClicked: {
-                    Documents.clearFilters()
-                    pageStack.navigateBack()
+                    Documents.clearFilters();
+                    pageStack.navigateBack();
                 }
             }
+
         }
 
         Column {
             id: column
+
             width: page.width
 
-            PageHeader { title: qsTr("Filters") }
+            PageHeader {
+                title: qsTr("Filters")
+            }
 
-            SectionHeader { text: qsTr("Views") }
+            SectionHeader {
+                text: qsTr("Views")
+            }
 
             BackgroundItem {
                 width: parent.width
-                onClicked: page.applyView({}, "", -1)
+                onClicked: page.applyView({
+                }, "", -1)
 
                 Label {
                     x: Theme.horizontalPageMargin
@@ -108,12 +104,14 @@ Page {
                     text: qsTr("All documents")
                     color: page.showingAll ? Theme.highlightColor : Theme.primaryColor
                 }
+
             }
 
             BackgroundItem {
                 width: parent.width
                 visible: Tags.inboxTagId > 0
-                onClicked: page.applyView({}, "", Tags.inboxTagId)
+                onClicked: page.applyView({
+                }, "", Tags.inboxTagId)
 
                 Label {
                     x: Theme.horizontalPageMargin
@@ -121,6 +119,7 @@ Page {
                     text: qsTr("Inbox")
                     color: page.showingInbox ? Theme.highlightColor : Theme.primaryColor
                 }
+
             }
 
             Repeater {
@@ -131,9 +130,7 @@ Page {
 
                     width: column.width
                     enabled: model.supported
-
-                    onClicked: page.applyView(SavedViews.filtersFor(index),
-                                              SavedViews.orderingFor(index), -1)
+                    onClicked: page.applyView(SavedViews.filtersFor(index), SavedViews.orderingFor(index), -1)
 
                     Column {
                         anchors {
@@ -148,9 +145,8 @@ Page {
                             width: parent.width
                             truncationMode: TruncationMode.Fade
                             text: model.name
-                            color: viewItem.highlighted || page.showingView(index)
-                                   ? Theme.highlightColor : Theme.primaryColor
-                            opacity: model.supported ? 1.0 : Theme.opacityLow
+                            color: viewItem.highlighted || page.showingView(index) ? Theme.highlightColor : Theme.primaryColor
+                            opacity: model.supported ? 1 : Theme.opacityLow
                         }
 
                         Label {
@@ -160,15 +156,22 @@ Page {
                             color: Theme.secondaryColor
                             text: qsTr("Uses filters this app does not support")
                         }
+
                     }
+
                 }
+
             }
 
-            SectionHeader { text: qsTr("Tags") }
+            SectionHeader {
+                text: qsTr("Tags")
+            }
 
             BackgroundItem {
                 width: parent.width
-                onClicked: page.apply({ tagId: -1 })
+                onClicked: page.apply({
+                    "tagId": -1
+                })
 
                 Label {
                     x: Theme.horizontalPageMargin
@@ -176,6 +179,7 @@ Page {
                     text: qsTr("All tags")
                     color: Documents.tagId <= 0 ? Theme.highlightColor : Theme.primaryColor
                 }
+
             }
 
             Repeater {
@@ -183,7 +187,9 @@ Page {
 
                 BackgroundItem {
                     width: column.width
-                    onClicked: page.apply({ tagId: model.itemId })
+                    onClicked: page.apply({
+                        "tagId": model.itemId
+                    })
 
                     // The count keeps to the page margin whatever its number of
                     // digits, and the name gives way to it.
@@ -195,29 +201,37 @@ Page {
                         Rectangle {
                             id: dot
 
-                            anchors {
-                                left: parent.left
-                                verticalCenter: parent.verticalCenter
-                            }
                             width: Theme.paddingMedium
                             height: width
                             radius: width / 2
                             color: model.color !== "" ? model.color : Theme.secondaryColor
+
+                            anchors {
+                                left: parent.left
+                                verticalCenter: parent.verticalCenter
+                            }
+
                         }
 
                         Label {
                             id: countLabel
 
+                            font.pixelSize: Theme.fontSizeExtraSmall
+                            color: Theme.secondaryColor
+                            text: model.documentCount > 0 ? model.documentCount : ""
+
                             anchors {
                                 right: parent.right
                                 verticalCenter: parent.verticalCenter
                             }
-                            font.pixelSize: Theme.fontSizeExtraSmall
-                            color: Theme.secondaryColor
-                            text: model.documentCount > 0 ? model.documentCount : ""
+
                         }
 
                         Label {
+                            truncationMode: TruncationMode.Fade
+                            text: model.name
+                            color: Documents.tagId === model.itemId ? Theme.highlightColor : Theme.primaryColor
+
                             anchors {
                                 left: dot.right
                                 leftMargin: Theme.paddingMedium
@@ -225,28 +239,32 @@ Page {
                                 rightMargin: Theme.paddingMedium
                                 verticalCenter: parent.verticalCenter
                             }
-                            truncationMode: TruncationMode.Fade
-                            text: model.name
-                            color: Documents.tagId === model.itemId ? Theme.highlightColor
-                                                                    : Theme.primaryColor
+
                         }
+
                     }
+
                 }
+
             }
 
-            SectionHeader { text: qsTr("Correspondents") }
+            SectionHeader {
+                text: qsTr("Correspondents")
+            }
 
             BackgroundItem {
                 width: parent.width
-                onClicked: page.apply({ correspondentId: -1 })
+                onClicked: page.apply({
+                    "correspondentId": -1
+                })
 
                 Label {
                     x: Theme.horizontalPageMargin
                     anchors.verticalCenter: parent.verticalCenter
                     text: qsTr("All correspondents")
-                    color: Documents.correspondentId <= 0 ? Theme.highlightColor
-                                                          : Theme.primaryColor
+                    color: Documents.correspondentId <= 0 ? Theme.highlightColor : Theme.primaryColor
                 }
+
             }
 
             Repeater {
@@ -254,7 +272,9 @@ Page {
 
                 BackgroundItem {
                     width: column.width
-                    onClicked: page.apply({ correspondentId: model.itemId })
+                    onClicked: page.apply({
+                        "correspondentId": model.itemId
+                    })
 
                     Label {
                         x: Theme.horizontalPageMargin
@@ -262,14 +282,18 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         truncationMode: TruncationMode.Fade
                         text: model.name
-                        color: Documents.correspondentId === model.itemId ? Theme.highlightColor
-                                                                          : Theme.primaryColor
+                        color: Documents.correspondentId === model.itemId ? Theme.highlightColor : Theme.primaryColor
                     }
+
                 }
+
             }
+
         }
 
-        VerticalScrollDecorator {}
+        VerticalScrollDecorator {
+        }
+
     }
 
     BusyIndicator {
@@ -277,4 +301,5 @@ Page {
         size: BusyIndicatorSize.Large
         running: (Tags.loading && Tags.count === 0) || (Correspondents.loading && Correspondents.count === 0)
     }
+
 }
