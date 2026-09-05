@@ -131,7 +131,7 @@ Dialog {
                             id: appicon
 
                             anchors.horizontalCenter: parent.horizontalCenter
-                            source: "../../images/appinfo.png"
+                            source: "../../appicon.png"
                         }
 
                     }
@@ -178,7 +178,8 @@ Dialog {
 
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible: page.optionsKnown && (page.providers.length > 0 || !page.passwordSignIn
+                visible: false
+//                visible: page.optionsKnown && (page.providers.length > 0 || !page.passwordSignIn
                                                || page.tokenMode)
                 enabled: serverField.text.trim() !== ""
                 text: qsTr("Sign in with the web interface")

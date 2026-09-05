@@ -27,7 +27,7 @@ The SailfishOS Community Team is on Liberapay:
 <br style="clear: both; height:5px;" />
 -->
 
-- Sign in with user name and password, with an API token, or through the web interface.
+- Sign in with user name and password or with an API token.
 - Document view with tags, correspondent, document type, archive serial number and the OCR text.
 - Edit title, correspondent, type, tags, date, archive serial number and custom fields; change several documents at once; read, write and delete notes.
 - Upload files from the device and from the camera.
