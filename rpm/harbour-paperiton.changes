@@ -1,3 +1,21 @@
+* Sat Sep 05 2026 fravaccaro 0.5.2-1
+- The document list no longer breaks apart when the app is left and come back
+  to: the list is read again in place, so what was filed since appears at the
+  top, what was deleted goes, and the list stays where it was being read
+  instead of starting halfway down the archive
+- Reaching the end of the list asks for the next page once and only once, and a
+  page is only ever added to the list it was asked for
+- Picking a tag or a correspondent shows the documents straight away, as
+  picking a view already did, instead of leaving the filters page in front
+- A search now runs inside whatever the list is showing, and the search field
+  says so: searching while the inbox or a correspondent is picked searches
+  those documents rather than starting over on the whole archive
+- A list that could not be read again keeps the documents it has, and says why
+  instead of emptying itself
+- The whole app now works on one list of documents, and the cover reads the
+  number of documents in the inbox from the tag itself rather than by listing
+  the inbox on the side
+
 * Wed Sep 02 2026 fravaccaro 0.5.1-1
 - Only files Paperless can take are offered: the picker lists PDFs, pictures
   and plain text files, other apps offer Paperiton for those kinds only, and a

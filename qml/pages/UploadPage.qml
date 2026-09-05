@@ -336,7 +336,8 @@ Page {
 
         // The file picker rather than the content picker, which offers music
         // and videos and cannot be narrowed down. This one lists only the files
-        // the server takes, in every directory it opens.
+        // the server takes, in every directory it opens; its filters ignore
+        // case, so a file named in capitals is listed just the same.
         MultiFilePickerDialog {
             title: qsTr("Select files")
             nameFilters: Uploads.acceptedNameFilters

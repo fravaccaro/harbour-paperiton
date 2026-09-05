@@ -21,6 +21,7 @@ LookupModel::LookupModel(PaperlessApi *api, const QString &endpoint, QObject *pa
     , m_endpoint(endpoint)
     , m_generation(0)
     , m_inboxTagId(-1)
+    , m_inboxDocumentCount(0)
     , m_loading(false)
     , m_ready(false)
 {
@@ -194,16 +195,24 @@ void LookupModel::fetchPage(int page)
         m_entries = m_incoming;
         m_indexById.clear();
         int inboxTagId = -1;
+        int inboxDocumentCount = 0;
         for (int i = 0; i < m_entries.count(); ++i) {
             m_indexById.insert(m_entries.at(i).id, i);
-            if (m_entries.at(i).isInboxTag && inboxTagId < 0)
+            if (m_entries.at(i).isInboxTag && inboxTagId < 0) {
                 inboxTagId = m_entries.at(i).id;
+                inboxDocumentCount = m_entries.at(i).documentCount;
+            }
         }
         endResetModel();
 
         if (inboxTagId != m_inboxTagId) {
             m_inboxTagId = inboxTagId;
             emit inboxTagIdChanged();
+        }
+
+        if (inboxDocumentCount != m_inboxDocumentCount) {
+            m_inboxDocumentCount = inboxDocumentCount;
+            emit inboxDocumentCountChanged();
         }
 
         m_incoming.clear();

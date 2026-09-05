@@ -334,6 +334,10 @@
         <source>Pull down to refresh</source>
         <translation>Tira giù per aggiornare</translation>
     </message>
+    <message>
+        <source>Search in %1</source>
+        <translation>Cerca in %1</translation>
+    </message>
 </context>
 <context>
     <name>ExternalUrlPage</name>

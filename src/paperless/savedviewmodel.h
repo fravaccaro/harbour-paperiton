@@ -45,6 +45,9 @@ public:
     // True when a document list queried with these parameters is showing this
     // view, which is how the filter page marks the one in use.
     Q_INVOKABLE bool matches(int index, const QVariantMap &filters, const QString &ordering) const;
+    // The name of the view a list queried with these parameters is showing, so
+    // that the list can say which view it is searching inside of.
+    Q_INVOKABLE QString nameMatching(const QVariantMap &filters, const QString &ordering) const;
 
 signals:
     void countChanged();

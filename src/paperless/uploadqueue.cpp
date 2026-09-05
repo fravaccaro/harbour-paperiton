@@ -125,6 +125,11 @@ QStringList UploadQueue::acceptedNameFilters() const
     return paperlessAcceptedNameFilters();
 }
 
+QStringList UploadQueue::acceptedMimeTypes() const
+{
+    return paperlessAcceptedMimeTypes();
+}
+
 bool UploadQueue::accepts(const QString &filePath) const
 {
     return paperlessAcceptsFile(filePath);

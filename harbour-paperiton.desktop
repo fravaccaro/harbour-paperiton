@@ -18,6 +18,8 @@ ExecDBus=harbour-paperiton
 [X-Share Method upload]
 Description=Add to your Paperless archive
 Description[it]=Aggiungi al tuo archivio Paperless
+# The kinds of file Paperless takes. src/paperless/filetypes.h holds the same
+# list for the running app; the two have to agree.
 Capabilities=application/pdf;image/png;image/jpeg;image/tiff;image/gif;image/webp;text/plain
 SupportsMultipleFiles=true
 

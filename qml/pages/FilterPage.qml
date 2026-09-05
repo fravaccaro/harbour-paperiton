@@ -4,41 +4,43 @@ import Sailfish.Silica 1.0
 Page {
     id: page
 
-    property QtObject documents
-
     allowedOrientations: Orientation.All
 
-    // A view replaces the whole selection, so the list is shown with it; the tag
-    // and correspondent lists below apply straight away instead. This page is
-    // attached to the list and must be navigated away from, never popped.
-    function applyView(filters, ordering, tagId) {
-        documents.searchQuery = ""
-        documents.correspondentId = -1
-        documents.tagId = tagId
-        // A view that names no order gets the order the list opens with, rather
-        // than whichever order the previous view happened to ask for.
-        documents.ordering = ordering === "" ? documents.defaultOrdering : ordering
-        documents.filters = filters
+    // Every choice on this page narrows the list and then shows it: this page is
+    // attached to the list and is navigated away from, never popped.
+    function apply(changes) {
+        Documents.applyFilters(changes)
         pageStack.navigateBack()
     }
 
+    // A view replaces the whole selection, tag and correspondent included. The
+    // search stays: a view is where to search, not what to search for.
+    function applyView(filters, ordering, tagId) {
+        apply({
+                  correspondentId: -1,
+                  tagId: tagId,
+                  // A view that names no order gets the order the list opens
+                  // with, rather than whichever order the previous view asked for.
+                  ordering: ordering === "" ? Documents.defaultOrdering : ordering,
+                  filters: filters
+              })
+    }
+
     // Which entry of the Views section the document list is currently showing.
-    readonly property bool showingAll: documents.tagId <= 0 && documents.correspondentId <= 0
-                                       && documents.searchQuery === ""
-                                       && documents.ordering === documents.defaultOrdering
-                                       && Object.keys(documents.filters).length === 0
+    // A search runs inside a view, so it does not change which one that is.
+    readonly property bool showingAll: Documents.tagId <= 0 && Documents.correspondentId <= 0
+                                       && Documents.ordering === Documents.defaultOrdering
+                                       && Object.keys(Documents.filters).length === 0
 
     readonly property bool showingInbox: Tags.inboxTagId > 0
-                                         && documents.tagId === Tags.inboxTagId
-                                         && documents.correspondentId <= 0
-                                         && documents.searchQuery === ""
-                                         && documents.ordering === documents.defaultOrdering
-                                         && Object.keys(documents.filters).length === 0
+                                         && Documents.tagId === Tags.inboxTagId
+                                         && Documents.correspondentId <= 0
+                                         && Documents.ordering === Documents.defaultOrdering
+                                         && Object.keys(Documents.filters).length === 0
 
     function showingView(index) {
-        return documents.tagId <= 0 && documents.correspondentId <= 0
-                && documents.searchQuery === ""
-                && SavedViews.matches(index, documents.filters, documents.ordering)
+        return Documents.tagId <= 0 && Documents.correspondentId <= 0
+                && SavedViews.matches(index, Documents.filters, Documents.ordering)
     }
 
     // The names and the views are held for the whole run of the app, so opening
@@ -75,7 +77,7 @@ Page {
             MenuItem {
                 text: qsTr("Clear all filters")
                 onClicked: {
-                    page.documents.clearFilters()
+                    Documents.clearFilters()
                     pageStack.navigateBack()
                 }
             }
@@ -159,13 +161,13 @@ Page {
 
             BackgroundItem {
                 width: parent.width
-                onClicked: page.documents.tagId = -1
+                onClicked: page.apply({ tagId: -1 })
 
                 Label {
                     x: Theme.horizontalPageMargin
                     anchors.verticalCenter: parent.verticalCenter
                     text: qsTr("All tags")
-                    color: page.documents.tagId <= 0 ? Theme.highlightColor : Theme.primaryColor
+                    color: Documents.tagId <= 0 ? Theme.highlightColor : Theme.primaryColor
                 }
             }
 
@@ -174,7 +176,7 @@ Page {
 
                 BackgroundItem {
                     width: column.width
-                    onClicked: page.documents.tagId = model.itemId
+                    onClicked: page.apply({ tagId: model.itemId })
 
                     // The count keeps to the page margin whatever its number of
                     // digits, and the name gives way to it.
@@ -218,8 +220,8 @@ Page {
                             }
                             truncationMode: TruncationMode.Fade
                             text: model.name
-                            color: page.documents.tagId === model.itemId ? Theme.highlightColor
-                                                                         : Theme.primaryColor
+                            color: Documents.tagId === model.itemId ? Theme.highlightColor
+                                                                    : Theme.primaryColor
                         }
                     }
                 }
@@ -229,14 +231,14 @@ Page {
 
             BackgroundItem {
                 width: parent.width
-                onClicked: page.documents.correspondentId = -1
+                onClicked: page.apply({ correspondentId: -1 })
 
                 Label {
                     x: Theme.horizontalPageMargin
                     anchors.verticalCenter: parent.verticalCenter
                     text: qsTr("All correspondents")
-                    color: page.documents.correspondentId <= 0 ? Theme.highlightColor
-                                                               : Theme.primaryColor
+                    color: Documents.correspondentId <= 0 ? Theme.highlightColor
+                                                          : Theme.primaryColor
                 }
             }
 
@@ -245,7 +247,7 @@ Page {
 
                 BackgroundItem {
                     width: column.width
-                    onClicked: page.documents.correspondentId = model.itemId
+                    onClicked: page.apply({ correspondentId: model.itemId })
 
                     Label {
                         x: Theme.horizontalPageMargin
@@ -253,8 +255,8 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         truncationMode: TruncationMode.Fade
                         text: model.name
-                        color: page.documents.correspondentId === model.itemId ? Theme.highlightColor
-                                                                               : Theme.primaryColor
+                        color: Documents.correspondentId === model.itemId ? Theme.highlightColor
+                                                                          : Theme.primaryColor
                     }
                 }
             }

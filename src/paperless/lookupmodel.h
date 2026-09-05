@@ -19,6 +19,9 @@ class LookupModel : public QAbstractListModel
     Q_PROPERTY(bool ready READ isReady NOTIFY readyChanged)
     // Only meaningful for tags: -1 when the server defines no inbox tag.
     Q_PROPERTY(int inboxTagId READ inboxTagId NOTIFY inboxTagIdChanged)
+    // How many documents the server counts under the inbox tag. The cover shows
+    // it, which saves it a list of its own.
+    Q_PROPERTY(int inboxDocumentCount READ inboxDocumentCount NOTIFY inboxDocumentCountChanged)
 
 public:
     enum Roles {
@@ -39,6 +42,7 @@ public:
     bool isLoading() const { return m_loading; }
     bool isReady() const { return m_ready; }
     int inboxTagId() const { return m_inboxTagId; }
+    int inboxDocumentCount() const { return m_inboxDocumentCount; }
 
     Q_INVOKABLE void reload();
     // Reloads only when the names were last read more than that many seconds
@@ -55,6 +59,7 @@ signals:
     void loadingChanged();
     void readyChanged();
     void inboxTagIdChanged();
+    void inboxDocumentCountChanged();
 
 private:
     struct Entry {
@@ -79,6 +84,7 @@ private:
     QHash<int, int> m_indexById;
     int m_generation;
     int m_inboxTagId;
+    int m_inboxDocumentCount;
     bool m_loading;
     bool m_ready;
 };

@@ -1,16 +1,21 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import harbour.paperiton 1.0
 
 Page {
     id: page
 
-    property string filterSummary: {
+    // What the list is narrowed to, in the words the user picked it by.
+    readonly property string filterSummary: {
         var parts = []
-        if (documents.tagId > 0 && Tags.ready)
-            parts.push(Tags.nameFor(documents.tagId))
-        if (documents.correspondentId > 0 && Correspondents.ready)
-            parts.push(Correspondents.nameFor(documents.correspondentId))
+        if (SavedViews.count > 0 && Object.keys(Documents.filters).length > 0) {
+            var viewName = SavedViews.nameMatching(Documents.filters, Documents.ordering)
+            if (viewName !== "")
+                parts.push(viewName)
+        }
+        if (Documents.tagId > 0 && Tags.ready)
+            parts.push(Tags.nameFor(Documents.tagId))
+        if (Documents.correspondentId > 0 && Correspondents.ready)
+            parts.push(Correspondents.nameFor(Documents.correspondentId))
         return parts.join("  \u00b7  ")
     }
 
@@ -34,7 +39,7 @@ Page {
         if (bulkIndex >= bulkOperations.length) {
             bulkIndex = -1
             selectedIds = []
-            documents.reload()
+            Documents.reload()
             return
         }
 
@@ -80,19 +85,24 @@ Page {
         // this page becomes current again. Not while signed out, since this page
         // is then on its way off the stack and a second change would collide.
         if (Paperless.authenticated && !pageStack.nextPage(page))
-            pageStack.pushAttached(Qt.resolvedUrl("FilterPage.qml"), { documents: documents })
+            pageStack.pushAttached(Qt.resolvedUrl("FilterPage.qml"))
 
-        if (documents.count === 0 && !documents.loading)
-            documents.reload()
+        if (Documents.count === 0 && !Documents.loading)
+            Documents.reload()
     }
 
-    DocumentListModel {
-        id: documents
-    }
-
+    // A new document belongs at the top of the list, and merging it in leaves
+    // the rest of the list, and the place in it, alone.
     Connections {
         target: Uploads
-        onUploadCompleted: documents.reload()
+        onUploadCompleted: Documents.refresh()
+    }
+
+    // The documents are still there to be read; only the reason they could not
+    // be read again has to reach the user.
+    Connections {
+        target: Documents
+        onLoadFailed: app.notify(error)
     }
 
     Connections {
@@ -112,14 +122,14 @@ Page {
         }
     }
 
-    // Coming back after a while should not show yesterday's list, but a reload
-    // empties the model and sends the view back to the top, so a short glance at
-    // the cover leaves the list as it was.
+    // Coming back after a while should not show yesterday's list. The first page
+    // is read again and merged in, so what arrived since appears at the top and
+    // the list stays where the user left it.
     Connections {
         target: app
         onApplicationActiveChanged: {
             if (app.applicationActive && Paperless.authenticated)
-                documents.reloadIfStale(300)
+                Documents.refreshIfStale(300)
         }
     }
 
@@ -127,7 +137,7 @@ Page {
         id: listView
 
         anchors.fill: parent
-        model: documents
+        model: Documents
 
         header: Column {
             width: listView.width
@@ -151,12 +161,16 @@ Page {
             SearchField {
                 id: searchField
                 width: parent.width
-                placeholderText: qsTr("Search documents")
+                // A search runs inside whatever the list is narrowed to, so the
+                // field says which documents are being searched.
+                placeholderText: page.filterSummary !== ""
+                                 ? qsTr("Search in %1").arg(page.filterSummary)
+                                 : qsTr("Search documents")
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                 EnterKey.iconSource: "image://theme/icon-m-enter-close"
                 EnterKey.onClicked: {
                     searchDelay.stop()
-                    documents.searchQuery = text.trim()
+                    Documents.searchQuery = text.trim()
                     focus = false
                 }
                 onTextChanged: searchDelay.restart()
@@ -167,16 +181,16 @@ Page {
             Timer {
                 id: searchDelay
                 interval: 600
-                onTriggered: documents.searchQuery = searchField.text.trim()
+                onTriggered: Documents.searchQuery = searchField.text.trim()
             }
 
             Connections {
-                target: documents
+                target: Documents
                 onSearchQueryChanged: {
-                    if (searchField.text === documents.searchQuery)
+                    if (searchField.text === Documents.searchQuery)
                         return
 
-                    searchField.text = documents.searchQuery
+                    searchField.text = Documents.searchQuery
                     searchDelay.stop()
                 }
             }
@@ -214,7 +228,7 @@ Page {
             MenuItem {
                 text: qsTr("Refresh")
                 visible: page.selectedIds.length === 0
-                onClicked: documents.reload()
+                onClicked: Documents.reload()
             }
         }
 
@@ -332,39 +346,54 @@ Page {
 
         footer: Item {
             width: listView.width
-            height: documents.loading && documents.count > 0 ? Theme.itemSizeSmall : Theme.paddingLarge
+            height: Documents.loading && Documents.count > 0 ? Theme.itemSizeSmall : Theme.paddingLarge
 
             BusyIndicator {
                 anchors.centerIn: parent
                 size: BusyIndicatorSize.Small
-                running: documents.loading && documents.count > 0
+                running: Documents.loading && Documents.count > 0
             }
         }
 
+        // Reaching the end is noticed while the view is laying itself out, and
+        // the model must not be asked for anything in the middle of that, so the
+        // next page is asked for once the layout has settled.
         onAtYEndChanged: {
-            if (atYEnd && documents.canLoadMore)
-                documents.loadMore()
+            if (atYEnd)
+                loadMoreDelay.restart()
         }
 
         ViewPlaceholder {
-            enabled: !documents.loading && documents.count === 0
+            enabled: !Documents.loading && Documents.count === 0
             text: {
-                if (documents.errorString !== "")
+                if (Documents.errorString !== "")
                     return qsTr("Could not load documents")
-                if (documents.searchQuery !== "" || documents.tagId > 0 || documents.correspondentId > 0)
+                if (Documents.searchQuery !== "" || Documents.tagId > 0
+                        || Documents.correspondentId > 0
+                        || Object.keys(Documents.filters).length > 0) {
                     return qsTr("Nothing found")
+                }
                 return qsTr("No documents")
             }
-            hintText: documents.errorString !== "" ? documents.errorString
+            hintText: Documents.errorString !== "" ? Documents.errorString
                                                    : qsTr("Pull down to refresh")
         }
 
         VerticalScrollDecorator {}
     }
 
+    Timer {
+        id: loadMoreDelay
+        interval: 0
+        onTriggered: {
+            if (listView.atYEnd)
+                Documents.loadMore()
+        }
+    }
+
     BusyIndicator {
         anchors.centerIn: parent
         size: BusyIndicatorSize.Large
-        running: documents.loading && documents.count === 0
+        running: Documents.loading && Documents.count === 0
     }
 }

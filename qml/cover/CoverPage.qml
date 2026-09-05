@@ -1,13 +1,12 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import harbour.paperiton 1.0
 
 CoverBackground {
     id: cover
 
-    // Held apart from the model: reloading blanks totalCount while the request
-    // is in flight, and the cover is on screen the whole time.
-    property int inboxCount: 0
+    // The server counts the documents under each tag itself, so the number is
+    // read off the inbox tag rather than by listing the inbox a second time.
+    readonly property int inboxCount: Paperless.authenticated ? Tags.inboxDocumentCount : 0
 
     readonly property bool uploading: Uploads.activeCount > 0
     readonly property bool showInbox: !uploading && inboxCount > 0
@@ -93,40 +92,13 @@ CoverBackground {
         running: cover.uploading
     }
 
-    DocumentListModel {
-        id: inboxModel
-
-        // Only totalCount is read, so there is no point in carrying a whole
-        // page of documents back from the server.
-        pageSize: 1
-        onLoadingChanged: {
-            if (!loading && tagId > 0)
-                cover.inboxCount = totalCount
-        }
-    }
-
-    // The tag id is only known once the server has answered, and asking with
-    // no tag at all would count every document instead.
-    Binding {
-        target: inboxModel
-        property: "tagId"
-        value: Tags.inboxTagId
-        when: Paperless.authenticated && Tags.inboxTagId > 0
-    }
-
-    Connections {
-        target: Paperless
-        onAuthenticatedChanged: {
-            if (!Paperless.authenticated)
-                cover.inboxCount = 0
-        }
-    }
-
+    // The number shown here is the one from the last time the tags were read,
+    // so leaving the app is the moment to ask for them again.
     Connections {
         target: Qt.application
         onActiveChanged: {
-            if (!Qt.application.active && inboxModel.tagId > 0)
-                inboxModel.reloadIfStale(120)
+            if (!Qt.application.active && Paperless.authenticated)
+                Tags.reloadIfStale(120)
         }
     }
 }

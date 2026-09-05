@@ -334,6 +334,10 @@
         <source>Pull down to refresh</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Search in %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ExternalUrlPage</name>

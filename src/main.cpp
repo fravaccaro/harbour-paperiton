@@ -60,8 +60,10 @@ int main(int argc, char *argv[])
     UploadQueue uploads(&api);
     ThumbnailFetcher thumbnailFetcher(&api);
 
-    DocumentListModel::setApi(&api);
-    qmlRegisterType<DocumentListModel>("harbour.paperiton", 1, 0, "DocumentListModel");
+    // One list for the whole app: the list page and the filter page work on the
+    // same documents, and nothing else pages the archive on the side.
+    DocumentListModel documents(&api);
+
     qmlRegisterUncreatableType<UploadQueue>("harbour.paperiton", 1, 0, "UploadQueue",
                                             QStringLiteral("Provided as the Uploads context property"));
 
@@ -76,6 +78,7 @@ int main(int argc, char *argv[])
     QQmlContext *context = view->rootContext();
     context->setContextProperty(QStringLiteral("Paperless"), &api);
     context->setContextProperty(QStringLiteral("Settings"), &config);
+    context->setContextProperty(QStringLiteral("Documents"), &documents);
     context->setContextProperty(QStringLiteral("Tags"), &tags);
     context->setContextProperty(QStringLiteral("Correspondents"), &correspondents);
     context->setContextProperty(QStringLiteral("DocumentTypes"), &documentTypes);

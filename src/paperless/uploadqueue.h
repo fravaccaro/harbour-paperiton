@@ -25,6 +25,9 @@ class UploadQueue : public QAbstractListModel
     Q_PROPERTY(int runDone READ runDone NOTIFY progressChanged)
     // The kinds of file the server takes, as patterns for a file picker.
     Q_PROPERTY(QStringList acceptedNameFilters READ acceptedNameFilters CONSTANT)
+    // The same kinds as mime types, which is what other apps are offered this
+    // app for. The desktop entry names them too, and has to say the same.
+    Q_PROPERTY(QStringList acceptedMimeTypes READ acceptedMimeTypes CONSTANT)
 
 public:
     enum Status {
@@ -57,6 +60,7 @@ public:
     int runTotal() const { return m_runTotal; }
     int runDone() const { return m_runAdded + m_runFailed; }
     QStringList acceptedNameFilters() const;
+    QStringList acceptedMimeTypes() const;
 
     // Whether the server would take this file, decided by what is in it. A file
     // it would refuse is better turned down here, where the reason can be given.

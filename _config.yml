@@ -1,0 +1,11 @@
+remote_theme: pmarsceill/just-the-docs
+title: Paperiton
+description: A native Paperless-ngx client for Sailfish OS
+baseurl: "/harbour-paperiton"
+exclude: ["icons/", "landing/", "libs/", "qml/", "rpm/", "RPMS/", "src/", "translations/", "LICENSE", "*.desktop", "*.pro", "*.o", "Makefile", "harbour-paperiton"]
+
+url: "https://fravaccaro.github.io"
+search_enabled: true
+aux_links:
+    "Paperiton on GitHub":
+      - "//github.com/fravaccaro/harbour-paperiton"

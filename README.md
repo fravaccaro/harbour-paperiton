@@ -1,112 +1,70 @@
+---
+layout: default
+title: Home
+nav_order: 1
+description: "A native Paperless-ngx client for Sailfish OS"
+permalink: /
+---
+
 # Paperiton
 
-A native [Paperless-ngx](https://docs.paperless-ngx.com/) client for Sailfish OS.
+Paperiton is a native [Paperless-ngx](https://docs.paperless-ngx.com/) client for Sailfish OS. It talks to a Paperless-ngx server that you already run; it does not host documents on the phone.
 
-Paperiton talks to a Paperless-ngx server that you already run; it does not host
-documents on the phone.
+[![GitHub license](https://img.shields.io/github/license/fravaccaro/harbour-paperiton.svg)](https://github.com/fravaccaro/harbour-paperiton/blob/main/LICENSE) [![GitHub issues](https://img.shields.io/github/issues/fravaccaro/harbour-paperiton.svg)](https://github.com/fravaccaro/harbour-paperiton/issues) [![GitHub releases](https://img.shields.io/github/release/fravaccaro/harbour-paperiton.svg)](https://github.com/fravaccaro/harbour-paperiton/releases/latest)
+
+## Donate
+
+[![Liberapay receiving](https://img.shields.io/liberapay/receives/fravaccaro?logo=liberapay&label=fravaccaro)](https://liberapay.com/fravaccaro)
 
 ## Features
 
-- Sign in with user name and password, with an API token, or through the web
-  interface of the server, which also covers single sign-on and two-factor
-  authentication; the token is kept in Sailfish Secrets
-- Browse documents with infinite scrolling and thumbnails
-- Full text search (`?query=`) with a debounced search field
-- Filter by tag and by correspondent, and follow the saved views and the inbox
-  of the server
-- Document view with tags, correspondent, document type, archive serial number
-  and the OCR text
-- Edit title, correspondent, type, tags, date, archive serial number and custom
-  fields; change tags, correspondent and type of several documents at once
-- Read, write and delete notes
-- Upload files from the device, from other apps through the share menu, and
-  from the camera; the consumer task is followed until the document exists.
-  Only what Paperless can take is offered: PDFs, PNG, JPEG, TIFF, GIF and WebP
-  pictures, and plain text
-- Watch the task queue of the server and acknowledge failures
-- Open a document inside the app: it is downloaded into the private cache
-  directory, which is emptied when the app closes and when you sign out.
-  "Save on device" keeps a copy of the archived PDF in `~/Downloads`, which is
-  also the only place another application can read a document from
-- Self-signed certificates can be accepted explicitly
+<!-- Add screenshots to docs/screenshots/ and uncomment:
+<a href="docs/screenshots/screenshot1.png"><img width="33%" style="float: left;" src="docs/screenshots/screenshot1.png" alt="Document list" /></a> <a href="docs/screenshots/screenshot2.png"><img width="33%" style="float: left;" src="docs/screenshots/screenshot2.png" alt="Document view" /></a> <a href="docs/screenshots/screenshot3.png"><img width="33%" style="float: left;" src="docs/screenshots/screenshot3.png" alt="Upload" /></a>
+<br style="clear: both; height:5px;" />
+-->
+
+- Sign in with user name and password, with an API token, or through the web interface of the server (covers single sign-on and two-factor authentication); the token is kept in Sailfish Secrets.
+- Browse documents with infinite scrolling and thumbnails; full text search with a debounced search field.
+- Filter by tag and by correspondent, and follow the saved views and the inbox of the server.
+- Document view with tags, correspondent, document type, archive serial number and the OCR text.
+- Edit title, correspondent, type, tags, date, archive serial number and custom fields; change several documents at once; read, write and delete notes.
+- Upload files from the device, from other apps through the share menu, and from the camera; the consumer task is followed until the document exists.
+- Watch the task queue of the server and acknowledge failures.
+- Open documents inside the app, or keep a copy of the archived PDF in `~/Downloads` with "Save on device".
+- Self-signed certificates can be accepted explicitly.
 
 ## Requirements
 
 - Sailfish OS 5.0 or newer (Sailfish Secrets is used for the API token)
 - A reachable Paperless-ngx instance, API version 9 or newer
 
-## Building
+## Using Paperiton
 
-With the [Sailfish SDK](https://docs.sailfishos.org/Tools/Sailfish_SDK/Installation/):
+[Using Paperiton](docs/guide.md) — signing in, browsing and searching, editing, uploading, and where your files live.
 
-```bash
-sfdk config target SailfishOS-4.6.0.13-aarch64
-sfdk build
-```
+## Download
 
-Deploy to a connected device:
+RPMs for aarch64 and armv7hl are attached to the [GitHub releases](https://github.com/fravaccaro/harbour-paperiton/releases/latest). The package targets Chum and OpenRepos rather than the Jolla Store, because the document viewer needs the `Sailfish.Office` import, which Harbour does not allow.
 
-```bash
-sfdk config device "My Phone"
-sfdk deploy --sdk
-```
+## Developers
 
-RPMs for armv7hl and aarch64 are also built by the GitHub Actions workflow in
-`.github/workflows/build.yml`.
+[Developers](docs/devel/) — architecture, building, deploying, and CI (maintainers and contributors).
 
-`sfdk check` reports one error, `Import 'Sailfish.Office 1.0' is not allowed`.
-That import is the viewer of the Documents application, without which a
-document in the private cache directory cannot be shown at all, so the package
-is meant for Chum and OpenRepos rather than the Jolla Store.
+## Translate
 
-## Architecture
+Request a new language or contribute on the [Transifex project page](https://explore.transifex.com/fravaccaro/paperiton).
 
-| Part | Purpose |
-|---|---|
-| `src/paperless/config.*` | Server URL, user name and TLS preference in `~/.config/org.frapps.paperiton/harbour-paperiton/settings.conf` |
-| `src/paperless/secretsstore.*` | The API token in Sailfish Secrets, with migration of tokens written by version 0.1 |
-| `src/paperless/api.*` | `QNetworkAccessManager` wrapper: token header, redirect retries, timeouts, downloads, uploads, permission probe |
-| `src/paperless/documentlistmodel.*` | Paginated list model for `/api/documents/` |
-| `src/paperless/lookupmodel.*` | Tags, correspondents and document types by id |
-| `src/paperless/customfieldsmodel.*` | The custom fields defined on the server |
-| `src/paperless/savedviewmodel.*` | Saved views, translated into query parameters |
-| `src/paperless/uploadqueue.*` | Multipart uploads and polling of the consumer task |
-| `src/paperless/tasklistmodel.*` | `/api/tasks/` and acknowledging failures |
-| `src/paperless/thumbimageprovider.*` | `image://paperless/thumb/<id>` and `image://paperless/preview/<id>` |
-| `qml/pages/*` | Silica UI |
+## Credits
 
-Networking lives in C++ because the Paperless endpoints for thumbnails and
-previews need an `Authorization: Token …` header, which QML's `Image` cannot
-send. All API paths keep their trailing slash: Django redirects slash-less URLs
-and the redirect drops the authorization header.
+- [Paperless-ngx](https://docs.paperless-ngx.com/), the document management system this app is a client for.
+- [Opal](https://github.com/Pretty-SFOS/opal) QML modules (About, SupportMe) by [Mirian Margiani](https://github.com/Pretty-SFOS/opal-about).
+- Thanks to all translators and testers.
 
-Sailjail gives the app three private directories, named after the
-`OrganizationName` and `ApplicationName` of the desktop file:
-`~/.config/org.frapps.paperiton/harbour-paperiton` for the settings,
-`~/.cache/org.frapps.paperiton/harbour-paperiton` for thumbnails, downloaded
-documents, camera captures and the web view profile, and the matching
-`~/.local/share` directory, which is unused. No other application can read
-these paths, so documents are shown by `qml/pages/PdfViewPage.qml`, which wraps
-the viewer of the Documents application, and by `qml/pages/ImageViewPage.qml`.
-When that viewer is missing, the app falls back to a copy in `~/Downloads`.
-`documents/` and `captures/` are removed when the app starts and when it quits,
-and signing out removes the whole cache.
+## AI disclosure
 
-## Permissions
-
-`Internet` for the API, `Downloads` for keeping a copy of a document where
-another application can open it and for reading files that arrived from
-elsewhere, `Documents` and `Pictures` for the files kept there,
-`RemovableMedia` for files on a memory card, `Camera` for scanning, `Secrets`
-for the API token and `WebView` for signing in through the web interface of the
-server.
-
-Without a permission for the directory a file sits in, a file picked or shared
-from there cannot be read at all: the sandbox hides every one of the common
-directories unless a permission names it. The file picker reads those
-directories itself, so the media index, and the `MediaIndexing` permission it
-would need, are not involved.
+- **Cursor-assisted work.** Paperiton is developed with [Cursor](https://cursor.com) as an IDE with AI assistance, for tasks such as scaffolding, documentation, translation upkeep and RPM packaging. Output is reviewed and edited by the maintainer before commit.
+- **Not a substitute for testing.** AI suggestions do not replace testing on Sailfish OS hardware, reading the code, or applying your own knowledge. Generated changes are treated like any other patch: understand it, test it, then ship it.
 
 ## Licence
 
-GPL-3.0-only
+[GPL-3.0-only](https://github.com/fravaccaro/harbour-paperiton/blob/main/LICENSE)

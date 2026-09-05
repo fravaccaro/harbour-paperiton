@@ -4,12 +4,17 @@
 #include <QAbstractListModel>
 #include <QDateTime>
 #include <QString>
+#include <QUrl>
 #include <QVariantList>
 #include <QVariantMap>
 #include <QVector>
 
 class PaperlessApi;
 
+// The one list of documents the app shows. The list page and the filter page
+// both work on this single instance, so what the user chose in one is what the
+// other sees, and there is never a second copy of the archive being paged in
+// the background.
 class DocumentListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -21,9 +26,6 @@ class DocumentListModel : public QAbstractListModel
     Q_PROPERTY(QString defaultOrdering READ defaultOrdering CONSTANT)
     // Extra query parameters, used for the inbox tag and for saved views.
     Q_PROPERTY(QVariantMap filters READ filters WRITE setFilters NOTIFY filtersChanged)
-    // The cover only wants totalCount, so it asks for the smallest page the
-    // server will send rather than a screenful of documents it never shows.
-    Q_PROPERTY(int pageSize READ pageSize WRITE setPageSize NOTIFY pageSizeChanged)
     Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
     Q_PROPERTY(int totalCount READ totalCount NOTIFY totalCountChanged)
     Q_PROPERTY(bool loading READ isLoading NOTIFY loadingChanged)
@@ -45,10 +47,7 @@ public:
         PageCountRole
     };
 
-    explicit DocumentListModel(QObject *parent = nullptr);
-
-    // Set once from main.cpp; the app talks to a single server.
-    static void setApi(PaperlessApi *api);
+    explicit DocumentListModel(PaperlessApi *api, QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
@@ -70,19 +69,25 @@ public:
     QVariantMap filters() const { return m_filters; }
     void setFilters(const QVariantMap &filters);
 
-    int pageSize() const { return m_pageSize; }
-    void setPageSize(int size);
-
     int totalCount() const { return m_totalCount; }
-    bool isLoading() const { return m_loading; }
+    bool isLoading() const { return m_request != NoRequest; }
     bool canLoadMore() const;
     QString errorString() const { return m_errorString; }
 
+    // Throws the list away and reads it again from the top. For a query that
+    // describes another set of documents, and for a refresh the user asked for.
     Q_INVOKABLE void reload();
-    // Reloads only when the list was last read more than that many seconds ago,
-    // so returning to the app does not throw away a list the user is reading.
-    Q_INVOKABLE void reloadIfStale(int seconds);
+    // Reads the first page again and merges it into the list in place, so the
+    // documents that arrived since are picked up without the list blanking or
+    // losing the place the user had scrolled to.
+    Q_INVOKABLE void refresh();
+    // Merges, but only if the list was last read more than that many seconds
+    // ago; a short glance at the cover leaves the list alone.
+    Q_INVOKABLE void refreshIfStale(int seconds);
     Q_INVOKABLE void loadMore();
+    // Several parts of the query at once, named as the properties are. Set one
+    // by one they would each start a request for a list nobody ever sees.
+    Q_INVOKABLE void applyFilters(const QVariantMap &changes);
     Q_INVOKABLE void clearFilters();
     Q_INVOKABLE QVariantMap get(int index) const;
 
@@ -92,12 +97,14 @@ signals:
     void correspondentIdChanged();
     void orderingChanged();
     void filtersChanged();
-    void pageSizeChanged();
     void countChanged();
     void totalCountChanged();
     void loadingChanged();
     void canLoadMoreChanged();
     void errorStringChanged();
+    // A request that failed over a list which still holds documents: the
+    // documents stay on screen, so the reason is told instead of shown.
+    void loadFailed(const QString &error);
 
 private:
     struct Entry {
@@ -111,15 +118,40 @@ private:
         QString originalFileName;
         QVariant archiveSerialNumber;
         int pageCount;
+
+        bool operator==(const Entry &other) const;
+        bool operator!=(const Entry &other) const { return !(*this == other); }
     };
 
-    void fetchPage(int page);
-    void setLoading(bool loading);
+    // At most one of these is in flight at any time, which is what keeps a
+    // reply from being applied to a list that has meanwhile become another one.
+    enum Request {
+        NoRequest,
+        ReloadRequest,
+        RefreshRequest,
+        PageRequest
+    };
+
+    // Each records the new value and announces it, and answers whether the
+    // query changed; who called decides when the list is read again.
+    bool changeSearchQuery(const QString &query);
+    bool changeTagId(int id);
+    bool changeCorrespondentId(int id);
+    bool changeOrdering(const QString &ordering);
+    bool changeFilters(const QVariantMap &filters);
+
+    void fetchPage(int page, Request kind);
+    void applyReload(const QVector<Entry> &entries);
+    void applyRefresh(const QVector<Entry> &entries);
+    void applyPage(const QVector<Entry> &entries);
+    void setRequest(Request request);
     void setErrorString(const QString &error);
+    void reportError(const QString &error);
+    void clear();
     bool hasFilters() const;
+    QUrl pageUrl(int page) const;
 
-    static PaperlessApi *s_api;
-
+    PaperlessApi *m_api;
     QVector<Entry> m_entries;
     QDateTime m_loadedAt;
     QString m_searchQuery;
@@ -127,11 +159,15 @@ private:
     QVariantMap m_filters;
     int m_tagId;
     int m_correspondentId;
-    int m_pageSize;
     int m_totalCount;
-    int m_page;
+    // The number of rows the list had when the request in flight was sent. A
+    // reply is only applied to a list that still looks that way.
+    int m_expectedRows;
     int m_generation;
-    bool m_loading;
+    Request m_request;
+    // Set when the server had nothing left to add below what is already held,
+    // so the end of the list is not asked for over and over.
+    bool m_endReached;
     QString m_errorString;
 };
 

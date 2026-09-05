@@ -185,17 +185,18 @@ ApplicationWindow {
     ShareProvider {
         method: "upload"
         registerName: true
-        // What other apps offer Paperiton for is read from the share method in
-        // the desktop file; this list is kept the same as the one there.
-        capabilities: ["application/pdf", "image/png", "image/jpeg", "image/tiff",
-                       "image/gif", "image/webp", "text/plain"]
+        // The kinds of file Paperless takes, from the one list the app keeps of
+        // them. The share method in the desktop file names the same kinds: that
+        // is what other apps read before the app is running.
+        capabilities: Uploads.acceptedMimeTypes
 
         onTriggered: {
+            // A share can also carry plain text rather than a file; this app is
+            // offered for files, and only a file has a path to read.
             var files = []
             for (var i = 0; i < resources.length; ++i) {
-                var path = resources[i].filePath
-                if (path)
-                    files.push(path)
+                if (resources[i].type === ShareResource.FilePathType)
+                    files.push(resources[i].filePath)
             }
 
             if (files.length === 0)

@@ -9,7 +9,9 @@
 // Paperless puts PDFs and the image formats below through OCR and takes plain
 // text as it is. Office documents and mail need Tika and Gotenberg alongside
 // the server, which cannot be asked for over the API, so they are left out: a
-// file the server refuses is better not offered at all.
+// file the server refuses is better not offered at all. The share method in
+// harbour-paperiton.desktop names the same kinds, for the apps that look before
+// this one is running.
 inline QStringList paperlessAcceptedMimeTypes()
 {
     return QStringList()

@@ -125,6 +125,16 @@ bool SavedViewModel::matches(int index, const QVariantMap &filters, const QStrin
     return entry.filters == filters && effectiveOrdering == ordering;
 }
 
+QString SavedViewModel::nameMatching(const QVariantMap &filters, const QString &ordering) const
+{
+    for (int i = 0; i < m_entries.count(); ++i) {
+        if (matches(i, filters, ordering))
+            return m_entries.at(i).name;
+    }
+
+    return QString();
+}
+
 void SavedViewModel::setLoading(bool loading)
 {
     if (loading == m_loading)
