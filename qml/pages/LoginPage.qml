@@ -120,8 +120,22 @@ Dialog {
             DialogHeader {
                 title: qsTr("Sign in")
                 acceptText: qsTr("Sign in")
+                cancelText: ""
             }
 
+                    Item {
+                        height: appicon.height + Theme.paddingMedium
+                        width: parent.width
+
+                        Image {
+                            id: appicon
+
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            source: "../../images/appinfo.png"
+                        }
+
+                    }
+                    
             Label {
                 x: Theme.horizontalPageMargin
                 width: parent.width - 2 * Theme.horizontalPageMargin

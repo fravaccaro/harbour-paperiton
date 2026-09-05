@@ -513,6 +513,10 @@
         <source>Only for a server with a self-signed certificate on your own network.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Exit</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LookupPickerPage</name>
