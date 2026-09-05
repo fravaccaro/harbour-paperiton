@@ -23,7 +23,7 @@ Page {
 
             DetailItem {
                 label: "Italiano"
-                value: "Francesco Vaccaro"
+                value: "fravaccaro"
             }
 
             Label {

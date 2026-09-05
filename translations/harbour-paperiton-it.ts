@@ -877,63 +877,63 @@
     <name>SettingsPage</name>
     <message>
         <source>Sign out</source>
-        <translation type="unfinished"></translation>
+        <translation>Esci</translation>
     </message>
     <message>
         <source>Signing out</source>
-        <translation type="unfinished"></translation>
+        <translation>Uscita</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Impostazioni</translation>
+        <translation>Impostazioni</translation>
     </message>
     <message>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Server</translation>
     </message>
     <message>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo</translation>
     </message>
     <message>
         <source>User</source>
-        <translation type="unfinished"></translation>
+        <translation>Utente</translation>
     </message>
     <message>
         <source>Documents</source>
-        <translation type="unfinished">Documenti</translation>
+        <translation>Documenti</translation>
     </message>
     <message>
         <source>Ignore certificate errors</source>
-        <translation type="unfinished">Ignora gli errori del certificato</translation>
+        <translation>Ignora gli errori del certificato</translation>
     </message>
     <message>
         <source>Only for a server with a self-signed certificate on your own network.</source>
-        <translation type="unfinished">Solo per un server con certificato autofirmato sulla tua rete.</translation>
+        <translation>Solo per un server con certificato autofirmato sulla tua rete.</translation>
     </message>
     <message>
         <source>This account cannot read documents: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo account non può leggere i documenti: %1</translation>
     </message>
     <message>
         <source>Storage</source>
-        <translation type="unfinished"></translation>
+        <translation>Archiviazione</translation>
     </message>
     <message>
         <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Downloads.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il token API è conservato nell&amp;apos;archivio cifrato di Sailfish OS. I documenti che apri vengono scaricati nella cache privata dell&apos;app ed eliminati alla chiusura; &quot;Salva sul dispositivo&quot; ne conserva una copia in Download.</translation>
     </message>
     <message>
         <source>Secure storage reported: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;archivio sicuro ha segnalato: %1</translation>
     </message>
     <message>
         <source>Clear cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Svuota la cache</translation>
     </message>
     <message>
         <source>Clearing cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Svuotamento della cache</translation>
     </message>
 </context>
 <context>
