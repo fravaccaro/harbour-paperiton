@@ -1,3 +1,4 @@
+import "../components"
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
@@ -10,16 +11,13 @@ Page {
         anchors.fill: parent
         contentHeight: column.height + Theme.paddingLarge
 
-
         PullDownMenu {
             MenuItem {
-                
                 text: qsTr("Sign out")
                 onClicked: signOutRemorse.execute(qsTr("Signing out"), function() {
                     Paperless.logout();
                 })
             }
-
 
         }
 
@@ -93,9 +91,7 @@ Page {
                 text: qsTr("Secure storage reported: %1").arg(Settings.secretsError)
             }
 
-            Item {
-                width: 1
-                height: Theme.paddingMedium
+            LabelSpacer {
             }
 
             Button {
@@ -106,12 +102,10 @@ Page {
                 })
             }
 
-            Item {
-                width: 1
-                height: Theme.paddingLarge
+            LabelSpacer {
             }
 
-
+        }
 
         RemorsePopup {
             id: signOutRemorse

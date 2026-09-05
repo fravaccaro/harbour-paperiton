@@ -22,10 +22,9 @@ The SailfishOS Community Team is on Liberapay:
 
 ## Features
 
-<!-- Add screenshots to docs/screenshots/ and uncomment:
 <a href="docs/screenshots/screenshot1.png"><img width="33%" style="float: left;" src="docs/screenshots/screenshot1.png" alt="Document list" /></a> <a href="docs/screenshots/screenshot2.png"><img width="33%" style="float: left;" src="docs/screenshots/screenshot2.png" alt="Document view" /></a> <a href="docs/screenshots/screenshot3.png"><img width="33%" style="float: left;" src="docs/screenshots/screenshot3.png" alt="Upload" /></a>
 <br style="clear: both; height:5px;" />
--->
+
 
 - Sign in with user name and password or with an API token.
 - Document view with tags, correspondent, document type, archive serial number and the OCR text.
