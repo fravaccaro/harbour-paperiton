@@ -11,7 +11,7 @@ nav_order: 1
 
 | Part | Purpose |
 |---|---|
-| `src/paperless/config.*` | Server URL, user name and TLS preference in `~/.config/org.frapps.paperiton/harbour-paperiton/settings.conf` |
+| `src/paperless/config.*` | Server URL, user name and TLS preference in `~/.config/org.frapps/harbour-paperiton/settings.conf` |
 | `src/paperless/secretsstore.*` | The API token in Sailfish Secrets, with migration of tokens written by version 0.1 |
 | `src/paperless/api.*` | `QNetworkAccessManager` wrapper: token header, redirect retries, timeouts, downloads, uploads, permission probe |
 | `src/paperless/documentlistmodel.*` | Paginated list model for `/api/documents/` |
@@ -34,8 +34,8 @@ All API paths keep their **trailing slash**: Django redirects slash-less URLs an
 
 Sailjail gives the app three private directories, named after the `OrganizationName` and `ApplicationName` of the desktop file:
 
-* `~/.config/org.frapps.paperiton/harbour-paperiton` — settings
-* `~/.cache/org.frapps.paperiton/harbour-paperiton` — thumbnails, downloaded documents, camera captures and the web view profile
-* the matching `~/.local/share` directory — unused
+* `~/.config/org.frapps/harbour-paperiton` - settings
+* `~/.cache/org.frapps/harbour-paperiton` - thumbnails, downloaded documents, camera captures and the web view profile
+* the matching `~/.local/share` directory - unused
 
 No other application can read these paths, so documents are shown by `qml/pages/PdfViewPage.qml`, which wraps the viewer of the Documents application, and by `qml/pages/ImageViewPage.qml`. When that viewer is missing, the app falls back to a copy in `~/Downloads`. `documents/` and `captures/` are removed when the app starts and when it quits, and signing out removes the whole cache.

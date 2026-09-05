@@ -81,7 +81,7 @@ Page {
 
         onLoginSucceeded: {
             pageStack.replaceAbove(null, Qt.resolvedUrl("DocumentsPage.qml"))
-            app.takePendingShare()
+            app.takePendingUpload()
         }
 
         onLoginFailed: {

@@ -258,16 +258,18 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("UploadPage.qml"))
             }
 
-            MenuItem {
-                text: page.searchVisible ? qsTr("Hide search") : qsTr("Search")
-                visible: page.selectedIds.length === 0
-                onClicked: page.searchVisible = !page.searchVisible
-            }
 
             MenuItem {
                 text: qsTr("Refresh")
                 visible: page.selectedIds.length === 0
                 onClicked: Documents.reload()
+            }
+
+
+            MenuItem {
+                text: page.searchVisible ? qsTr("Hide search") : qsTr("Search")
+                visible: page.selectedIds.length === 0
+                onClicked: page.searchVisible = !page.searchVisible
             }
         }
 

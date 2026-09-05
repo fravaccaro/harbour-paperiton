@@ -92,6 +92,20 @@ CoverBackground {
         running: cover.uploading
     }
 
+    // Offered only to someone who could act on it: signed in, and allowed by the
+    // server to add documents, which is the rule the pulley menu follows too.
+    CoverActionList {
+        enabled: Paperless.authenticated
+                 && __silica_applicationwindow_instance.allowed("add_document")
+
+        CoverAction {
+            iconSource: "image://theme/icon-cover-new"
+            // The cover is loaded outside the window's own file, so the window
+            // is reached by the name Silica gives it.
+            onTriggered: __silica_applicationwindow_instance.openUpload()
+        }
+    }
+
     // The number shown here is the one from the last time the tags were read,
     // so leaving the app is the moment to ask for them again.
     Connections {

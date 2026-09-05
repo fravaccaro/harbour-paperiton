@@ -59,6 +59,12 @@ Page {
         contentHeight: column.height + Theme.paddingLarge
 
         PullDownMenu {
+
+            MenuItem {
+                text: qsTr("About")
+                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+            }
+            
             MenuItem {
                 text: qsTr("Settings")
                 onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
@@ -69,10 +75,6 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("TasksPage.qml"))
             }
 
-            MenuItem {
-                text: qsTr("About")
-                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
-            }
 
             MenuItem {
                 text: qsTr("Clear all filters")

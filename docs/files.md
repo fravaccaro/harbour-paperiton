@@ -11,7 +11,7 @@ nav_order: 5
 
 Nothing is stored permanently. A document you open is downloaded into the app's private cache directory, which no other application can read; `documents/` and `captures/` inside it are emptied when the app starts and when it quits, and signing out removes the whole cache.
 
-The one exception is **Save on device**, which keeps a copy of the archived PDF in `~/Downloads` — the only place another application can pick a document up from.
+The one exception is **Save on device**, which keeps a copy of the archived PDF in `~/Downloads` - the only place another application can pick a document up from.
 
 ## Permissions
 
@@ -27,7 +27,7 @@ Sailjail, the Sailfish OS sandbox, hides every common directory from the app unl
 | `Secrets` | The API token in Sailfish Secrets |
 | `WebView` | Signing in through the web interface of the server |
 
-Without the permission for the directory a file sits in, a file picked or shared from there cannot be read at all. The file picker reads those directories itself, so the media index — and the `MediaIndexing` permission it would need — is not involved.
+Without the permission for the directory a file sits in, a file picked or shared from there cannot be read at all. The file picker reads those directories itself, so the media index - and the `MediaIndexing` permission it would need - is not involved.
 
 ## Backup
 

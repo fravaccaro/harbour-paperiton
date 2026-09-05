@@ -6,6 +6,11 @@ import harbour.paperiton 1.0
 Page {
     id: page
 
+    // The window looks for this page by name, so that a request to add files
+    // which arrives from outside the pages returns to it instead of opening a
+    // second copy of it.
+    objectName: "uploadPage"
+
     // Files handed over by another app; the picker and the camera add more.
     property var filePaths: []
 

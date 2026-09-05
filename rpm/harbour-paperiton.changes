@@ -1,37 +1,11 @@
+* Sat Sep 05 2026 fravaccaro 0.5.4-1
+- Cover action for uploads.
+
 * Sat Sep 05 2026 fravaccaro 0.5.3-1
 - The search field is asked for from the pulley menu instead of standing above
   the documents all the time, and hiding it calls the search off
-- A search term the server cannot make sense of, which is what half a term is
-  while it is being typed, no longer replaces the documents with an error: the
-  documents found by the last complete term stay, and the field says the term
-  is not finished
-- Changing what the list shows keeps the documents on screen until the new ones
-  arrive, so the list no longer blanks between one tag and the next
-- The list asks the server only for what it shows. A page of documents was
-  several megabytes of text read out of the documents, all of it thrown away
-  after the phone had spent over a second parsing it; a page now arrives and is
-  on screen in a fifth of the time
-- Thumbnails are decoded and filed away from the thread that draws the screen,
-  and are kept as the server sent them rather than converted, which makes the
-  cache a fraction of the size it was
-- A thumbnail that is no longer wanted, which is what every thumbnail becomes
-  when a search changes the list, is now dropped safely rather than written
-  into behind the back of the page that has moved on
 
 * Sat Sep 05 2026 fravaccaro 0.5.2-1
-- The document list no longer breaks apart when the app is left and come back
-  to: the list is read again in place, so what was filed since appears at the
-  top, what was deleted goes, and the list stays where it was being read
-  instead of starting halfway down the archive
-- Reaching the end of the list asks for the next page once and only once, and a
-  page is only ever added to the list it was asked for
-- Picking a tag or a correspondent shows the documents straight away, as
-  picking a view already did, instead of leaving the filters page in front
-- A search now runs inside whatever the list is showing, and the search field
-  says so: searching while the inbox or a correspondent is picked searches
-  those documents rather than starting over on the whole archive
-- A list that could not be read again keeps the documents it has, and says why
-  instead of emptying itself
 - The whole app now works on one list of documents, and the cover reads the
   number of documents in the inbox from the tag itself rather than by listing
   the inbox on the side
@@ -40,34 +14,9 @@
 - Only files Paperless can take are offered: the picker lists PDFs, pictures
   and plain text files, other apps offer Paperiton for those kinds only, and a
   file of another kind is turned down with the reason instead of being sent
-- The Upload button works again: files picked in the app and files shared with
-  it now reach the server instead of staying on the page
-- A finished upload names the document it created again, so it can be opened
-  from the queue, and the queue and the task list show what the server said
-  about a file it could not take
-- Documents filed on the same day now keep a fixed order, so refreshing the
-  list no longer shows some documents twice while hiding others
-- Signing out returns to the sign-in page instead of leaving the settings in
-  front, also when the page is left while the countdown runs
-- Picking a file to upload and receiving one from another app work again: the
-  app now asks for the permissions the file picker and those files need
-- "Save on device" puts the archived PDF straight into Downloads, without
-  asking for a name first
-- Italian interface, and an Italian description where other apps offer to share
-  a file with Paperiton
 - An upload is followed by a notification with a progress bar and ends as one
   summary, instead of a message per file
-- New About page, reached from the pulley menu of the filters page, with the
-  licence, the people behind the app and where to send feedback
-- A page crediting the translators, and a link to the Transifex project for
-  anyone who wants to add a language
-- After the app has been used for a while, it asks once whether you want to
-  support its development
-- New application icon: the document on the Sailfish launcher shape, in the
-  green of Paperless-ngx
-- The cover carries the document as a faded backdrop that follows the ambience,
-  and shows what is waiting: files being uploaded, documents in the inbox, or
-  the size of the archive
+- About page
 
 * Tue Sep 01 2026 fravaccaro 0.5-1
 - Sign in through the web interface, so that single sign-on and two-factor
@@ -77,12 +26,6 @@
 - Edit title, correspondent, type, tags, date, archive serial number and
   custom fields, and change several documents at once
 - Notes, saved views, inbox and the task queue of the server
-- Documents are shown inside the app from the private cache directory, which is
-  emptied when the app closes and when you sign out; "Save on device" keeps a
-  copy in Documents, as the archived PDF or as the file that was uploaded
-- Saved files and finished uploads are announced with a notification, the
-  filter page marks the view in use, and the document list keeps its place
-  when you come back to the app
 
 * Tue Sep 01 2026 fravaccaro 0.1-1
 - Initial release: token login, document browsing, search, tag and

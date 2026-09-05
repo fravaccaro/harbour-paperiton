@@ -5,8 +5,6 @@ import Opal.About 1.0 as A
 A.AboutPageBase {
     id: page
 
-    readonly property string repository: "https://github.com/fravaccaro/harbour-paperiton"
-
     allowedOrientations: S.Orientation.All
 
     appName: "Paperiton"
@@ -16,8 +14,8 @@ A.AboutPageBase {
                       + "filters, previews, uploads from the device or the camera, "
                       + "metadata, notes and the task queue.")
     authors: ["fravaccaro"]
-    sourcesUrl: page.repository
-    translationsUrl: "https://explore.transifex.com/fravaccaro/paperiton"
+    homepageUrl: "https://fravaccaro.github.io/paperiton/"
+    sourcesUrl: "https://github.com/fravaccaro/harbour-paperiton"
 
     donations.text: donations.defaultTextCoffee
     donations.services: [
@@ -30,17 +28,17 @@ A.AboutPageBase {
     extraSections: [
         A.InfoSection {
             title: qsTr("Feedback")
-            text: qsTr("Questions, ideas and reports of what went wrong are welcome.")
+            text: qsTr("If you want to provide feedback or report an issue, please use GitHub.")
             buttons: [
                 A.InfoButton {
                     text: qsTr("Report an issue")
-                    onClicked: openOrCopyUrl(page.repository + "/issues", text)
+                    onClicked: openOrCopyUrl("https://github.com/fravaccaro/harbour-paperiton/issues", text)
                 }
             ]
         },
         A.InfoSection {
             title: qsTr("Translations")
-            text: qsTr("Who translated the app, and how to add your own language.")
+            text: qsTr("Credits for existing translations and how to contribute.")
             buttons: [
                 A.InfoButton {
                     text: qsTr("Translations")

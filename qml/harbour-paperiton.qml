@@ -11,7 +11,11 @@ ApplicationWindow {
 
     // Files handed over by another app, until this app is in a state to show
     // them: signed in, and not in the middle of a page transition.
-    property var pendingShare: []
+    property var pendingFiles: []
+
+    // Whether the page for adding files has been asked for at all. The cover
+    // action asks for it without bringing any files along.
+    property bool uploadWanted: false
 
     // Kept so that an upload run which added a single file can name it, the way
     // each upload used to be announced.
@@ -23,7 +27,7 @@ ApplicationWindow {
 
     function showMain() {
         pageStack.replaceAbove(null, Paperless.authenticated ? documentsPage : loginPage)
-        takePendingShare()
+        takePendingUpload()
     }
 
     // Until the server has answered which operations the account may perform,
@@ -32,27 +36,50 @@ ApplicationWindow {
         return !Paperless.permissionsKnown || Paperless.can(permission)
     }
 
-    function takePendingShare() {
-        if (pendingShare.length === 0 || !Settings.ready || !Paperless.authenticated)
+    // Adding files can be asked for from outside the pages: another app sharing
+    // them, or the cover action. Both may arrive before the app has a page to
+    // put in front of anyone, so both wait in the same place.
+    function openUpload(files) {
+        activate()
+        if (files !== undefined && files.length > 0)
+            pendingFiles = files
+        uploadWanted = true
+        takePendingUpload()
+    }
+
+    function takePendingUpload() {
+        if (!uploadWanted || !Settings.ready || !Paperless.authenticated)
             return
 
         // A share that starts the app arrives while the first page is still
         // animating in, and a push during a transition is refused, which used to
         // lose the file. So it waits for the stack to settle.
         if (pageStack.busy) {
-            shareRetry.restart()
+            uploadRetry.restart()
             return
         }
 
-        var files = pendingShare
-        pendingShare = []
+        // The page may already be open, from an earlier share or from the last
+        // time the cover action was used, and a second copy of it would only
+        // hide the first. A share still opens its own, since it carries files
+        // the open page was not asked about.
+        var open = pageStack.find(function(item) { return item.objectName === "uploadPage" })
+        if (open && pendingFiles.length === 0) {
+            uploadWanted = false
+            pageStack.pop(open, PageStackAction.Immediate)
+            return
+        }
+
+        var files = pendingFiles
+        pendingFiles = []
+        uploadWanted = false
         pageStack.push(Qt.resolvedUrl("pages/UploadPage.qml"), { filePaths: files })
     }
 
     Timer {
-        id: shareRetry
+        id: uploadRetry
         interval: 200
-        onTriggered: app.takePendingShare()
+        onTriggered: app.takePendingUpload()
     }
 
     // Signing out has to leave every page that shows the archive behind. The
@@ -168,7 +195,7 @@ ApplicationWindow {
         target: Paperless
         onAuthenticatedChanged: {
             if (Paperless.authenticated)
-                app.takePendingShare()
+                app.takePendingUpload()
             else
                 app.showLogin()
         }
@@ -202,9 +229,7 @@ ApplicationWindow {
             if (files.length === 0)
                 return
 
-            app.activate()
-            app.pendingShare = files
-            app.takePendingShare()
+            app.openUpload(files)
         }
     }
 }

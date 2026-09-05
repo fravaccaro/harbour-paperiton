@@ -9,9 +9,9 @@ nav_order: 4
 
 Three ways into the archive:
 
-* **From the app** — the upload page opens a file picker.
-* **From other apps** — Paperiton appears in the Sailfish OS share menu; several files at once are fine.
-* **From the camera** — capture a document directly; the picture is uploaded like any other file.
+* **From the app** - the upload page opens a file picker.
+* **From other apps** - Paperiton appears in the Sailfish OS share menu; several files at once are fine.
+* **From the camera** - capture a document directly; the picture is uploaded like any other file.
 
 ## What the server can take
 
@@ -23,4 +23,4 @@ An upload shows a notification with a progress bar and ends as one summary rathe
 
 ## The task queue
 
-The tasks page shows the task queue of the server — what is being consumed, what succeeded, and what failed with the reason the server gave. Failures can be acknowledged from the app.
+The tasks page shows the task queue of the server - what is being consumed, what succeeded, and what failed with the reason the server gave. Failures can be acknowledged from the app.

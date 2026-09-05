@@ -44,7 +44,7 @@ The SailfishOS Community Team is on Liberapay:
 
 ## Using Paperiton
 
-[Using Paperiton](docs/guide.md) — signing in, browsing and searching, editing, uploading, and where your files live.
+[Using Paperiton](docs/guide.md) - signing in, browsing and searching, editing, uploading, and where your files live.
 
 ## Download
 
@@ -52,7 +52,7 @@ RPMs for aarch64 and armv7hl are attached to the [GitHub releases](https://githu
 
 ## Developers
 
-[Developers](docs/devel/) — architecture, building, deploying, and CI (maintainers and contributors).
+[Developers](docs/devel/) - architecture, building, deploying, and CI (maintainers and contributors).
 
 ## Translate
 

@@ -10,7 +10,7 @@ X-Share-Methods=upload
 X-DBusActivatable=true
 
 [X-Sailjail]
-OrganizationName=org.frapps.paperiton
+OrganizationName=org.frapps
 ApplicationName=harbour-paperiton
 Permissions=Internet;Documents;Downloads;Pictures;Camera;Secrets;WebView;RemovableMedia
 ExecDBus=harbour-paperiton
@@ -24,4 +24,4 @@ Capabilities=application/pdf;image/png;image/jpeg;image/tiff;image/gif;image/web
 SupportsMultipleFiles=true
 
 [X-HarbourBackup]
-BackupPathList=.config/org.frapps.paperiton/harbour-paperiton/
+BackupPathList=.config/org.frapps/harbour-paperiton/

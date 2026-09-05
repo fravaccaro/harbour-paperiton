@@ -24,16 +24,16 @@
         <translation>Feedback</translation>
     </message>
     <message>
-        <source>Questions, ideas and reports of what went wrong are welcome.</source>
-        <translation>Domande, idee e segnalazioni di ciò che non funziona sono benvenute.</translation>
-    </message>
-    <message>
         <source>Translations</source>
         <translation>Traduzioni</translation>
     </message>
     <message>
-        <source>Who translated the app, and how to add your own language.</source>
-        <translation>Chi ha tradotto l&apos;app e come aggiungere la tua lingua.</translation>
+        <source>If you want to provide feedback or report an issue, please use GitHub.</source>
+        <translation>Se vuoi inviare feedback o segnalare un problema, usa GitHub.</translation>
+    </message>
+    <message>
+        <source>Credits for existing translations and how to contribute.</source>
+        <translation>Crediti per le traduzioni esistenti e come contribuire.</translation>
     </message>
 </context>
 <context>
@@ -1000,8 +1000,8 @@
         <translation>Traduzioni</translation>
     </message>
     <message>
-        <source>The app is written in English. To add a language, or to improve one that is already there, join the project on Transifex.</source>
-        <translation>L&apos;app è scritta in inglese. Per aggiungere una lingua, o migliorarne una già presente, unisciti al progetto su Transifex.</translation>
+        <source>Request a new language or contribute to existing languages on the Transifex project page.</source>
+        <translation>Richiedi una nuova lingua o contribuisci a quelle esistenti sulla pagina del progetto di Transifex.</translation>
     </message>
 </context>
 <context>

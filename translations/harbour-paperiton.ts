@@ -24,15 +24,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Questions, ideas and reports of what went wrong are welcome.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Who translated the app, and how to add your own language.</source>
+        <source>If you want to provide feedback or report an issue, please use GitHub.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Credits for existing translations and how to contribute.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1000,7 +1000,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The app is written in English. To add a language, or to improve one that is already there, join the project on Transifex.</source>
+        <source>Request a new language or contribute to existing languages on the Transifex project page.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

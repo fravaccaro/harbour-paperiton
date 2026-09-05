@@ -5,8 +5,6 @@ import Opal.LinkHandler 1.0 as L
 Page {
     id: page
 
-    readonly property string transifex: "https://explore.transifex.com/fravaccaro/paperiton"
-
     allowedOrientations: Orientation.All
 
     SilicaFlickable {
@@ -31,14 +29,13 @@ Page {
                 wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeSmall
                 color: Theme.secondaryColor
-                text: qsTr("The app is written in English. To add a language, or to improve "
-                           + "one that is already there, join the project on Transifex.")
+                text: qsTr("Request a new language or contribute to existing languages on the Transifex project page.")
             }
 
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: "Transifex"
-                onClicked: L.LinkHandler.openOrCopyUrl(page.transifex, text)
+                onClicked: L.LinkHandler.openOrCopyUrl("https://explore.transifex.com/fravaccaro/paperiton", text)
             }
         }
 

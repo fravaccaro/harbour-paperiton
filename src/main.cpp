@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     // Must be set before anything resolves QStandardPaths, so that settings and
     // caches land in the directories Sailjail whitelists for this app.
-    app->setOrganizationName(QStringLiteral("org.frapps.paperiton"));
+    app->setOrganizationName(QStringLiteral("org.frapps"));
     app->setOrganizationDomain(QStringLiteral("frapps.org"));
     app->setApplicationName(QStringLiteral("harbour-paperiton"));
     app->setApplicationVersion(QStringLiteral(APP_VERSION));
