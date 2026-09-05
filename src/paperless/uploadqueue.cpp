@@ -1,6 +1,7 @@
 #include "uploadqueue.h"
 
 #include "api.h"
+#include "filetypes.h"
 #include "taskfields.h"
 
 #include <QDateTime>
@@ -117,6 +118,16 @@ qreal UploadQueue::progress() const
     }
 
     return qMin(done / qreal(m_runTotal), qreal(1));
+}
+
+QStringList UploadQueue::acceptedNameFilters() const
+{
+    return paperlessAcceptedNameFilters();
+}
+
+bool UploadQueue::accepts(const QString &filePath) const
+{
+    return paperlessAcceptsFile(filePath);
 }
 
 QString UploadQueue::currentFileName() const

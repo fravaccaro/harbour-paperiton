@@ -1039,10 +1039,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Pull down to pick files from the device or to scan a document with the camera. Other apps can also share files with Paperiton.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ready to upload</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1092,6 +1088,14 @@
     </message>
     <message>
         <source>Select files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is not a PDF, a picture or a text file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pull down to pick files from the device or to scan a document with the camera. Other apps can also share files with Paperiton. Paperless takes PDFs, pictures and plain text files.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -3,6 +3,7 @@
 
 #include <QAbstractListModel>
 #include <QString>
+#include <QStringList>
 #include <QVariantMap>
 #include <QVector>
 
@@ -22,6 +23,8 @@ class UploadQueue : public QAbstractListModel
     Q_PROPERTY(QString currentFileName READ currentFileName NOTIFY progressChanged)
     Q_PROPERTY(int runTotal READ runTotal NOTIFY progressChanged)
     Q_PROPERTY(int runDone READ runDone NOTIFY progressChanged)
+    // The kinds of file the server takes, as patterns for a file picker.
+    Q_PROPERTY(QStringList acceptedNameFilters READ acceptedNameFilters CONSTANT)
 
 public:
     enum Status {
@@ -53,6 +56,11 @@ public:
     QString currentFileName() const;
     int runTotal() const { return m_runTotal; }
     int runDone() const { return m_runAdded + m_runFailed; }
+    QStringList acceptedNameFilters() const;
+
+    // Whether the server would take this file, decided by what is in it. A file
+    // it would refuse is better turned down here, where the reason can be given.
+    Q_INVOKABLE bool accepts(const QString &filePath) const;
 
     // Set temporary for files the app created itself, such as camera captures;
     // they are removed once the server has accepted them.

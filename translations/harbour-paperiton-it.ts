@@ -1039,10 +1039,6 @@
         <translation>%1 file in corso</translation>
     </message>
     <message>
-        <source>Pull down to pick files from the device or to scan a document with the camera. Other apps can also share files with Paperiton.</source>
-        <translation>Tira giù per scegliere file dal dispositivo o per scansionare un documento con la fotocamera. Anche altre app possono condividere file con Paperiton.</translation>
-    </message>
-    <message>
         <source>Ready to upload</source>
         <translation>Pronti da caricare</translation>
     </message>
@@ -1093,6 +1089,14 @@
     <message>
         <source>Select files</source>
         <translation>Seleziona i file</translation>
+    </message>
+    <message>
+        <source>%1 is not a PDF, a picture or a text file</source>
+        <translation>%1 non è un PDF, un&apos;immagine o un file di testo</translation>
+    </message>
+    <message>
+        <source>Pull down to pick files from the device or to scan a document with the camera. Other apps can also share files with Paperiton. Paperless takes PDFs, pictures and plain text files.</source>
+        <translation>Tira giù per scegliere file dal dispositivo o per scansionare un documento con la fotocamera. Anche altre app possono condividere file con Paperiton. Paperless accetta PDF, immagini e file di testo semplice.</translation>
     </message>
 </context>
 <context>

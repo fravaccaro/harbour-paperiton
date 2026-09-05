@@ -12,13 +12,13 @@ X-DBusActivatable=true
 [X-Sailjail]
 OrganizationName=org.frapps.paperiton
 ApplicationName=harbour-paperiton
-Permissions=Internet;Documents;Downloads;Pictures;Camera;Secrets;WebView;MediaIndexing;RemovableMedia
+Permissions=Internet;Documents;Downloads;Pictures;Camera;Secrets;WebView;RemovableMedia
 ExecDBus=harbour-paperiton
 
 [X-Share Method upload]
 Description=Add to your Paperless archive
 Description[it]=Aggiungi al tuo archivio Paperless
-Capabilities=application/pdf;image/*;text/plain
+Capabilities=application/pdf;image/png;image/jpeg;image/tiff;image/gif;image/webp;text/plain
 SupportsMultipleFiles=true
 
 [X-HarbourBackup]

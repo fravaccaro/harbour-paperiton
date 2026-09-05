@@ -21,6 +21,13 @@ Page {
     allowedOrientations: Orientation.All
 
     function addFile(path, temporary) {
+        // Every file passes through here, whichever way it arrived, so this is
+        // where one the server would refuse is turned down.
+        if (!Uploads.accepts(path)) {
+            app.notify(qsTr("%1 is not a PDF, a picture or a text file").arg(baseName(path)))
+            return
+        }
+
         for (var i = 0; i < pending.count; ++i) {
             if (pending.get(i).filePath === path)
                 return
@@ -136,7 +143,8 @@ Page {
                 color: Theme.secondaryHighlightColor
                 font.pixelSize: Theme.fontSizeSmall
                 text: qsTr("Pull down to pick files from the device or to scan a document with the camera. "
-                           + "Other apps can also share files with Paperiton.")
+                           + "Other apps can also share files with Paperiton. Paperless takes PDFs, "
+                           + "pictures and plain text files.")
             }
 
             Column {
@@ -326,8 +334,15 @@ Page {
     Component {
         id: pickerDialog
 
-        MultiContentPickerDialog {
+        // The file picker rather than the content picker, which offers music
+        // and videos and cannot be narrowed down. This one lists only the files
+        // the server takes, in every directory it opens.
+        MultiFilePickerDialog {
             title: qsTr("Select files")
+            nameFilters: Uploads.acceptedNameFilters
+            // The root of the filesystem holds nothing this app is allowed to
+            // read, so it is not offered as a place to look.
+            showSystemFiles: false
         }
     }
 }

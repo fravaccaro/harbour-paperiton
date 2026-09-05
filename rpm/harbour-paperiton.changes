@@ -1,4 +1,7 @@
 * Wed Sep 02 2026 fravaccaro 0.5.1-1
+- Only files Paperless can take are offered: the picker lists PDFs, pictures
+  and plain text files, other apps offer Paperiton for those kinds only, and a
+  file of another kind is turned down with the reason instead of being sent
 - The Upload button works again: files picked in the app and files shared with
   it now reach the server instead of staying on the page
 - A finished upload names the document it created again, so it can be opened

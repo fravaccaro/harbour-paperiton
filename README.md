@@ -20,7 +20,9 @@ documents on the phone.
   fields; change tags, correspondent and type of several documents at once
 - Read, write and delete notes
 - Upload files from the device, from other apps through the share menu, and
-  from the camera; the consumer task is followed until the document exists
+  from the camera; the consumer task is followed until the document exists.
+  Only what Paperless can take is offered: PDFs, PNG, JPEG, TIFF, GIF and WebP
+  pictures, and plain text
 - Watch the task queue of the server and acknowledge failures
 - Open a document inside the app: it is downloaded into the private cache
   directory, which is emptied when the app closes and when you sign out.
@@ -95,15 +97,15 @@ and signing out removes the whole cache.
 `Internet` for the API, `Downloads` for keeping a copy of a document where
 another application can open it and for reading files that arrived from
 elsewhere, `Documents` and `Pictures` for the files kept there,
-`RemovableMedia` for files on a memory card, `MediaIndexing` because the file
-picker lists what the media index knows about, `Camera` for scanning, `Secrets`
+`RemovableMedia` for files on a memory card, `Camera` for scanning, `Secrets`
 for the API token and `WebView` for signing in through the web interface of the
 server.
 
-Without `MediaIndexing` the picker has no index to read and shows nothing, and
-without a permission for the directory a file sits in, a file picked or shared
+Without a permission for the directory a file sits in, a file picked or shared
 from there cannot be read at all: the sandbox hides every one of the common
-directories unless a permission names it.
+directories unless a permission names it. The file picker reads those
+directories itself, so the media index, and the `MediaIndexing` permission it
+would need, are not involved.
 
 ## Licence
 

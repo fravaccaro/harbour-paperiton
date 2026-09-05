@@ -38,6 +38,7 @@ HEADERS += \
     src/paperless/config.h \
     src/paperless/customfieldsmodel.h \
     src/paperless/documentlistmodel.h \
+    src/paperless/filetypes.h \
     src/paperless/lookupmodel.h \
     src/paperless/savedviewmodel.h \
     src/paperless/secretsstore.h \

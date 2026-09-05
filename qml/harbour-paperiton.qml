@@ -185,7 +185,10 @@ ApplicationWindow {
     ShareProvider {
         method: "upload"
         registerName: true
-        capabilities: ["application/pdf", "image/*", "text/plain", "application/*"]
+        // What other apps offer Paperiton for is read from the share method in
+        // the desktop file; this list is kept the same as the one there.
+        capabilities: ["application/pdf", "image/png", "image/jpeg", "image/tiff",
+                       "image/gif", "image/webp", "text/plain"]
 
         onTriggered: {
             var files = []
