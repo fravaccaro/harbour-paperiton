@@ -287,6 +287,18 @@
         <translation>Cerca documenti</translation>
     </message>
     <message>
+        <source>Search</source>
+        <translation>Cerca</translation>
+    </message>
+    <message>
+        <source>Hide search</source>
+        <translation>Nascondi la ricerca</translation>
+    </message>
+    <message>
+        <source>Incomplete search term</source>
+        <translation>Termine di ricerca incompleto</translation>
+    </message>
+    <message>
         <source>Refresh</source>
         <translation>Aggiorna</translation>
     </message>
@@ -337,18 +349,6 @@
     <message>
         <source>Search in %1</source>
         <translation>Cerca in %1</translation>
-    </message>
-    <message>
-        <source>Incomplete search term</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide search</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

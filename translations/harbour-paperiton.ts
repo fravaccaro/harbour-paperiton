@@ -287,6 +287,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hide search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Incomplete search term</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
@@ -336,18 +348,6 @@
     </message>
     <message>
         <source>Search in %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Incomplete search term</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hide search</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

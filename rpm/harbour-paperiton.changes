@@ -1,3 +1,23 @@
+* Sat Sep 05 2026 fravaccaro 0.5.3-1
+- The search field is asked for from the pulley menu instead of standing above
+  the documents all the time, and hiding it calls the search off
+- A search term the server cannot make sense of, which is what half a term is
+  while it is being typed, no longer replaces the documents with an error: the
+  documents found by the last complete term stay, and the field says the term
+  is not finished
+- Changing what the list shows keeps the documents on screen until the new ones
+  arrive, so the list no longer blanks between one tag and the next
+- The list asks the server only for what it shows. A page of documents was
+  several megabytes of text read out of the documents, all of it thrown away
+  after the phone had spent over a second parsing it; a page now arrives and is
+  on screen in a fifth of the time
+- Thumbnails are decoded and filed away from the thread that draws the screen,
+  and are kept as the server sent them rather than converted, which makes the
+  cache a fraction of the size it was
+- A thumbnail that is no longer wanted, which is what every thumbnail becomes
+  when a search changes the list, is now dropped safely rather than written
+  into behind the back of the page that has moved on
+
 * Sat Sep 05 2026 fravaccaro 0.5.2-1
 - The document list no longer breaks apart when the app is left and come back
   to: the list is read again in place, so what was filed since appears at the
