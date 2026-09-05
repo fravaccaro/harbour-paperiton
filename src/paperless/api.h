@@ -95,6 +95,9 @@ public:
     Q_INVOKABLE QUrl webUrl(const QString &path) const;
 
     Q_INVOKABLE void patchDocument(int documentId, const QVariantMap &fields);
+    // On a server that keeps a trash the document lands there rather than being
+    // gone for good, which is the server's business and not the app's.
+    Q_INVOKABLE void deleteDocument(int documentId);
     Q_INVOKABLE void bulkEdit(const QVariantList &documentIds, const QString &method,
                               const QVariantMap &parameters);
 
@@ -129,6 +132,9 @@ signals:
 
     void documentUpdated(int documentId, const QVariantMap &document);
     void documentUpdateFailed(int documentId, const QString &error);
+
+    void documentDeleted(int documentId);
+    void documentDeleteFailed(int documentId, const QString &error);
 
     void bulkEditFinished(const QString &error);
 

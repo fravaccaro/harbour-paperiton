@@ -184,6 +184,13 @@ Page {
                 return
             page.errorMessage = error
         }
+
+        // The document this page is about is no longer there to be shown. The
+        // list it came from has already dropped the row.
+        onDocumentDeleted: {
+            if (documentId === page.documentId)
+                pageStack.pop()
+        }
     }
 
     SilicaFlickable {
@@ -191,6 +198,16 @@ Page {
         contentHeight: column.height + Theme.paddingLarge
 
         PullDownMenu {
+
+            MenuItem {
+                text: qsTr("Delete")
+                visible: app.allowed("delete_document")
+                onClicked: deleteRemorse.execute(qsTr("Deleting"), function() {
+                    Paperless.deleteDocument(page.documentId)
+                })
+            }
+            
+
             MenuItem {
                 text: qsTr("Edit")
                 visible: app.allowed("change_document")
@@ -207,12 +224,13 @@ Page {
                                           })
             }
 
+
             MenuItem {
                 text: qsTr("Save on device")
                 enabled: !page.saving && !page.loadingDetails
                 onClicked: page.saveOnDevice()
             }
-
+            
             MenuItem {
                 text: qsTr("Refresh")
                 onClicked: {
@@ -222,11 +240,7 @@ Page {
                 }
             }
 
-            MenuItem {
-                text: qsTr("Open")
-                enabled: !page.saving
-                onClicked: page.open()
-            }
+
         }
 
         Column {
@@ -437,6 +451,8 @@ Page {
                 text: page.details.content ? String(page.details.content).trim() : ""
             }
         }
+
+        RemorsePopup { id: deleteRemorse }
 
         VerticalScrollDecorator {}
     }

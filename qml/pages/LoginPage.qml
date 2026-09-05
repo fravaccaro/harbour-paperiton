@@ -1,11 +1,15 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-Page {
+// Signing in is accepted from the header, and the waiting for the server
+// happens on the page the accept leads to. This one stays underneath it, which
+// is what lets the form come back as it was typed when the server says no.
+Dialog {
     id: page
 
     property bool tokenMode: false
     property bool signingIn: false
+    property bool signedIn: false
     property string errorMessage
 
     property var providers: []
@@ -13,6 +17,15 @@ Page {
     property bool optionsKnown: false
 
     allowedOrientations: Orientation.All
+
+    canAccept: !page.signingIn && serverField.text.trim() !== ""
+               && (page.tokenMode
+                   ? tokenField.text.trim() !== ""
+                   : usernameField.text.trim() !== "" && passwordField.text !== "")
+    acceptDestination: Qt.resolvedUrl("StartPage.qml")
+    acceptDestinationAction: PageStackAction.Push
+
+    onAccepted: page.signIn()
 
     function detectOptions() {
         page.optionsKnown = false
@@ -40,6 +53,31 @@ Page {
             pageStack.push(Qt.resolvedUrl("WebLoginPage.qml"), { serverUrl: url })
     }
 
+    // The server can answer while the waiting page is still animating in, and
+    // the stack refuses to be changed in the middle of that, so the answer is
+    // acted on once it is idle: the archive takes over the stack, or this form
+    // comes back with what went wrong.
+    function settle() {
+        if (pageStack.busy) {
+            settleAgain.restart()
+            return
+        }
+
+        if (page.signedIn) {
+            pageStack.replaceAbove(null, Qt.resolvedUrl("DocumentsPage.qml"))
+            app.takePendingUpload()
+            return
+        }
+
+        pageStack.pop(page)
+    }
+
+    Timer {
+        id: settleAgain
+        interval: 100
+        onTriggered: page.settle()
+    }
+
     Component.onCompleted: {
         if (serverField.text.trim() !== "")
             page.detectOptions()
@@ -58,29 +96,31 @@ Page {
 
         onLoginSucceeded: {
             page.signingIn = false
-            pageStack.replaceAbove(null, Qt.resolvedUrl("DocumentsPage.qml"))
-            app.takePendingUpload()
+            page.signedIn = true
+            page.settle()
         }
 
         onLoginFailed: {
             page.signingIn = false
+            page.signedIn = false
             page.errorMessage = error
+            page.settle()
         }
     }
 
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: column.height + Theme.paddingLarge
-        enabled: !page.signingIn
-        opacity: page.signingIn ? Theme.opacityLow : 1.0
-        Behavior on opacity { FadeAnimation {} }
 
         Column {
             id: column
             width: page.width
             spacing: Theme.paddingMedium
 
-            PageHeader { title: qsTr("Sign in") }
+            DialogHeader {
+                title: qsTr("Sign in")
+                acceptText: qsTr("Sign in")
+            }
 
             Label {
                 x: Theme.horizontalPageMargin
@@ -150,7 +190,11 @@ Page {
                 label: qsTr("Password")
                 placeholderText: qsTr("Password")
                 EnterKey.iconSource: "image://theme/icon-m-enter-accept"
-                EnterKey.onClicked: page.signIn()
+                EnterKey.onClicked: {
+                    focus = false
+                    if (page.canAccept)
+                        page.accept()
+                }
             }
 
             TextField {
@@ -161,7 +205,11 @@ Page {
                 placeholderText: qsTr("API token")
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText
                 EnterKey.iconSource: "image://theme/icon-m-enter-accept"
-                EnterKey.onClicked: page.signIn()
+                EnterKey.onClicked: {
+                    focus = false
+                    if (page.canAccept)
+                        page.accept()
+                }
             }
 
             Button {
@@ -207,22 +255,8 @@ Page {
                 font.pixelSize: Theme.fontSizeSmall
                 text: page.errorMessage
             }
-
-            Button {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("Sign in")
-                visible: page.passwordSignIn || page.tokenMode
-                enabled: serverField.text.trim() !== ""
-                onClicked: page.signIn()
-            }
         }
 
         VerticalScrollDecorator {}
-    }
-
-    BusyIndicator {
-        anchors.centerIn: parent
-        size: BusyIndicatorSize.Large
-        running: page.signingIn
     }
 }

@@ -192,8 +192,12 @@
 <context>
     <name>DocumentPage</name>
     <message>
-        <source>Open</source>
-        <translation>Apri</translation>
+        <source>Delete</source>
+        <translation>Elimina</translation>
+    </message>
+    <message>
+        <source>Deleting</source>
+        <translation>Eliminazione</translation>
     </message>
     <message>
         <source>Open original file</source>
@@ -321,6 +325,22 @@
     <message>
         <source>Edit %1 documents</source>
         <translation>Modifica %1 documenti</translation>
+    </message>
+    <message>
+        <source>Delete one document</source>
+        <translation>Elimina un documento</translation>
+    </message>
+    <message>
+        <source>Delete %1 documents</source>
+        <translation>Elimina %1 documenti</translation>
+    </message>
+    <message>
+        <source>Deleting</source>
+        <translation>Eliminazione</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Elimina</translation>
     </message>
     <message>
         <source>Cancel selection</source>

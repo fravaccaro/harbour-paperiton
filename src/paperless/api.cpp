@@ -432,8 +432,13 @@ void PaperlessApi::checkAccess()
         m_permissionsKnown = error.isEmpty();
         if (m_permissionsKnown) {
             const QJsonArray permissions = document.object().value(QStringLiteral("permissions")).toArray();
-            for (int i = 0; i < permissions.count(); ++i)
-                m_permissions.insert(permissions.at(i).toString());
+            for (int i = 0; i < permissions.count(); ++i) {
+                // Django names a permission after the app it belongs to, as in
+                // documents.add_document. What the app asks about is the last
+                // part, which is the operation itself.
+                const QString name = permissions.at(i).toString();
+                m_permissions.insert(name.section(QLatin1Char('.'), -1));
+            }
         }
 
         emit permissionsChanged();
@@ -670,6 +675,19 @@ void PaperlessApi::patchDocument(int documentId, const QVariantMap &fields)
         }
 
         emit documentUpdated(documentId, document.object().toVariantMap());
+    });
+}
+
+void PaperlessApi::deleteDocument(int documentId)
+{
+    deleteResource(m_config->apiUrl(QStringLiteral("documents/%1").arg(documentId)),
+                   [this, documentId](const QJsonDocument &, const QString &error) {
+        if (!error.isEmpty()) {
+            emit documentDeleteFailed(documentId, error);
+            return;
+        }
+
+        emit documentDeleted(documentId);
     });
 }
 

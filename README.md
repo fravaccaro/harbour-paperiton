@@ -27,19 +27,14 @@ The SailfishOS Community Team is on Liberapay:
 <br style="clear: both; height:5px;" />
 -->
 
-- Sign in with user name and password, with an API token, or through the web interface of the server (covers single sign-on and two-factor authentication); the token is kept in Sailfish Secrets.
-- Browse documents with infinite scrolling and thumbnails; full text search with a debounced search field.
-- Filter by tag and by correspondent, and follow the saved views and the inbox of the server.
+- Sign in with user name and password, with an API token, or through the web interface.
 - Document view with tags, correspondent, document type, archive serial number and the OCR text.
 - Edit title, correspondent, type, tags, date, archive serial number and custom fields; change several documents at once; read, write and delete notes.
-- Upload files from the device, from other apps through the share menu, and from the camera; the consumer task is followed until the document exists.
-- Watch the task queue of the server and acknowledge failures.
-- Open documents inside the app, or keep a copy of the archived PDF in `~/Downloads` with "Save on device".
-- Self-signed certificates can be accepted explicitly.
+- Upload files from the device and from the camera.
 
 ## Requirements
 
-- Sailfish OS 5.0 or newer (Sailfish Secrets is used for the API token)
+- Sailfish OS 5.0 or newer
 - A reachable Paperless-ngx instance, API version 9 or newer
 
 ## Using Paperiton
@@ -48,7 +43,7 @@ The SailfishOS Community Team is on Liberapay:
 
 ## Download
 
-RPMs for aarch64 and armv7hl are attached to the [GitHub releases](https://github.com/fravaccaro/harbour-paperiton/releases/latest). The package targets Chum and OpenRepos rather than the Jolla Store, because the document viewer needs the `Sailfish.Office` import, which Harbour does not allow.
+RPMs are attached to the [GitHub releases](https://github.com/fravaccaro/harbour-paperiton/releases/latest) and [OpenRepos](https://openrepos.net/content/fravaccaro/paperiton-paperless-ngx-client).
 
 ## Developers
 

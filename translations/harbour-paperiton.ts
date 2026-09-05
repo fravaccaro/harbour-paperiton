@@ -192,7 +192,11 @@
 <context>
     <name>DocumentPage</name>
     <message>
-        <source>Open</source>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -320,6 +324,22 @@
     </message>
     <message>
         <source>Edit %1 documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete one document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete %1 documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Deleting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

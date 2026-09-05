@@ -94,6 +94,9 @@ public:
     // by one they would each start a request for a list nobody ever sees.
     Q_INVOKABLE void applyFilters(const QVariantMap &changes);
     Q_INVOKABLE void clearFilters();
+    // Takes a document the server no longer has out of the list, without
+    // reading the list again around it.
+    void removeDocument(int documentId);
     Q_INVOKABLE QVariantMap get(int index) const;
 
 signals:

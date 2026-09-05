@@ -1,3 +1,8 @@
+* Sat Sep 05 2026 fravaccaro 0.5.5-1
+- Documents can be deleted
+- Redesign sign-in page
+- "Clear all filters" is greyed out when there is nothing to clear
+
 * Sat Sep 05 2026 fravaccaro 0.5.4-1
 - Cover action for uploads.
 

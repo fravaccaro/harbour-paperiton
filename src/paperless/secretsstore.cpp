@@ -70,6 +70,20 @@ void SecretsStore::load()
 
 void SecretsStore::save(const QString &token)
 {
+    // Sailfish Secrets has no way to replace a secret: storing over one that is
+    // already there is refused. So the old one goes first, and how that went is
+    // of no interest, since having nothing stored is the normal state before
+    // the first sign in.
+    DeleteSecretRequest *request = new DeleteSecretRequest(this);
+    request->setManager(&m_manager);
+    request->setIdentifier(identifier());
+    request->setUserInteractionMode(SecretManager::PreventInteraction);
+
+    run(request, [this, token](DeleteSecretRequest *) { store(token); });
+}
+
+void SecretsStore::store(const QString &token)
+{
     Secret secret(identifier());
     secret.setType(Secret::TypeBlob);
     secret.setData(token.toUtf8());

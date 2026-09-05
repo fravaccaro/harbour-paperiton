@@ -28,6 +28,7 @@ signals:
 
 private:
     Sailfish::Secrets::Secret::Identifier identifier() const;
+    void store(const QString &token);
 
     Sailfish::Secrets::SecretManager m_manager;
 };

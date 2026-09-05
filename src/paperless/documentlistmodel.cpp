@@ -88,6 +88,10 @@ DocumentListModel::DocumentListModel(PaperlessApi *api, QObject *parent)
         else
             clear();
     });
+
+    // A document deleted from anywhere in the app leaves the list, so no page
+    // has to remember to ask for one.
+    connect(m_api, &PaperlessApi::documentDeleted, this, &DocumentListModel::removeDocument);
 }
 
 int DocumentListModel::rowCount(const QModelIndex &parent) const
@@ -303,6 +307,29 @@ void DocumentListModel::applyFilters(const QVariantMap &changes)
 
     if (changed)
         reload();
+}
+
+void DocumentListModel::removeDocument(int documentId)
+{
+    for (int row = 0; row < m_entries.count(); ++row) {
+        if (m_entries.at(row).id != documentId)
+            continue;
+
+        beginRemoveRows(QModelIndex(), row, row);
+        m_entries.remove(row);
+        endRemoveRows();
+        emit countChanged();
+        break;
+    }
+
+    if (m_totalCount > 0) {
+        --m_totalCount;
+        emit totalCountChanged();
+        // The number on the cover counts the whole archive, so it only follows
+        // a list that is the whole archive.
+        if (!hasFilters())
+            m_api->setTotalDocuments(m_totalCount);
+    }
 }
 
 void DocumentListModel::clearFilters()

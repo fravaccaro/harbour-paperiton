@@ -38,6 +38,10 @@ Page {
                                          && Documents.ordering === Documents.defaultOrdering
                                          && Object.keys(Documents.filters).length === 0
 
+    // Whether there is anything for "Clear all filters" to clear. Showing all
+    // documents covers everything it resets apart from the search term.
+    readonly property bool anyFilterApplied: !showingAll || Documents.searchQuery !== ""
+
     function showingView(index) {
         return Documents.tagId <= 0 && Documents.correspondentId <= 0
                 && SavedViews.matches(index, Documents.filters, Documents.ordering)
@@ -78,6 +82,7 @@ Page {
 
             MenuItem {
                 text: qsTr("Clear all filters")
+                enabled: page.anyFilterApplied
                 onClicked: {
                     Documents.clearFilters()
                     pageStack.navigateBack()

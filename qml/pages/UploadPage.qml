@@ -349,6 +349,12 @@ Page {
             // The root of the filesystem holds nothing this app is allowed to
             // read, so it is not offered as a place to look.
             showSystemFiles: false
+            // Every directory the picker opens is a page of its own, and each
+            // one hands this destination down to the next. Without it, accepting
+            // returns one directory at a time. The system content picker uses
+            // the dialog the same way.
+            _maskedAcceptDestination: page
+            acceptDestinationAction: PageStackAction.Pop
         }
     }
 }

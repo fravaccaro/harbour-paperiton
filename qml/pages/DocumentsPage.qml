@@ -112,6 +112,10 @@ Page {
     Connections {
         target: Paperless
 
+        // Deleting is answered for here for the whole app: the document page
+        // leaves itself when it worked, and says nothing when it did not.
+        onDocumentDeleteFailed: app.notify(error)
+
         onBulkEditFinished: {
             if (page.bulkIndex < 0)
                 return
@@ -246,6 +250,16 @@ Page {
             }
 
             MenuItem {
+                text: page.selectedIds.length === 1
+                      ? qsTr("Delete one document")
+                      : qsTr("Delete %1 documents").arg(page.selectedIds.length)
+                visible: page.selectedIds.length > 0 && app.allowed("delete_document")
+                onClicked: deleteRemorse.execute(qsTr("Deleting"), function() {
+                    page.runBulk([{ "method": "delete", "parameters": {} }])
+                })
+            }
+
+            MenuItem {
                 text: qsTr("Cancel selection")
                 visible: page.selectedIds.length > 0
                 onClicked: page.selectedIds = []
@@ -287,6 +301,19 @@ Page {
                     text: qsTr("Select")
                     visible: page.selectedIds.length === 0 && app.allowed("change_document")
                     onClicked: page.startSelection(model.documentId)
+                }
+
+                MenuItem {
+                    text: qsTr("Delete")
+                    visible: page.selectedIds.length === 0 && app.allowed("delete_document")
+                    onClicked: {
+                        // The row is gone by the time the countdown runs out, so
+                        // which document it was has to be kept.
+                        var id = model.documentId
+                        item.remorseAction(qsTr("Deleting"), function() {
+                            Paperless.deleteDocument(id)
+                        })
+                    }
                 }
             }
 
@@ -422,6 +449,8 @@ Page {
 
         VerticalScrollDecorator {}
     }
+
+    RemorsePopup { id: deleteRemorse }
 
     Timer {
         id: loadMoreDelay
