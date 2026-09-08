@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="it" sourcelanguage="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="it" sourcelanguage="en">
 <context>
     <name>AboutPage</name>
     <message>
@@ -216,10 +214,6 @@
         <translation>Apertura in un&apos;altra app</translation>
     </message>
     <message>
-        <source>%1 was saved in Downloads</source>
-        <translation>%1 è stato salvato in Download</translation>
-    </message>
-    <message>
         <source>Changes saved</source>
         <translation>Modifiche salvate</translation>
     </message>
@@ -278,6 +272,10 @@
     <message>
         <source>File</source>
         <translation>File</translation>
+    </message>
+    <message>
+        <source>%1 was saved in Downloads</source>
+        <translation>%1 è stato salvato in Download</translation>
     </message>
 </context>
 <context>
@@ -600,11 +598,11 @@
     </message>
     <message>
         <source>Homepage</source>
-        <translation>Sito web</translation>
+        <translation>Pagina iniziale</translation>
     </message>
     <message>
         <source>Changelog</source>
-        <translation>Registro modifiche</translation>
+        <translation>Registro delle modifiche</translation>
     </message>
     <message>
         <source>Translations</source>
@@ -624,14 +622,11 @@
     </message>
     <message numerus="yes">
         <source>show license(s)</source>
-        <translation>
-            <numerusform>mostra licenza</numerusform>
-            <numerusform>mostra licenze</numerusform>
-        </translation>
+        <translation><numerusform>mostra licenza</numerusform><numerusform>mostra licenze</numerusform><numerusform>mostra licenze</numerusform></translation>
     </message>
     <message>
         <source>News</source>
-        <translation>Novità</translation>
+        <translation>Notizie</translation>
     </message>
     <message>
         <source>Changes since version %1</source>
@@ -639,11 +634,11 @@
     </message>
     <message>
         <source>show details</source>
-        <translation>mostra i dettagli</translation>
+        <translation>mostra dettagli</translation>
     </message>
     <message>
         <source>Thank you!</source>
-        <translation>Grazie!</translation>
+        <translation>Grazie mille!</translation>
     </message>
     <message>
         <source>Details</source>
@@ -655,11 +650,11 @@
     </message>
     <message>
         <source>Acknowledgements</source>
-        <translation>Riconoscimenti</translation>
+        <translation>Ringraziamenti</translation>
     </message>
     <message>
         <source>Please refer to &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
-        <translation>Fai riferimento a &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
+        <translation>Fare riferimento a &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>
     <message>
         <source>Download license texts</source>
@@ -671,29 +666,26 @@
     </message>
     <message numerus="yes">
         <source>License(s)</source>
-        <translation>
-            <numerusform>mostra licenza</numerusform>
-            <numerusform>mostra licenze</numerusform>
-        </translation>
+        <translation><numerusform>mostra licenza</numerusform><numerusform>mostra licenze</numerusform><numerusform>mostra licenze</numerusform></translation>
     </message>
     <message>
         <source>Note: please check the source code for most accurate information.</source>
-        <translation>Nota: consulta il codice sorgente per le informazioni più accurate.</translation>
+        <translation>Nota: per informazioni più accurate, controllare il codice sorgente.</translation>
     </message>
 </context>
 <context>
     <name>Opal.About.Common</name>
     <message>
         <source>If you want to support my work, you can buy me a cup of coffee.</source>
-        <translation>Se vuoi sostenere il mio lavoro, puoi offrirmi un caffè.</translation>
+        <translation>Se vuoi sostenere il mio lavoro, puoi offrirmi una tazza di caffè.</translation>
     </message>
     <message>
         <source>You can support this project by contributing, or by donating using any of these services.</source>
-        <translation>Puoi sostenere questo progetto contribuendo o donando tramite uno di questi servizi.</translation>
+        <translation>Puoi sostenere questo progetto contribuendo o effettuando una donazione tramite uno di questi servizi.</translation>
     </message>
     <message>
         <source>Your contributions to translations or code would be most welcome.</source>
-        <translation>I tuoi contributi alle traduzioni o al codice sono i benvenuti.</translation>
+        <translation>I vostri contributi alle traduzioni o al codice saranno molto graditi.</translation>
     </message>
 </context>
 <context>
@@ -704,7 +696,7 @@
     </message>
     <message>
         <source>Share link</source>
-        <translation>Condividi il collegamento</translation>
+        <translation>Condividi collegamento</translation>
     </message>
     <message>
         <source>Phone number</source>
@@ -720,7 +712,7 @@
     </message>
     <message>
         <source>Open externally</source>
-        <translation>Apri con un&apos;altra app</translation>
+        <translation>Apri esternamente</translation>
     </message>
     <message>
         <source>Share</source>
@@ -728,19 +720,19 @@
     </message>
     <message>
         <source>Copy link</source>
-        <translation>Copia il collegamento</translation>
+        <translation>Copia collegamento</translation>
     </message>
     <message>
         <source>Copy text</source>
-        <translation>Copia il testo</translation>
+        <translation>Copia testo</translation>
     </message>
     <message>
         <source>No preview available.</source>
-        <translation>Nessuna anteprima disponibile.</translation>
+        <translation>Anteprima non disponibile.</translation>
     </message>
     <message>
         <source>The page is taking too long to load.</source>
-        <translation>La pagina ci sta mettendo troppo a caricare.</translation>
+        <translation>Il caricamento della pagina sta impiegando troppo tempo.</translation>
     </message>
 </context>
 <context>
@@ -921,7 +913,7 @@
     </message>
     <message>
         <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Downloads.</source>
-        <translation>Il token API è conservato nell&amp;apos;archivio cifrato di Sailfish OS. I documenti che apri vengono scaricati nella cache privata dell&apos;app ed eliminati alla chiusura; &quot;Salva sul dispositivo&quot; ne conserva una copia in Download.</translation>
+        <translation>Il token API è conservato nell&apos;archivio cifrato di Sailfish OS. I documenti che apri vengono scaricati nella cache privata dell&apos;app ed eliminati alla chiusura; &quot;Salva sul dispositivo&quot; ne conserva una copia in Download.</translation>
     </message>
     <message>
         <source>Secure storage reported: %1</source>
@@ -944,11 +936,11 @@
     </message>
     <message>
         <source>Thank you for using my little app! Maybe you can contribute back?</source>
-        <translation>Grazie per usare la mia piccola app! Ti va di contribuire?</translation>
+        <translation>Grazie per usare la mia piccola app! Forse puoi ricambiare con un contributo?</translation>
     </message>
     <message>
         <source>Thank you for your support!</source>
-        <translation>Grazie per il tuo sostegno!</translation>
+        <translation>Grazie per il tuo supporto!</translation>
     </message>
     <message>
         <source>Remind me later</source>
