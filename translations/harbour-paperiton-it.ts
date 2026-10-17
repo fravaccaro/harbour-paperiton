@@ -17,7 +17,7 @@
     </message>
     <message>
         <source>This app is a separate project and not affiliated with Paperless-ngx.</source>
-        <translation>Quest'app è un progetto a sé e non è collegata a Paperless-ngx.</translation>
+        <translation>Quest&apos;app è un progetto a sé e non è collegata a Paperless-ngx.</translation>
     </message>
     <message>
         <source>Feedback</source>

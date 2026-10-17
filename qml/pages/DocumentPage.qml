@@ -13,6 +13,9 @@ Page {
     })
     property bool loadingDetails: true
     property bool saving: false
+    // Set only by open(), so a Download that finishes through the same save
+    // signals is never taken for a request to open the file.
+    property bool openAfterSave: false
     property string statusMessage
     property string errorMessage
     // Paperless keeps the file as it was uploaded and, for most documents, an
@@ -43,18 +46,20 @@ Page {
     // images stay inside Paperiton, everything else goes to the system handler.
     // Without an explicit choice the version that renders best is used: an image
     // shows as an image, while everything else is read from the archived PDF.
+    // Only a tap on the preview (or its press-and-hold menu) asks for this.
     function open(original) {
         page.errorMessage = "";
         page.statusMessage = "";
         if (original === undefined)
             original = isImage() || !hasArchive;
 
+        page.openAfterSave = true;
         Paperless.saveDocument(documentId, fileName(original), original);
     }
 
     // Writes the file into Downloads/Paperiton without opening it, in the same
-    // version Open would choose. The run, and its notification, belong to the
-    // window, so it carries on if this page is left behind.
+    // version a preview tap would choose. The run, and its notification, belong
+    // to the window, so it carries on if this page is left behind.
     function download() {
         var original = isImage() || !hasArchive;
         app.downloadDocument(documentId, fileName(original), original);
@@ -111,26 +116,29 @@ Page {
             page.loadingDetails = false;
             page.errorMessage = error;
         }
-        // A download run started from the list reports itself, and must not also
-        // be taken for the Open this page asked for.
+        // Only a preview open sets openAfterSave. A Download shares the same
+        // save signals but reports itself through the window notification, and
+        // must not open the file once the run has already cleared app.downloading.
         onDocumentSaveStarted: {
-            if (documentId === page.documentId && !app.downloading)
+            if (documentId === page.documentId && page.openAfterSave)
                 page.saving = true;
 
         }
         onDocumentSaved: {
-            if (documentId !== page.documentId || app.downloading)
+            if (documentId !== page.documentId || !page.openAfterSave)
                 return ;
 
+            page.openAfterSave = false;
             page.saving = false;
             app.notify(qsTr("%1 was saved in Downloads/Paperiton")
                        .arg(filePath.substring(filePath.lastIndexOf("/") + 1)));
             page.view(filePath);
         }
         onDocumentSaveFailed: {
-            if (documentId !== page.documentId || app.downloading)
+            if (documentId !== page.documentId || !page.openAfterSave)
                 return ;
 
+            page.openAfterSave = false;
             page.saving = false;
             page.errorMessage = error;
         }

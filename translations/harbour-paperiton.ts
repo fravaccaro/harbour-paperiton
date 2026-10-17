@@ -4,19 +4,11 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>A client for the documents of a Paperless-ngx server: search, filters, previews, uploads from the device or the camera, metadata, notes and the task queue.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Report an issue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>About Paperless-ngx</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Paperless-ngx is a separate project and is not affiliated with this app.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -33,6 +25,14 @@
     </message>
     <message>
         <source>Credits for existing translations and how to contribute.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A client for the documents of a Paperless-ngx server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This app is a separate project and not affiliated with Paperless-ngx.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1216,14 +1216,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Downloading from Paperless</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Downloaded from Paperless</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>%1 files were saved in Downloads/Paperiton</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1249,6 +1241,14 @@
     </message>
     <message>
         <source>%1 was saved in Downloads/Paperiton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
