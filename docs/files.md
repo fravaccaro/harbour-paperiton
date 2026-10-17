@@ -11,7 +11,7 @@ nav_order: 5
 
 **Open** downloads the file into `~/Downloads/Paperiton` under the name the server keeps for it (for example the archived PDF name). If that name is already there, it is overwritten. Pictures are then shown inside Paperiton; PDFs and other files are handed to the system viewer.
 
-**Download**, from a row's context menu or the pulley menu when documents are selected, writes the same files into the same folder without opening them. While files arrive, a progress notification is shown; each successful file then gets its own entry in the events view, from which it can be opened or shared.
+**Download**, from a row's context menu or the pulley menu when documents are selected, writes the same files into the same folder without opening them. While files arrive, a progress notification is shown; each successful file then gets its own entry in the events view, from which it can be opened (Gallery for pictures, the system handler for PDFs) or shared, without bringing Paperiton to the front.
 
 Thumbnails and camera captures still use the app's private cache. Signing out clears that cache (and leftover `documents/` folders from older versions); `Downloads/Paperiton` is never emptied by the app.
 

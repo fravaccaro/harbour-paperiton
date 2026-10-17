@@ -163,24 +163,63 @@ ApplicationWindow {
         return "application/octet-stream";
     }
 
-    // Same choice a preview Open makes once the file is already on disk.
-    function openDownloaded(path) {
-        activate();
-        if (isImagePath(path)) {
-            pageStack.push(Qt.resolvedUrl("pages/ImageViewPage.qml"), {
-                "source": Paperless.fileUrl(path),
-                "title": baseName(path)
-            });
-            return ;
-        }
-        Qt.openUrlExternally(Paperless.fileUrl(path));
+    function fileUrlString(path) {
+        var text = String(path);
+        return text.indexOf("file://") === 0 ? text : ("file://" + text);
     }
 
+    // Opens without raising Paperiton: Gallery for pictures (via the system
+    // handler), Documents or another viewer for PDFs and the rest.
+    function openDownloaded(path) {
+        Qt.openUrlExternally(fileUrlString(path));
+    }
+
+    // ShareAction can present the sheet while Paperiton stays in the background.
     function shareDownloaded(path) {
-        activate();
         downloadShare.mimeType = mimeForPath(path);
         downloadShare.resources = [path];
         downloadShare.trigger();
+    }
+
+    function downloadRemoteActions(filePath) {
+        var share = {
+            "name": "share",
+            "displayName": qsTr("Share"),
+            "icon": "icon-s-share"
+        };
+        // Pictures go straight to Gallery over D-Bus, so Open does not have to
+        // wake Paperiton. Everything else is answered in onClicked / onActionInvoked.
+        if (isImagePath(filePath)) {
+            var show = {
+                "service": "com.jolla.gallery",
+                "path": "/com/jolla/gallery/ui",
+                "iface": "com.jolla.gallery.ui",
+                "method": "showimage",
+                "arguments": [fileUrlString(filePath)]
+            };
+            return [{
+                    "name": "default",
+                    "service": show.service,
+                    "path": show.path,
+                    "iface": show.iface,
+                    "method": show.method,
+                    "arguments": show.arguments
+                }, share, {
+                    "name": "open",
+                    "displayName": qsTr("Open"),
+                    "service": show.service,
+                    "path": show.path,
+                    "iface": show.iface,
+                    "method": show.method,
+                    "arguments": show.arguments
+                }];
+        }
+        return [{
+                "name": "default"
+            }, share, {
+                "name": "open",
+                "displayName": qsTr("Open")
+            }];
     }
 
     // One events-view entry per successful file, with Open (and body click)
@@ -199,6 +238,7 @@ ApplicationWindow {
         notice.body = baseName(filePath);
         notice.previewSummary = qsTr("Downloaded");
         notice.previewBody = baseName(filePath);
+        notice.remoteActions = downloadRemoteActions(filePath);
         notice.publish();
     }
 
@@ -408,24 +448,14 @@ ApplicationWindow {
             appIcon: "harbour-paperiton"
             isTransient: false
             urgency: Notification.Normal
-            // default and open both open the file; share has no remote service
-            // of its own and is taken in onActionInvoked, as Tarkka does.
-            remoteActions: [{
-                    "name": "default"
-                }, {
-                    "name": "share",
-                    "displayName": qsTr("Share"),
-                    "icon": "icon-s-share"
-                }, {
-                    "name": "open",
-                    "displayName": qsTr("Open")
-                }]
+            // remoteActions are filled when the notice is published: pictures
+            // open Gallery over D-Bus; Share is always taken here.
             onClicked: app.openDownloaded(filePath)
             onActionInvoked: {
-                if (name === "open" || name === "default")
-                    app.openDownloaded(filePath);
-                else if (name === "share")
+                if (name === "share")
                     app.shareDownloaded(filePath);
+                else if (name === "open" || name === "default")
+                    app.openDownloaded(filePath);
             }
             onClosed: app.forgetDownloadNotice(notice)
         }
