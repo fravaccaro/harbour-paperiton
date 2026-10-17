@@ -4,20 +4,12 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>A client for the documents of a Paperless-ngx server.</source>
-        <translation>Un client per i documenti di un server Paperless-ngx.</translation>
-    </message>
-    <message>
         <source>Report an issue</source>
         <translation>Segnala un problema</translation>
     </message>
     <message>
         <source>About Paperless-ngx</source>
         <translation>Informazioni su Paperless-ngx</translation>
-    </message>
-    <message>
-        <source>This app is a separate project and not affiliated with Paperless-ngx.</source>
-        <translation>Quest&apos;app è un progetto a sé e non è collegata a Paperless-ngx.</translation>
     </message>
     <message>
         <source>Feedback</source>
@@ -34,6 +26,14 @@
     <message>
         <source>Credits for existing translations and how to contribute.</source>
         <translation>Crediti per le traduzioni esistenti e come contribuire.</translation>
+    </message>
+    <message>
+        <source>A client for the documents of a Paperless-ngx server.</source>
+        <translation>Un client per i documenti di un server Paperless-ngx.</translation>
+    </message>
+    <message>
+        <source>This app is a separate project and not affiliated with Paperless-ngx.</source>
+        <translation>Quest&apos;app è un progetto a sé e non è collegata a Paperless-ngx.</translation>
     </message>
 </context>
 <context>
@@ -688,8 +688,8 @@
     <message numerus="yes">
         <source>License(s)</source>
         <translation>
-            <numerusform>mostra licenza</numerusform>
-            <numerusform>mostra licenze</numerusform>
+            <numerusform>Licenza</numerusform>
+            <numerusform>Licenze</numerusform>
         </translation>
     </message>
     <message>
@@ -1216,22 +1216,6 @@
         <translation>Non è stato aggiunto nulla all&apos;archivio</translation>
     </message>
     <message>
-        <source>Downloading</source>
-        <translation>Download da Paperless</translation>
-    </message>
-    <message>
-        <source>Downloaded</source>
-        <translation>Scaricato</translation>
-    </message>
-    <message>
-        <source>Open</source>
-        <translation>Apri</translation>
-    </message>
-    <message>
-        <source>Share</source>
-        <translation>Condividi</translation>
-    </message>
-    <message>
         <source>%1 of %2 files were saved in Downloads/Paperiton</source>
         <translation>%1 di %2 file sono stati salvati in Downloads/Paperiton</translation>
     </message>
@@ -1250,6 +1234,22 @@
     <message>
         <source>%1 files were added to the archive</source>
         <translation>%1 file aggiunti all&apos;archivio</translation>
+    </message>
+    <message>
+        <source>Downloaded</source>
+        <translation>Scaricato</translation>
+    </message>
+    <message>
+        <source>Downloading</source>
+        <translation>Download da Paperless</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Apri</translation>
+    </message>
+    <message>
+        <source>Share</source>
+        <translation>Condividi</translation>
     </message>
 </context>
 </TS>
