@@ -22,6 +22,26 @@ Page {
         pageStack.navigateBack();
     }
 
+    // A tag, a correspondent or a view is a place to look, not a further
+    // narrowing of the place already chosen. The search stays.
+    function applyTag(tagId) {
+        apply({
+            "tagId": tagId,
+            "correspondentId": -1,
+            "filters": ({}),
+            "ordering": Documents.defaultOrdering
+        });
+    }
+
+    function applyCorrespondent(correspondentId) {
+        apply({
+            "correspondentId": correspondentId,
+            "tagId": -1,
+            "filters": ({}),
+            "ordering": Documents.defaultOrdering
+        });
+    }
+
     // A view replaces the whole selection, tag and correspondent included. The
     // search stays: a view is where to search, not what to search for.
     function applyView(filters, ordering, tagId) {
@@ -187,9 +207,7 @@ Page {
 
                 BackgroundItem {
                     width: column.width
-                    onClicked: page.apply({
-                        "tagId": model.itemId
-                    })
+                    onClicked: page.applyTag(model.itemId)
 
                     // The count keeps to the page margin whatever its number of
                     // digits, and the name gives way to it.
@@ -272,9 +290,7 @@ Page {
 
                 BackgroundItem {
                     width: column.width
-                    onClicked: page.apply({
-                        "correspondentId": model.itemId
-                    })
+                    onClicked: page.applyCorrespondent(model.itemId)
 
                     Label {
                         x: Theme.horizontalPageMargin

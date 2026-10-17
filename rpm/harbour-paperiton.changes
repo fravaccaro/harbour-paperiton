@@ -1,3 +1,7 @@
+* Sat Oct 17 2026 fravaccaro 0.5.7-1
+- Choosing a tag or a correspondent replaces the previous place to look,
+  instead of combining with it
+
 * Sat Sep 05 2026 fravaccaro 0.5.6-1
 - Signing in with the web interface works: the token is taken from the account
   profile instead of a script whose answer never came back
