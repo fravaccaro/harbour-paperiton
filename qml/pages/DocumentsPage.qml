@@ -171,7 +171,6 @@ Page {
         }
 
         PullDownMenu {
-
             MenuItem {
                 text: page.selectedIds.length === 1 ? qsTr("Delete one document") : qsTr("Delete %1 documents").arg(page.selectedIds.length)
                 visible: page.selectedIds.length > 0 && app.allowed("delete_document")
@@ -184,7 +183,7 @@ Page {
                     }]);
                 })
             }
-            
+
             MenuItem {
                 text: page.selectedIds.length === 1 ? qsTr("Edit one document") : qsTr("Edit %1 documents").arg(page.selectedIds.length)
                 visible: page.selectedIds.length > 0
@@ -205,7 +204,6 @@ Page {
                 enabled: !page.downloading
                 onClicked: page.downloadSelected()
             }
-
 
             MenuItem {
                 text: qsTr("Cancel selection")

@@ -71,9 +71,8 @@ Page {
                 "source": Paperless.fileUrl(path),
                 "title": page.documentTitle
             });
-            return;
+            return ;
         }
-
         Qt.openUrlExternally(Paperless.fileUrl(path));
     }
 
@@ -130,8 +129,7 @@ Page {
 
             page.openAfterSave = false;
             page.saving = false;
-            app.notify(qsTr("%1 was saved in Downloads/Paperiton")
-                       .arg(filePath.substring(filePath.lastIndexOf("/") + 1)));
+            app.notify(qsTr("%1 was saved in Downloads/Paperiton").arg(filePath.substring(filePath.lastIndexOf("/") + 1)));
             page.view(filePath);
         }
         onDocumentSaveFailed: {

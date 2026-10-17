@@ -18,7 +18,6 @@ ApplicationWindow {
     // Kept so that an upload run which added a single file can name it, the way
     // each upload used to be announced.
     property string lastAddedFileName
-
     // Documents asked for from the list are written to Downloads/Paperiton one
     // after another. The run lives here rather than on the page that started it,
     // so leaving that page does not take the run, or its notification, with it.
@@ -38,7 +37,6 @@ ApplicationWindow {
 
         return Math.min((downloadIndex + downloadByteProgress) / downloadIds.length, 1);
     }
-
     // What a caller already knows about a document, by id, so that a page which
     // has the document itself does not depend on the list holding its row.
     property var downloadChoices: ({
@@ -94,7 +92,6 @@ ApplicationWindow {
             }
             return ;
         }
-
         var id = downloadIds[next];
         var name;
         var original;
@@ -114,8 +111,8 @@ ApplicationWindow {
             name = original ? (originalName || archivedName) : (archivedName || originalName);
             if (!name)
                 name = (title !== "" ? title : ("paperless-" + id)) + ".pdf";
-        }
 
+        }
         // The name is in place before the run counts as started, so the first
         // notification the timer publishes already says which file it is about.
         downloadFileName = name;
@@ -129,6 +126,7 @@ ApplicationWindow {
             var row = Documents.get(i);
             if (row.documentId === documentId)
                 return row;
+
         }
         return null;
     }
@@ -146,20 +144,28 @@ ApplicationWindow {
         var name = String(path).toLowerCase();
         if (/\.pdf$/.test(name))
             return "application/pdf";
+
         if (/\.png$/.test(name))
             return "image/png";
+
         if (/\.jpe?g$/.test(name))
             return "image/jpeg";
+
         if (/\.gif$/.test(name))
             return "image/gif";
+
         if (/\.webp$/.test(name))
             return "image/webp";
+
         if (/\.tiff?$/.test(name))
             return "image/tiff";
+
         if (/\.bmp$/.test(name))
             return "image/bmp";
+
         if (/\.txt$/.test(name))
             return "text/plain";
+
         return "application/octet-stream";
     }
 
@@ -198,28 +204,28 @@ ApplicationWindow {
                 "arguments": [fileUrlString(filePath)]
             };
             return [{
-                    "name": "default",
-                    "service": show.service,
-                    "path": show.path,
-                    "iface": show.iface,
-                    "method": show.method,
-                    "arguments": show.arguments
-                }, share, {
-                    "name": "open",
-                    "displayName": qsTr("Open"),
-                    "service": show.service,
-                    "path": show.path,
-                    "iface": show.iface,
-                    "method": show.method,
-                    "arguments": show.arguments
-                }];
-        }
-        return [{
-                "name": "default"
+                "name": "default",
+                "service": show.service,
+                "path": show.path,
+                "iface": show.iface,
+                "method": show.method,
+                "arguments": show.arguments
             }, share, {
                 "name": "open",
-                "displayName": qsTr("Open")
+                "displayName": qsTr("Open"),
+                "service": show.service,
+                "path": show.path,
+                "iface": show.iface,
+                "method": show.method,
+                "arguments": show.arguments
             }];
+        }
+        return [{
+            "name": "default"
+        }, share, {
+            "name": "open",
+            "displayName": qsTr("Open")
+        }];
     }
 
     // One events-view entry per successful file, with Open (and body click)
@@ -247,6 +253,7 @@ ApplicationWindow {
         for (var i = 0; i < downloadNotices.length; ++i) {
             if (downloadNotices[i] !== notice)
                 kept.push(downloadNotices[i]);
+
         }
         downloadNotices = kept;
         notice.destroy();
@@ -459,6 +466,7 @@ ApplicationWindow {
             }
             onClosed: app.forgetDownloadNotice(notice)
         }
+
     }
 
     Connections {

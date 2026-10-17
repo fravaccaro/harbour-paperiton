@@ -78,9 +78,7 @@ Page {
                 wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.secondaryColor
-                text: qsTr("The API token is kept in the encrypted storage of Sailfish OS. "
-                           + "Opening a document writes it to Downloads/Paperiton under the name "
-                           + "the server keeps for it, replacing a file already there with that name.")
+                text: qsTr("The API token is kept in the encrypted storage of Sailfish OS. " + "Opening a document writes it to Downloads/Paperiton under the name " + "the server keeps for it, replacing a file already there with that name.")
             }
 
             Label {

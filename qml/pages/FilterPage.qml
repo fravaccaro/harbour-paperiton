@@ -28,7 +28,8 @@ Page {
         apply({
             "tagId": tagId,
             "correspondentId": -1,
-            "filters": ({}),
+            "filters": ({
+            }),
             "ordering": Documents.defaultOrdering
         });
     }
@@ -37,7 +38,8 @@ Page {
         apply({
             "correspondentId": correspondentId,
             "tagId": -1,
-            "filters": ({}),
+            "filters": ({
+            }),
             "ordering": Documents.defaultOrdering
         });
     }
