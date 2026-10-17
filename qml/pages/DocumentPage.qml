@@ -52,6 +52,14 @@ Page {
         Paperless.saveDocument(documentId, fileName(original), original);
     }
 
+    // Writes the file into Downloads/Paperiton without opening it, in the same
+    // version Open would choose. The run, and its notification, belong to the
+    // window, so it carries on if this page is left behind.
+    function download() {
+        var original = isImage() || !hasArchive;
+        app.downloadDocument(documentId, fileName(original), original);
+    }
+
     function view(path) {
         if (isImagePath(path)) {
             pageStack.push(Qt.resolvedUrl("ImageViewPage.qml"), {
@@ -178,6 +186,12 @@ Page {
                     "tagIds": page.tagIds,
                     "created": page.created
                 })
+            }
+
+            MenuItem {
+                text: qsTr("Download")
+                enabled: !page.loadingDetails && !page.saving && !app.downloading
+                onClicked: page.download()
             }
 
             MenuItem {

@@ -52,7 +52,7 @@ Page {
     }
 
     function downloadSelected() {
-        if (selectedIds.length < 2)
+        if (selectedIds.length === 0)
             return ;
 
         app.downloadDocuments(selectedIds);
@@ -166,6 +166,20 @@ Page {
         }
 
         PullDownMenu {
+
+            MenuItem {
+                text: page.selectedIds.length === 1 ? qsTr("Delete one document") : qsTr("Delete %1 documents").arg(page.selectedIds.length)
+                visible: page.selectedIds.length > 0 && app.allowed("delete_document")
+                enabled: !page.downloading
+                onClicked: deleteRemorse.execute(qsTr("Deleting"), function() {
+                    page.runBulk([{
+                        "method": "delete",
+                        "parameters": {
+                        }
+                    }]);
+                })
+            }
+            
             MenuItem {
                 text: page.selectedIds.length === 1 ? qsTr("Edit one document") : qsTr("Edit %1 documents").arg(page.selectedIds.length)
                 visible: page.selectedIds.length > 0
@@ -181,24 +195,12 @@ Page {
             }
 
             MenuItem {
-                text: qsTr("Download %1 documents").arg(page.selectedIds.length)
-                visible: page.selectedIds.length >= 2
+                text: page.selectedIds.length === 1 ? qsTr("Download one document") : qsTr("Download %1 documents").arg(page.selectedIds.length)
+                visible: page.selectedIds.length > 0
                 enabled: !page.downloading
                 onClicked: page.downloadSelected()
             }
 
-            MenuItem {
-                text: page.selectedIds.length === 1 ? qsTr("Delete one document") : qsTr("Delete %1 documents").arg(page.selectedIds.length)
-                visible: page.selectedIds.length > 0 && app.allowed("delete_document")
-                enabled: !page.downloading
-                onClicked: deleteRemorse.execute(qsTr("Deleting"), function() {
-                    page.runBulk([{
-                        "method": "delete",
-                        "parameters": {
-                        }
-                    }]);
-                })
-            }
 
             MenuItem {
                 text: qsTr("Cancel selection")

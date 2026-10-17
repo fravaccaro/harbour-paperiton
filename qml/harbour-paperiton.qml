@@ -39,11 +39,32 @@ ApplicationWindow {
         return Math.min((downloadIndex + downloadByteProgress) / downloadIds.length, 1);
     }
 
+    // What a caller already knows about a document, by id, so that a page which
+    // has the document itself does not depend on the list holding its row.
+    property var downloadChoices: ({
+    })
+
     function downloadDocuments(ids) {
+        startDownload(ids, ({
+        }));
+    }
+
+    function downloadDocument(documentId, fileName, original) {
+        var choices = {
+        };
+        choices[documentId] = {
+            "fileName": fileName,
+            "original": original
+        };
+        startDownload([documentId], choices);
+    }
+
+    function startDownload(ids, choices) {
         if (downloading || !ids || ids.length === 0)
             return ;
 
         downloadIds = ids.slice();
+        downloadChoices = choices;
         downloadIndex = -1;
         downloadOk = 0;
         downloadFail = 0;
@@ -56,35 +77,41 @@ ApplicationWindow {
             var total = downloadIds.length;
             var saved = downloadOk;
             var failed = downloadFail;
+            var lastName = downloadFileName;
             downloadIndex = -1;
             downloadIds = [];
             downloadFileName = "";
-            downloadNotice.close();
-            if (failed === 0) {
-                if (total === 1)
-                    notify(qsTr("The file was saved in Downloads/Paperiton"));
-                else
-                    notify(qsTr("%1 files were saved in Downloads/Paperiton").arg(saved));
-            } else if (saved === 0) {
-                notify(total === 1 ? qsTr("Could not download the file") : qsTr("Could not download the files"));
-            } else {
-                notify(qsTr("%1 of %2 files were saved in Downloads/Paperiton").arg(saved).arg(total));
-            }
+            var outcome;
+            if (failed === 0)
+                outcome = total === 1 ? qsTr("%1 was saved in Downloads/Paperiton").arg(lastName) : qsTr("%1 files were saved in Downloads/Paperiton").arg(saved);
+            else if (saved === 0)
+                outcome = total === 1 ? qsTr("Could not download the file") : qsTr("Could not download the files");
+            else
+                outcome = qsTr("%1 of %2 files were saved in Downloads/Paperiton").arg(saved).arg(total);
+            noticeFinished(downloadNotice, qsTr("Downloaded from Paperless"), outcome);
             return ;
         }
 
         var id = downloadIds[next];
-        var row = documentRow(id);
-        var originalName = row ? (row.originalFileName || "") : "";
-        var archivedName = row ? (row.archivedFileName || "") : "";
-        var title = row ? (row.title || "") : "";
-        // The same choice a single Open makes: an image as it was uploaded,
-        // everything else from the archived PDF when the server has one.
-        var isImage = /\.(png|jpe?g|gif|webp|bmp|tiff?)$/i.test(originalName);
-        var original = isImage || archivedName === "";
-        var name = original ? (originalName || archivedName) : (archivedName || originalName);
-        if (!name)
-            name = (title !== "" ? title : ("paperless-" + id)) + ".pdf";
+        var name;
+        var original;
+        var chosen = downloadChoices[id];
+        if (chosen) {
+            name = chosen.fileName;
+            original = chosen.original;
+        } else {
+            var row = documentRow(id);
+            var originalName = row ? (row.originalFileName || "") : "";
+            var archivedName = row ? (row.archivedFileName || "") : "";
+            var title = row ? (row.title || "") : "";
+            // The same choice a single Open makes: an image as it was uploaded,
+            // everything else from the archived PDF when the server has one.
+            var isImage = /\.(png|jpe?g|gif|webp|bmp|tiff?)$/i.test(originalName);
+            original = isImage || archivedName === "";
+            name = original ? (originalName || archivedName) : (archivedName || originalName);
+            if (!name)
+                name = (title !== "" ? title : ("paperless-" + id)) + ".pdf";
+        }
 
         // The name is in place before the run counts as started, so the first
         // notification the timer publishes already says which file it is about.
@@ -166,9 +193,9 @@ ApplicationWindow {
         loginNavigation.restart();
     }
 
-    // Work that finishes away from the page in front of the user. A notice is
-    // drawn inside the window, so it only reaches someone who is looking at the
-    // app; from the cover or the background the notification area does.
+    // The smaller things that happen along the way: a notice drawn inside the
+    // window, so it only reaches someone who is looking at the app; from the
+    // cover or the background a banner that is gone once it has been read.
     function notify(text) {
         if (app.applicationActive) {
             Notices.show(text, Notice.Short);
@@ -176,6 +203,31 @@ ApplicationWindow {
         }
         backgroundNotice.previewBody = text;
         backgroundNotice.publish();
+    }
+
+    // A run that moves files is work the user should be able to find again
+    // later, so it keeps one notification in the events view throughout: while
+    // it runs this says which file it is on and how far along it is, with no
+    // banner, since the run announces itself once at the end rather than every
+    // second.
+    function noticeRunning(notice, summary, body, progress) {
+        notice.summary = summary;
+        notice.body = body;
+        notice.progress = progress;
+        notice.previewSummary = "";
+        notice.previewBody = "";
+        notice.publish();
+    }
+
+    // The run is over: the bar goes, what it achieved stays in the events view,
+    // and this one publish is the only one that asks for a banner.
+    function noticeFinished(notice, summary, body) {
+        notice.summary = summary;
+        notice.body = body;
+        notice.progress = undefined;
+        notice.previewSummary = summary;
+        notice.previewBody = body;
+        notice.publish();
     }
 
     initialPage: Settings.ready ? (Paperless.authenticated ? documentsPage : loginPage) : startPage
@@ -204,6 +256,8 @@ ApplicationWindow {
     Notification {
         id: backgroundNotice
 
+        appName: "Paperiton"
+        appIcon: "harbour-paperiton"
         isTransient: true
         urgency: Notification.Low
         previewSummary: qsTr("Paperiton")
@@ -211,13 +265,17 @@ ApplicationWindow {
 
     // An upload keeps going once the page that started it is gone, so it is
     // followed in the notification area, with a bar that fills as the run
-    // advances and a summary once it is over.
+    // advances and a summary that stays once it is over.
+    // The events view groups what it shows by the name of the app it came from,
+    // and drops a notification that does not name one, so both of these say who
+    // they are about.
     Notification {
         id: uploadNotice
 
+        appName: "Paperiton"
+        appIcon: "harbour-paperiton"
         isTransient: false
-        urgency: Notification.Low
-        summary: qsTr("Adding to Paperless")
+        urgency: Notification.Normal
     }
 
     // The byte callbacks arrive many times a second, so the notification is
@@ -228,20 +286,18 @@ ApplicationWindow {
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            uploadNotice.body = Uploads.runTotal > 1 ? qsTr("%1 (%2 of %3)").arg(Uploads.currentFileName).arg(Math.min(Uploads.runDone + 1, Uploads.runTotal)).arg(Uploads.runTotal) : Uploads.currentFileName;
-            uploadNotice.progress = Uploads.progress;
-            uploadNotice.publish();
+            app.noticeRunning(uploadNotice, qsTr("Adding to Paperless"), Uploads.runTotal > 1 ? qsTr("%1 (%2 of %3)").arg(Uploads.currentFileName).arg(Math.min(Uploads.runDone + 1, Uploads.runTotal)).arg(Uploads.runTotal) : Uploads.currentFileName, Uploads.progress);
         }
     }
 
-    // A download run is followed the same way an upload run is: one notification
-    // with a bar that fills as the files arrive, and a summary once it is over.
+    // A download run is followed the same way an upload run is.
     Notification {
         id: downloadNotice
 
+        appName: "Paperiton"
+        appIcon: "harbour-paperiton"
         isTransient: false
-        urgency: Notification.Low
-        summary: qsTr("Downloading from Paperless")
+        urgency: Notification.Normal
     }
 
     Timer {
@@ -250,9 +306,7 @@ ApplicationWindow {
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            downloadNotice.body = app.downloadIds.length > 1 ? qsTr("%1 (%2 of %3)").arg(app.downloadFileName).arg(Math.min(app.downloadIndex + 1, app.downloadIds.length)).arg(app.downloadIds.length) : app.downloadFileName;
-            downloadNotice.progress = app.downloadProgress;
-            downloadNotice.publish();
+            app.noticeRunning(downloadNotice, qsTr("Downloading from Paperless"), app.downloadIds.length > 1 ? qsTr("%1 (%2 of %3)").arg(app.downloadFileName).arg(Math.min(app.downloadIndex + 1, app.downloadIds.length)).arg(app.downloadIds.length) : app.downloadFileName, app.downloadProgress);
         }
     }
 
@@ -289,11 +343,14 @@ ApplicationWindow {
         // names the file and what the server said about it.
         onUploadFailed: app.notify(qsTr("%1 could not be uploaded").arg(fileName))
         onRunFinished: {
-            uploadNotice.close();
+            var outcome;
             if (added === 1)
-                app.notify(qsTr("%1 was added to the archive").arg(app.lastAddedFileName));
+                outcome = qsTr("%1 was added to the archive").arg(app.lastAddedFileName);
             else if (added > 1)
-                app.notify(qsTr("%1 files were added to the archive").arg(added));
+                outcome = qsTr("%1 files were added to the archive").arg(added);
+            else
+                outcome = qsTr("Nothing was added to the archive");
+            app.noticeFinished(uploadNotice, qsTr("Added to Paperless"), outcome);
         }
     }
 

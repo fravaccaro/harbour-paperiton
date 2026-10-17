@@ -196,6 +196,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -340,6 +344,10 @@
     </message>
     <message>
         <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download one document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1196,11 +1204,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Added to Paperless</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nothing was added to the archive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Downloading from Paperless</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The file was saved in Downloads/Paperiton</source>
+        <source>Downloaded from Paperless</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1225,6 +1241,10 @@
     </message>
     <message>
         <source>%1 files were added to the archive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 was saved in Downloads/Paperiton</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

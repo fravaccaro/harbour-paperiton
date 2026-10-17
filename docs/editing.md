@@ -9,7 +9,7 @@ nav_order: 3
 
 ## The document view
 
-Opening a document shows its preview along with tags, correspondent, document type, archive serial number and the OCR text the server extracted. **Open** writes the file into `~/Downloads/Paperiton` under the name the server keeps for it: pictures are shown inside Paperiton, PDFs and other files are opened with the system handler (see [Files and permissions](files)).
+Opening a document shows its preview along with tags, correspondent, document type, archive serial number and the OCR text the server extracted. **Open** writes the file into `~/Downloads/Paperiton` under the name the server keeps for it: pictures are shown inside Paperiton, PDFs and other files are opened with the system handler (see [Files and permissions](files)). **Download** in the pulley menu writes the same file there without opening it.
 
 ## Editing one document
 

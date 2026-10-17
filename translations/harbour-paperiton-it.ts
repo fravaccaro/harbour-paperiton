@@ -196,6 +196,10 @@
         <translation>%1 è stato salvato in Downloads/Paperiton</translation>
     </message>
     <message>
+        <source>Download</source>
+        <translation>Scarica</translation>
+    </message>
+    <message>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
@@ -341,6 +345,10 @@
     <message>
         <source>Download</source>
         <translation>Scarica</translation>
+    </message>
+    <message>
+        <source>Download one document</source>
+        <translation>Scarica un documento</translation>
     </message>
     <message>
         <source>Download %1 documents</source>
@@ -1196,12 +1204,20 @@
         <translation>Aggiunta a Paperless</translation>
     </message>
     <message>
+        <source>Added to Paperless</source>
+        <translation>Aggiunta completata</translation>
+    </message>
+    <message>
+        <source>Nothing was added to the archive</source>
+        <translation>Non è stato aggiunto nulla all&apos;archivio</translation>
+    </message>
+    <message>
         <source>Downloading from Paperless</source>
         <translation>Download da Paperless</translation>
     </message>
     <message>
-        <source>The file was saved in Downloads/Paperiton</source>
-        <translation>Il file è stato salvato in Downloads/Paperiton</translation>
+        <source>Downloaded from Paperless</source>
+        <translation>Download completato</translation>
     </message>
     <message>
         <source>%1 files were saved in Downloads/Paperiton</source>
@@ -1226,6 +1242,10 @@
     <message>
         <source>%1 files were added to the archive</source>
         <translation>%1 file aggiunti all&apos;archivio</translation>
+    </message>
+    <message>
+        <source>%1 was saved in Downloads/Paperiton</source>
+        <translation>%1 è stato salvato in Downloads/Paperiton</translation>
     </message>
 </context>
 </TS>
