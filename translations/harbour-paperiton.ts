@@ -192,6 +192,10 @@
 <context>
     <name>DocumentPage</name>
     <message>
+        <source>%1 was saved in Downloads/Paperiton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -212,19 +216,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Opening in another app</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Changes saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save on device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -273,10 +269,6 @@
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 was saved in Downloads</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -853,19 +845,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The cache folder is not available.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The folder %1 is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Could not write to %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not write to the cache folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -920,7 +904,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Downloads.</source>
+        <source>The API token is kept in the encrypted storage of Sailfish OS. Opening a document writes it to Downloads/Paperiton under the name the server keeps for it, replacing a file already there with that name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

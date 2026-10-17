@@ -78,18 +78,12 @@ public:
     Q_INVOKABLE bool can(const QString &permission) const;
 
     Q_INVOKABLE void fetchDocument(int documentId);
-    // Downloads a document into the private cache directory, where only this
-    // app can read it, for viewing inside the app.
+    // Downloads a document into ~/Downloads/Paperiton under the name the server
+    // keeps for it. A file already there with that name is overwritten.
     Q_INVOKABLE void saveDocument(int documentId, const QString &fileName, bool original);
-    // Saves a document into ~/Downloads, where files that came off the network
-    // are kept and which is also the only way another app can open it: the cache
-    // directory is invisible outside this sandbox.
-    Q_INVOKABLE void exportDocument(int documentId, const QString &fileName, bool original);
-    // Everything the app has written into the cache, including thumbnails and
-    // the web view profile. Used when signing out.
+    // Thumbnails and the web view profile. Used when signing out.
     Q_INVOKABLE void clearCache();
-    // The document copies and camera captures only, which are scratch files.
-    // Used when the app starts and when it quits.
+    // Camera captures only. Used when the app starts and when it quits.
     Q_INVOKABLE void clearTransientCache();
     Q_INVOKABLE QUrl fileUrl(const QString &path) const;
     Q_INVOKABLE QUrl webUrl(const QString &path) const;
@@ -127,7 +121,6 @@ signals:
 
     void documentSaveStarted(int documentId);
     void documentSaved(int documentId, const QString &filePath);
-    void documentExported(int documentId, const QString &filePath);
     void documentSaveFailed(int documentId, const QString &error);
 
     void documentUpdated(int documentId, const QVariantMap &document);
@@ -166,8 +159,7 @@ private:
     void setLastError(const QString &error);
     void setAccessWarning(const QString &warning);
     void applyLogin(const QString &serverUrl, const QString &username, const QString &token);
-    void downloadDocument(int documentId, const QString &fileName, bool original,
-                          const QString &directory, bool unique, bool exported);
+    void downloadDocument(int documentId, const QString &fileName, bool original);
 
     Config *m_config;
     QNetworkAccessManager *m_network;

@@ -192,6 +192,10 @@
 <context>
     <name>DocumentPage</name>
     <message>
+        <source>%1 was saved in Downloads/Paperiton</source>
+        <translation>%1 è stato salvato in Downloads/Paperiton</translation>
+    </message>
+    <message>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
@@ -212,20 +216,12 @@
         <translation>Testo</translation>
     </message>
     <message>
-        <source>Opening in another app</source>
-        <translation>Apertura in un&apos;altra app</translation>
-    </message>
-    <message>
         <source>Changes saved</source>
         <translation>Modifiche salvate</translation>
     </message>
     <message>
         <source>Edit</source>
         <translation>Modifica</translation>
-    </message>
-    <message>
-        <source>Save on device</source>
-        <translation>Salva sul dispositivo</translation>
     </message>
     <message>
         <source>Refresh</source>
@@ -274,10 +270,6 @@
     <message>
         <source>File</source>
         <translation>File</translation>
-    </message>
-    <message>
-        <source>%1 was saved in Downloads</source>
-        <translation>%1 è stato salvato in Download</translation>
     </message>
 </context>
 <context>
@@ -853,20 +845,12 @@
         <translation>Inserisci un token API.</translation>
     </message>
     <message>
-        <source>The cache folder is not available.</source>
-        <translation>La cartella della cache non è disponibile.</translation>
-    </message>
-    <message>
         <source>The folder %1 is not available.</source>
         <translation>La cartella %1 non è disponibile.</translation>
     </message>
     <message>
         <source>Could not write to %1.</source>
         <translation>Impossibile scrivere in %1.</translation>
-    </message>
-    <message>
-        <source>Could not write to the cache folder.</source>
-        <translation>Impossibile scrivere nella cartella della cache.</translation>
     </message>
     <message>
         <source>The file could not be read.</source>
@@ -920,8 +904,8 @@
         <translation>Archiviazione</translation>
     </message>
     <message>
-        <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Downloads.</source>
-        <translation>Il token API è conservato nell&apos;archivio cifrato di Sailfish OS. I documenti che apri vengono scaricati nella cache privata dell&apos;app ed eliminati alla chiusura; &quot;Salva sul dispositivo&quot; ne conserva una copia in Download.</translation>
+        <source>The API token is kept in the encrypted storage of Sailfish OS. Opening a document writes it to Downloads/Paperiton under the name the server keeps for it, replacing a file already there with that name.</source>
+        <translation>Il token API è conservato nell&apos;archivio cifrato di Sailfish OS. Aprendo un documento, questo viene scritto in Downloads/Paperiton con il nome che il server gli assegna, sostituendo un file già presente con lo stesso nome.</translation>
     </message>
     <message>
         <source>Secure storage reported: %1</source>

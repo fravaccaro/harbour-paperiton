@@ -9,9 +9,7 @@ nav_order: 3
 
 ## The document view
 
-Opening a document shows its preview along with tags, correspondent, document type, archive serial number and the OCR text the server extracted. PDFs open in the viewer of the Documents application, pictures in an image viewer; both stay inside Paperiton, reading from the private cache.
-
-**Save on device** puts a copy of the archived PDF straight into `~/Downloads` - the one place another application can read a document from (see [Files and permissions](files)).
+Opening a document shows its preview along with tags, correspondent, document type, archive serial number and the OCR text the server extracted. **Open** writes the file into `~/Downloads/Paperiton` under the name the server keeps for it: pictures are shown inside Paperiton, PDFs and other files are opened with the system handler (see [Files and permissions](files)).
 
 ## Editing one document
 

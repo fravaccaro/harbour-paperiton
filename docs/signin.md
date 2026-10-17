@@ -21,4 +21,4 @@ If the server presents a certificate the phone does not trust, the app shows the
 
 ## Signing out
 
-Signing out (from the settings page) removes the token from Sailfish Secrets, empties the private cache and returns to the sign-in page.
+Signing out (from the settings page) removes the token from Sailfish Secrets, clears thumbnails and the web-view profile in the private cache, and returns to the sign-in page. Files already in Downloads/Paperiton are left alone.

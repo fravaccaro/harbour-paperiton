@@ -9,9 +9,9 @@ nav_order: 5
 
 ## Where documents live on the phone
 
-Nothing is stored permanently. A document you open is downloaded into the app's private cache directory, which no other application can read; `documents/` and `captures/` inside it are emptied when the app starts and when it quits, and signing out removes the whole cache.
+**Open** downloads the file into `~/Downloads/Paperiton` under the name the server keeps for it (for example the archived PDF name). If that name is already there, it is overwritten. Pictures are then shown inside Paperiton; PDFs and other files are handed to the system viewer.
 
-The one exception is **Save on device**, which keeps a copy of the archived PDF in `~/Downloads` - the only place another application can pick a document up from.
+Thumbnails and camera captures still use the app's private cache. Signing out clears that cache (and leftover `documents/` folders from older versions); `Downloads/Paperiton` is never emptied by the app.
 
 ## Permissions
 
@@ -20,7 +20,7 @@ Sailjail, the Sailfish OS sandbox, hides every common directory from the app unl
 | Permission | Why |
 |---|---|
 | `Internet` | Talking to the Paperless-ngx API |
-| `Downloads` | "Save on device", and reading files that arrived from elsewhere |
+| `Downloads` | Opening documents, and reading files that arrived from elsewhere |
 | `Documents`, `Pictures` | Reading files kept there for upload |
 | `RemovableMedia` | Files on a memory card |
 | `Camera` | Scanning documents |

@@ -78,7 +78,6 @@ DISTFILES += \
     qml/pages/LoginPage.qml \
     qml/pages/LookupPickerPage.qml \
     qml/pages/NotesPage.qml \
-    qml/pages/PdfViewPage.qml \
     qml/pages/SettingsPage.qml \
     qml/pages/StartPage.qml \
     qml/pages/TasksPage.qml \

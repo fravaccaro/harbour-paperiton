@@ -38,4 +38,4 @@ Sailjail gives the app three private directories, named after the `OrganizationN
 * `~/.cache/org.frapps/harbour-paperiton` - thumbnails, downloaded documents, camera captures and the web view profile
 * the matching `~/.local/share` directory - unused
 
-No other application can read these paths, so documents are shown by `qml/pages/PdfViewPage.qml`, which wraps the viewer of the Documents application, and by `qml/pages/ImageViewPage.qml`. When that viewer is missing, the app falls back to a copy in `~/Downloads`. `documents/` and `captures/` are removed when the app starts and when it quits, and signing out removes the whole cache.
+Documents that are opened are written to `~/Downloads/Paperiton` under the server's file name. Pictures are shown by `qml/pages/ImageViewPage.qml`; everything else is handed to the system with `Qt.openUrlExternally`. Camera captures live under `captures/` in the cache and are removed when the app starts and when it quits; signing out also clears thumbnails and the web view profile.

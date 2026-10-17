@@ -31,6 +31,4 @@ The documentation site is built by `.github/workflows/pages.yml` (Jekyll with th
 
 ## Packaging notes
 
-`sfdk check` reports one error, `Import 'Sailfish.Office 1.0' is not allowed`. That import is the viewer of the Documents application, without which a document in the private cache directory cannot be shown at all, so the package is meant for Chum and OpenRepos rather than the Jolla Store.
-
-The spec file excludes automatic `Provides:` for the bundled Opal QML modules - Harbour forbids an application package from providing QML modules.
+The spec file excludes automatic `Provides:` for the bundled Opal QML modules - Harbour forbids an application package from providing QML modules. PDFs are opened through the system handler from `~/Downloads/Paperiton`, so the app no longer imports `Sailfish.Office`.

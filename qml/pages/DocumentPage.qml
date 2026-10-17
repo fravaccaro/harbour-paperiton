@@ -15,9 +15,6 @@ Page {
     property bool saving: false
     property string statusMessage
     property string errorMessage
-    property var pdfComponent: null
-    property bool openAfterExport: false
-    property bool openedOriginal: false
     // Paperless keeps the file as it was uploaded and, for most documents, an
     // archived PDF next to it.
     property bool hasArchive: !!details.archived_file_name
@@ -41,27 +38,18 @@ Page {
         return /\.(png|jpe?g|gif|webp|bmp|tiff?)$/.test(String(path).toLowerCase());
     }
 
-    // Downloads into the private cache, from where only this app can read the
-    // file; it is deleted again when the app quits. Without an explicit choice
-    // the version that renders best is used: an image shows as an image, while
-    // everything else is read from the archived PDF.
+    // Writes into ~/Downloads/Paperiton under the server's file name
+    // (overwriting if that name is already there), then opens from there:
+    // images stay inside Paperiton, everything else goes to the system handler.
+    // Without an explicit choice the version that renders best is used: an image
+    // shows as an image, while everything else is read from the archived PDF.
     function open(original) {
         page.errorMessage = "";
         page.statusMessage = "";
         if (original === undefined)
             original = isImage() || !hasArchive;
 
-        page.openedOriginal = original;
         Paperless.saveDocument(documentId, fileName(original), original);
-    }
-
-    // The archived PDF under the name the server keeps for it. A document
-    // without an archive has only the file it was uploaded as, and asking for
-    // the archived version returns that instead.
-    function saveOnDevice() {
-        page.errorMessage = "";
-        page.statusMessage = "";
-        Paperless.exportDocument(page.documentId, fileName(false), false);
     }
 
     function view(path) {
@@ -70,23 +58,10 @@ Page {
                 "source": Paperless.fileUrl(path),
                 "title": page.documentTitle
             });
-            return ;
+            return;
         }
-        if (page.pdfComponent === null)
-            page.pdfComponent = Qt.createComponent(Qt.resolvedUrl("PdfViewPage.qml"));
 
-        if (page.pdfComponent.status === Component.Ready) {
-            pageStack.push(page.pdfComponent, {
-                "source": Paperless.fileUrl(path),
-                "title": page.documentTitle
-            });
-            return ;
-        }
-        // Without the system viewer the file has to leave the sandbox, because
-        // no other app can read the cache directory.
-        page.statusMessage = qsTr("Opening in another app");
-        page.openAfterExport = true;
-        Paperless.exportDocument(documentId, fileName(page.openedOriginal), page.openedOriginal);
+        Qt.openUrlExternally(Paperless.fileUrl(path));
     }
 
     function formatDate(value) {
@@ -138,29 +113,15 @@ Page {
                 return ;
 
             page.saving = false;
+            app.notify(qsTr("%1 was saved in Downloads/Paperiton")
+                       .arg(filePath.substring(filePath.lastIndexOf("/") + 1)));
             page.view(filePath);
-        }
-        onDocumentExported: {
-            if (documentId !== page.documentId)
-                return ;
-
-            page.saving = false;
-            page.statusMessage = "";
-            // An export made only to hand the file over says nothing; the other
-            // app appearing is the answer.
-            if (page.openAfterExport) {
-                page.openAfterExport = false;
-                Qt.openUrlExternally(Paperless.fileUrl(filePath));
-                return ;
-            }
-            app.notify(qsTr("%1 was saved in Downloads").arg(filePath.substring(filePath.lastIndexOf("/") + 1)));
         }
         onDocumentSaveFailed: {
             if (documentId !== page.documentId)
                 return ;
 
             page.saving = false;
-            page.openAfterExport = false;
             page.errorMessage = error;
         }
         onDocumentUpdated: {
@@ -215,12 +176,6 @@ Page {
                     "tagIds": page.tagIds,
                     "created": page.created
                 })
-            }
-
-            MenuItem {
-                text: qsTr("Save on device")
-                enabled: !page.saving && !page.loadingDetails
-                onClicked: page.saveOnDevice()
             }
 
             MenuItem {
