@@ -4,8 +4,8 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>A client for the documents of a Paperless-ngx server: search, filters, previews, uploads from the device or the camera, metadata, notes and the task queue.</source>
-        <translation>Un client per i documenti di un server Paperless-ngx: ricerca, filtri, anteprime, caricamenti dal dispositivo o dalla fotocamera, metadati, note e coda delle operazioni.</translation>
+        <source>A client for the documents of a Paperless-ngx server.</source>
+        <translation>Un client per i documenti di un server Paperless-ngx.</translation>
     </message>
     <message>
         <source>Report an issue</source>
@@ -16,8 +16,8 @@
         <translation>Informazioni su Paperless-ngx</translation>
     </message>
     <message>
-        <source>Paperless-ngx is a separate project and is not affiliated with this app.</source>
-        <translation>Paperless-ngx è un progetto a sé e non è collegato a questa app.</translation>
+        <source>This app is a separate project and not affiliated with Paperless-ngx.</source>
+        <translation>Quest'app è un progetto a sé e non è collegata a Paperless-ngx.</translation>
     </message>
     <message>
         <source>Feedback</source>
@@ -1216,11 +1216,11 @@
         <translation>Non è stato aggiunto nulla all&apos;archivio</translation>
     </message>
     <message>
-        <source>Downloading from Paperless</source>
+        <source>Downloading</source>
         <translation>Download da Paperless</translation>
     </message>
     <message>
-        <source>Downloaded from Paperless</source>
+        <source>Downloaded</source>
         <translation>Download completato</translation>
     </message>
     <message>

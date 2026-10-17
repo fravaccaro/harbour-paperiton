@@ -88,7 +88,7 @@ ApplicationWindow {
                 outcome = total === 1 ? qsTr("Could not download the file") : qsTr("Could not download the files");
             else
                 outcome = qsTr("%1 of %2 files were saved in Downloads/Paperiton").arg(saved).arg(total);
-            noticeFinished(downloadNotice, qsTr("Downloaded from Paperless"), outcome);
+            noticeFinished(downloadNotice, qsTr("Downloaded"), outcome);
             return ;
         }
 
@@ -306,7 +306,7 @@ ApplicationWindow {
         repeat: true
         triggeredOnStart: true
         onTriggered: {
-            app.noticeRunning(downloadNotice, qsTr("Downloading from Paperless"), app.downloadIds.length > 1 ? qsTr("%1 (%2 of %3)").arg(app.downloadFileName).arg(Math.min(app.downloadIndex + 1, app.downloadIds.length)).arg(app.downloadIds.length) : app.downloadFileName, app.downloadProgress);
+            app.noticeRunning(downloadNotice, qsTr("Downloading"), app.downloadIds.length > 1 ? qsTr("%1 (%2 of %3)").arg(app.downloadFileName).arg(Math.min(app.downloadIndex + 1, app.downloadIds.length)).arg(app.downloadIds.length) : app.downloadFileName, app.downloadProgress);
         }
     }
 
