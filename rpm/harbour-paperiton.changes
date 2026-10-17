@@ -1,3 +1,7 @@
+* Sat Oct 17 2026 fravaccaro 0.5.9-1
+- With two or more documents selected, the pulley menu can download them all
+  into Downloads/Paperiton
+
 * Sat Oct 17 2026 fravaccaro 0.5.8-1
 - Open writes the file to Downloads/Paperiton under the name the server keeps
   for it and hands PDFs to the system viewer; Save on device is gone

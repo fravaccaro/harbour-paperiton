@@ -28,6 +28,13 @@ Page {
     property var bulkOperations: []
     property int bulkIndex: -1
     property string bulkError
+    // Selected documents are written to Downloads/Paperiton one after another,
+    // with the same archived-or-original choice a single Open would make.
+    property var downloadIds: []
+    property int downloadIndex: -1
+    property int downloadOk: 0
+    property int downloadFail: 0
+    readonly property bool downloading: downloadIndex >= 0
 
     function runBulk(operations) {
         bulkError = "";
@@ -46,6 +53,58 @@ Page {
         }
         var operation = bulkOperations[bulkIndex];
         Paperless.bulkEdit(selectedIds, operation.method, operation.parameters);
+    }
+
+    function documentRow(documentId) {
+        for (var i = 0; i < Documents.count; ++i) {
+            var row = Documents.get(i);
+            if (row.documentId === documentId)
+                return row;
+        }
+        return null;
+    }
+
+    function downloadSelected() {
+        if (downloading || selectedIds.length < 2)
+            return ;
+
+        downloadIds = selectedIds.slice();
+        downloadIndex = -1;
+        downloadOk = 0;
+        downloadFail = 0;
+        nextDownload();
+    }
+
+    function nextDownload() {
+        downloadIndex++;
+        if (downloadIndex >= downloadIds.length) {
+            var total = downloadIds.length;
+            var saved = downloadOk;
+            var failed = downloadFail;
+            downloadIndex = -1;
+            downloadIds = [];
+            selectedIds = [];
+            if (failed === 0)
+                app.notify(qsTr("%1 files were saved in Downloads/Paperiton").arg(saved));
+            else if (saved === 0)
+                app.notify(qsTr("Could not download the files"));
+            else
+                app.notify(qsTr("%1 of %2 files were saved in Downloads/Paperiton").arg(saved).arg(total));
+            return ;
+        }
+
+        var id = downloadIds[downloadIndex];
+        var row = documentRow(id);
+        var originalName = row ? (row.originalFileName || "") : "";
+        var archivedName = row ? (row.archivedFileName || "") : "";
+        var title = row ? (row.title || "") : "";
+        var isImage = /\.(png|jpe?g|gif|webp|bmp|tiff?)$/i.test(originalName);
+        var original = isImage || archivedName === "";
+        var name = original ? (originalName || archivedName) : (archivedName || originalName);
+        if (!name)
+            name = (title !== "" ? title : ("paperless-" + id)) + ".pdf";
+
+        Paperless.saveDocument(id, name, original);
     }
 
     function startSelection(documentId) {
@@ -126,6 +185,20 @@ Page {
             }
             page.nextBulkOperation();
         }
+        onDocumentSaved: {
+            if (page.downloadIndex < 0 || documentId !== page.downloadIds[page.downloadIndex])
+                return ;
+
+            page.downloadOk++;
+            page.nextDownload();
+        }
+        onDocumentSaveFailed: {
+            if (page.downloadIndex < 0 || documentId !== page.downloadIds[page.downloadIndex])
+                return ;
+
+            page.downloadFail++;
+            page.nextDownload();
+        }
     }
 
     // Coming back after a while should not show yesterday's list. The first page
@@ -158,6 +231,7 @@ Page {
             MenuItem {
                 text: page.selectedIds.length === 1 ? qsTr("Edit one document") : qsTr("Edit %1 documents").arg(page.selectedIds.length)
                 visible: page.selectedIds.length > 0
+                enabled: !page.downloading
                 onClicked: {
                     var dialog = pageStack.push(Qt.resolvedUrl("BulkEditPage.qml"), {
                         "documentCount": page.selectedIds.length
@@ -169,8 +243,16 @@ Page {
             }
 
             MenuItem {
+                text: qsTr("Download %1 documents").arg(page.selectedIds.length)
+                visible: page.selectedIds.length >= 2
+                enabled: !page.downloading
+                onClicked: page.downloadSelected()
+            }
+
+            MenuItem {
                 text: page.selectedIds.length === 1 ? qsTr("Delete one document") : qsTr("Delete %1 documents").arg(page.selectedIds.length)
                 visible: page.selectedIds.length > 0 && app.allowed("delete_document")
+                enabled: !page.downloading
                 onClicked: deleteRemorse.execute(qsTr("Deleting"), function() {
                     page.runBulk([{
                         "method": "delete",
@@ -183,6 +265,7 @@ Page {
             MenuItem {
                 text: qsTr("Cancel selection")
                 visible: page.selectedIds.length > 0
+                enabled: !page.downloading
                 onClicked: page.selectedIds = []
             }
 
@@ -228,7 +311,15 @@ Page {
 
             PageHeader {
                 title: qsTr("Documents")
-                description: page.selectedIds.length > 0 ? qsTr("%1 selected").arg(page.selectedIds.length) : page.filterSummary
+                description: {
+                    if (page.downloading)
+                        return qsTr("Downloading %1 of %2…").arg(Math.min(page.downloadIndex + 1, page.downloadIds.length)).arg(page.downloadIds.length);
+
+                    if (page.selectedIds.length > 0)
+                        return qsTr("%1 selected").arg(page.selectedIds.length);
+
+                    return page.filterSummary;
+                }
             }
 
             Label {

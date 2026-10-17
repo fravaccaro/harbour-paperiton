@@ -46,6 +46,7 @@ public:
         TagIdsRole,
         ThumbnailSourceRole,
         OriginalFileNameRole,
+        ArchivedFileNameRole,
         ArchiveSerialNumberRole,
         PageCountRole
     };
@@ -125,6 +126,7 @@ private:
         int documentTypeId;
         QVariantList tagIds;
         QString originalFileName;
+        QString archivedFileName;
         QVariant archiveSerialNumber;
         int pageCount;
 

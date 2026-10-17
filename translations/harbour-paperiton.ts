@@ -339,6 +339,26 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Download %1 documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading %1 of %2…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 files were saved in Downloads/Paperiton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not download the files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 of %2 files were saved in Downloads/Paperiton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Uploads (%1)</source>
         <translation type="unfinished"></translation>
     </message>

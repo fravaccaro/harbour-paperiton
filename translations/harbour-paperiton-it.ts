@@ -339,6 +339,26 @@
         <translation>Annulla la selezione</translation>
     </message>
     <message>
+        <source>Download %1 documents</source>
+        <translation>Scarica %1 documenti</translation>
+    </message>
+    <message>
+        <source>Downloading %1 of %2…</source>
+        <translation>Download di %1 di %2…</translation>
+    </message>
+    <message>
+        <source>%1 files were saved in Downloads/Paperiton</source>
+        <translation>%1 file sono stati salvati in Downloads/Paperiton</translation>
+    </message>
+    <message>
+        <source>Could not download the files</source>
+        <translation>Impossibile scaricare i file</translation>
+    </message>
+    <message>
+        <source>%1 of %2 files were saved in Downloads/Paperiton</source>
+        <translation>%1 di %2 file sono stati salvati in Downloads/Paperiton</translation>
+    </message>
+    <message>
         <source>Uploads (%1)</source>
         <translation>Caricamenti (%1)</translation>
     </message>
