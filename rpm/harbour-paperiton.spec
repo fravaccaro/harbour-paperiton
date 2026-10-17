@@ -8,7 +8,7 @@ Name:       harbour-paperiton
 
 Summary:    Paperless-ngx client for Sailfish OS
 Version:    0.6.0
-Release:    3
+Release:    4
 License:    GPLv3
 URL:        https://github.com/fravaccaro/harbour-paperiton
 Source0:    %{name}-%{version}.tar.bz2
@@ -53,6 +53,10 @@ Links:
 
 %install
 %qmake5_install
+
+# Harbour refuses an unstripped binary; the SDK packaging path does not always
+# strip by itself, so it is done here before the package is sealed.
+strip --strip-unneeded %{buildroot}%{_bindir}/%{name}
 
 desktop-file-install --delete-original \
     --dir %{buildroot}%{_datadir}/applications \
