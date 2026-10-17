@@ -200,18 +200,17 @@ Page {
                 description: page.formatDate(page.created)
             }
 
-            BackgroundItem {
+            // ContextMenu must hang off a ListItem (or an Item whose height
+            // grows with the menu). Showing it on a fixed-height BackgroundItem
+            // leaves the choices drawn inside the preview instead of on the page.
+            ListItem {
                 id: previewItem
 
                 width: parent.width
-                height: Math.round(page.height * 0.4)
+                contentHeight: Math.round(page.height * 0.4)
                 enabled: !page.saving
+                showMenuOnPressAndHold: page.hasArchive && page.hasOriginal
                 onClicked: page.open()
-                onPressAndHold: {
-                    if (page.hasArchive && page.hasOriginal)
-                        versionMenu.show(previewItem);
-
-                }
 
                 Image {
                     id: preview
@@ -233,19 +232,17 @@ Page {
                     running: preview.status === Image.Loading
                 }
 
-            }
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTr("Open archived PDF")
+                        onClicked: page.open(false)
+                    }
 
-            ContextMenu {
-                id: versionMenu
+                    MenuItem {
+                        text: qsTr("Open original file")
+                        onClicked: page.open(true)
+                    }
 
-                MenuItem {
-                    text: qsTr("Open archived PDF")
-                    onClicked: page.open(false)
-                }
-
-                MenuItem {
-                    text: qsTr("Open original file")
-                    onClicked: page.open(true)
                 }
 
             }
