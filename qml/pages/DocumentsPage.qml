@@ -65,10 +65,17 @@ Page {
     }
 
     function downloadSelected() {
-        if (downloading || selectedIds.length < 2)
+        if (selectedIds.length < 2)
             return ;
 
-        downloadIds = selectedIds.slice();
+        downloadDocuments(selectedIds);
+    }
+
+    function downloadDocuments(ids) {
+        if (downloading || !ids || ids.length === 0)
+            return ;
+
+        downloadIds = ids.slice();
         downloadIndex = -1;
         downloadOk = 0;
         downloadFail = 0;
@@ -84,12 +91,17 @@ Page {
             downloadIndex = -1;
             downloadIds = [];
             selectedIds = [];
-            if (failed === 0)
-                app.notify(qsTr("%1 files were saved in Downloads/Paperiton").arg(saved));
-            else if (saved === 0)
-                app.notify(qsTr("Could not download the files"));
-            else
+            if (failed === 0) {
+                if (total === 1)
+                    app.notify(qsTr("The file was saved in Downloads/Paperiton"));
+                else
+                    app.notify(qsTr("%1 files were saved in Downloads/Paperiton").arg(saved));
+            } else if (saved === 0) {
+                app.notify(total === 1 ? qsTr("Could not download the file")
+                                       : qsTr("Could not download the files"));
+            } else {
                 app.notify(qsTr("%1 of %2 files were saved in Downloads/Paperiton").arg(saved).arg(total));
+            }
             return ;
         }
 
@@ -511,6 +523,13 @@ Page {
                     text: qsTr("Select")
                     visible: page.selectedIds.length === 0 && app.allowed("change_document")
                     onClicked: page.startSelection(model.documentId)
+                }
+
+                MenuItem {
+                    text: qsTr("Download")
+                    visible: page.selectedIds.length === 0
+                    enabled: !page.downloading
+                    onClicked: page.downloadDocuments([model.documentId])
                 }
 
                 MenuItem {

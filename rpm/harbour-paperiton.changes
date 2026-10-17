@@ -1,6 +1,6 @@
 * Sat Oct 17 2026 fravaccaro 0.5.9-1
-- With two or more documents selected, the pulley menu can download them all
-  into Downloads/Paperiton
+- Documents can be downloaded into Downloads/Paperiton from a row's context
+  menu, or in bulk from the pulley menu when two or more are selected
 
 * Sat Oct 17 2026 fravaccaro 0.5.8-1
 - Open writes the file to Downloads/Paperiton under the name the server keeps

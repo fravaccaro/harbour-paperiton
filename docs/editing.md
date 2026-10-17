@@ -17,7 +17,7 @@ The edit page changes title, correspondent, document type, tags, date, archive s
 
 ## Editing several documents
 
-From the document list you can select several documents and change their tags, correspondent or document type in one step. With two or more selected, the pulley menu also offers **Download**, which writes each file into `~/Downloads/Paperiton` under the name the server keeps for it (the same archived-or-original choice a single Open would make).
+From the document list you can select several documents and change their tags, correspondent or document type in one step. **Download** on a row's context menu, or on the pulley menu when two or more are selected, writes each file into `~/Downloads/Paperiton` under the name the server keeps for it (the same archived-or-original choice a single Open would make).
 
 ## Notes
 
