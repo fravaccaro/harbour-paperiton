@@ -1,8 +1,8 @@
 * Sat Oct 17 2026 fravaccaro 0.6.0-1
 - Documents can be downloaded into Downloads/Paperiton from a row's context
   menu, or in bulk from the pulley menu when two or more are selected
-- A download is followed by a notification with a progress bar and ends as one
-  summary
+- A download is followed by a progress notification, then one events-view entry
+  per file with Open and Share
 - Picking documents out of the list is asked for from the pulley menu, and a
   long press no longer opens an empty menu that left the pulley unanswering
 - Open writes the file to Downloads/Paperiton under the name the server keeps

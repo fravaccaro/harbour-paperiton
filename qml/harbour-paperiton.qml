@@ -43,6 +43,9 @@ ApplicationWindow {
     // has the document itself does not depend on the list holding its row.
     property var downloadChoices: ({
     })
+    // Finished download notices, one per file, kept until the user dismisses
+    // them so Open and Share still reach the handlers that published them.
+    property var downloadNotices: []
 
     function downloadDocuments(ids) {
         startDownload(ids, ({
@@ -77,18 +80,18 @@ ApplicationWindow {
             var total = downloadIds.length;
             var saved = downloadOk;
             var failed = downloadFail;
-            var lastName = downloadFileName;
             downloadIndex = -1;
             downloadIds = [];
             downloadFileName = "";
-            var outcome;
-            if (failed === 0)
-                outcome = total === 1 ? qsTr("%1 was saved in Downloads/Paperiton").arg(lastName) : qsTr("%1 files were saved in Downloads/Paperiton").arg(saved);
-            else if (saved === 0)
-                outcome = total === 1 ? qsTr("Could not download the file") : qsTr("Could not download the files");
-            else
-                outcome = qsTr("%1 of %2 files were saved in Downloads/Paperiton").arg(saved).arg(total);
-            noticeFinished(downloadNotice, qsTr("Downloaded"), outcome);
+            downloadNotice.close();
+            // Each successful file already has its own notice. Only a failure
+            // still needs something said here.
+            if (failed > 0) {
+                if (saved === 0)
+                    notify(total === 1 ? qsTr("Could not download the file") : qsTr("Could not download the files"));
+                else
+                    notify(qsTr("%1 of %2 files were saved in Downloads/Paperiton").arg(saved).arg(total));
+            }
             return ;
         }
 
@@ -128,6 +131,85 @@ ApplicationWindow {
                 return row;
         }
         return null;
+    }
+
+    function baseName(path) {
+        var slash = String(path).lastIndexOf("/");
+        return slash >= 0 ? String(path).substring(slash + 1) : String(path);
+    }
+
+    function isImagePath(path) {
+        return /\.(png|jpe?g|gif|webp|bmp|tiff?)$/i.test(String(path));
+    }
+
+    function mimeForPath(path) {
+        var name = String(path).toLowerCase();
+        if (/\.pdf$/.test(name))
+            return "application/pdf";
+        if (/\.png$/.test(name))
+            return "image/png";
+        if (/\.jpe?g$/.test(name))
+            return "image/jpeg";
+        if (/\.gif$/.test(name))
+            return "image/gif";
+        if (/\.webp$/.test(name))
+            return "image/webp";
+        if (/\.tiff?$/.test(name))
+            return "image/tiff";
+        if (/\.bmp$/.test(name))
+            return "image/bmp";
+        if (/\.txt$/.test(name))
+            return "text/plain";
+        return "application/octet-stream";
+    }
+
+    // Same choice a preview Open makes once the file is already on disk.
+    function openDownloaded(path) {
+        activate();
+        if (isImagePath(path)) {
+            pageStack.push(Qt.resolvedUrl("pages/ImageViewPage.qml"), {
+                "source": Paperless.fileUrl(path),
+                "title": baseName(path)
+            });
+            return ;
+        }
+        Qt.openUrlExternally(Paperless.fileUrl(path));
+    }
+
+    function shareDownloaded(path) {
+        activate();
+        downloadShare.mimeType = mimeForPath(path);
+        downloadShare.resources = [path];
+        downloadShare.trigger();
+    }
+
+    // One events-view entry per successful file, with Open (and body click)
+    // and Share, the way a camera app keeps a notice for the last capture.
+    function publishDownloadedNotice(filePath) {
+        var notice = downloadedNoticeComponent.createObject(app, {
+            "filePath": filePath
+        });
+        if (!notice)
+            return ;
+
+        var kept = downloadNotices.slice();
+        kept.push(notice);
+        downloadNotices = kept;
+        notice.summary = qsTr("Downloaded");
+        notice.body = baseName(filePath);
+        notice.previewSummary = qsTr("Downloaded");
+        notice.previewBody = baseName(filePath);
+        notice.publish();
+    }
+
+    function forgetDownloadNotice(notice) {
+        var kept = [];
+        for (var i = 0; i < downloadNotices.length; ++i) {
+            if (downloadNotices[i] !== notice)
+                kept.push(downloadNotices[i]);
+        }
+        downloadNotices = kept;
+        notice.destroy();
     }
 
     function showMain() {
@@ -290,7 +372,7 @@ ApplicationWindow {
         }
     }
 
-    // A download run is followed the same way an upload run is.
+    // Progress only: each finished file gets a notice of its own below.
     Notification {
         id: downloadNotice
 
@@ -310,6 +392,45 @@ ApplicationWindow {
         }
     }
 
+    ShareAction {
+        id: downloadShare
+    }
+
+    Component {
+        id: downloadedNoticeComponent
+
+        Notification {
+            id: notice
+
+            property string filePath
+
+            appName: "Paperiton"
+            appIcon: "harbour-paperiton"
+            isTransient: false
+            urgency: Notification.Normal
+            // default and open both open the file; share has no remote service
+            // of its own and is taken in onActionInvoked, as Tarkka does.
+            remoteActions: [{
+                    "name": "default"
+                }, {
+                    "name": "share",
+                    "displayName": qsTr("Share"),
+                    "icon": "icon-s-share"
+                }, {
+                    "name": "open",
+                    "displayName": qsTr("Open")
+                }]
+            onClicked: app.openDownloaded(filePath)
+            onActionInvoked: {
+                if (name === "open" || name === "default")
+                    app.openDownloaded(filePath);
+                else if (name === "share")
+                    app.shareDownloaded(filePath);
+            }
+            onClosed: app.forgetDownloadNotice(notice)
+        }
+    }
+
     Connections {
         target: Paperless
         // A server that does not say how long the file is leaves the bar where
@@ -325,6 +446,7 @@ ApplicationWindow {
                 return ;
 
             app.downloadOk++;
+            app.publishDownloadedNotice(filePath);
             app.nextDownload();
         }
         onDocumentSaveFailed: {

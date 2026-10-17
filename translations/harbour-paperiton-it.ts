@@ -1221,11 +1221,15 @@
     </message>
     <message>
         <source>Downloaded</source>
-        <translation>Download completato</translation>
+        <translation>Scaricato</translation>
     </message>
     <message>
-        <source>%1 files were saved in Downloads/Paperiton</source>
-        <translation>%1 file sono stati salvati in Downloads/Paperiton</translation>
+        <source>Open</source>
+        <translation>Apri</translation>
+    </message>
+    <message>
+        <source>Share</source>
+        <translation>Condividi</translation>
     </message>
     <message>
         <source>%1 of %2 files were saved in Downloads/Paperiton</source>
@@ -1246,10 +1250,6 @@
     <message>
         <source>%1 files were added to the archive</source>
         <translation>%1 file aggiunti all&apos;archivio</translation>
-    </message>
-    <message>
-        <source>%1 was saved in Downloads/Paperiton</source>
-        <translation>%1 è stato salvato in Downloads/Paperiton</translation>
     </message>
 </context>
 </TS>

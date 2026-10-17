@@ -1216,10 +1216,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 files were saved in Downloads/Paperiton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>%1 of %2 files were saved in Downloads/Paperiton</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1240,15 +1236,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 was saved in Downloads/Paperiton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Downloaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Downloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Share</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
