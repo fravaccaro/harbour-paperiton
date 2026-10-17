@@ -315,6 +315,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Tap documents to select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Edit one document</source>
         <translation type="unfinished"></translation>
     </message>
@@ -364,10 +372,6 @@
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -315,6 +315,14 @@
         <translation>%1 selezionati</translation>
     </message>
     <message>
+        <source>Tap documents to select</source>
+        <translation>Tocca i documenti per selezionarli</translation>
+    </message>
+    <message>
+        <source>Select documents</source>
+        <translation>Seleziona documenti</translation>
+    </message>
+    <message>
         <source>Edit one document</source>
         <translation>Modifica un documento</translation>
     </message>
@@ -365,10 +373,6 @@
     <message>
         <source>Upload</source>
         <translation>Carica</translation>
-    </message>
-    <message>
-        <source>Select</source>
-        <translation>Seleziona</translation>
     </message>
     <message>
         <source>Could not load documents</source>

@@ -5,6 +5,8 @@
   summary, the way an upload run is
 - Upload and download runs leave their summary in the events view instead of
   removing the notification as soon as the run is over
+- Picking documents out of the list is asked for from the pulley menu, and a
+  long press no longer opens an empty menu that left the pulley unanswering
 
 * Sat Oct 17 2026 fravaccaro 0.5.8-1
 - Open writes the file to Downloads/Paperiton under the name the server keeps
