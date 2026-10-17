@@ -120,6 +120,7 @@ signals:
     void documentFetchFailed(int documentId, const QString &error);
 
     void documentSaveStarted(int documentId);
+    void documentSaveProgress(int documentId, qint64 received, qint64 total);
     void documentSaved(int documentId, const QString &filePath);
     void documentSaveFailed(int documentId, const QString &error);
 
@@ -147,6 +148,7 @@ private:
         // Owned by the reply once the request has been sent.
         QHttpMultiPart *multiPart;
         ProgressCallback progress;
+        ProgressCallback downloadProgress;
         // Overrides the stored token while signing in with a pasted token.
         QString token;
     };

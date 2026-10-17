@@ -351,26 +351,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The file was saved in Downloads/Paperiton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 files were saved in Downloads/Paperiton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not download the file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not download the files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 of %2 files were saved in Downloads/Paperiton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Uploads (%1)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1213,6 +1193,30 @@
     </message>
     <message>
         <source>Adding to Paperless</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading from Paperless</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file was saved in Downloads/Paperiton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 files were saved in Downloads/Paperiton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 of %2 files were saved in Downloads/Paperiton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not download the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not download the files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

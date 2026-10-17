@@ -235,6 +235,9 @@ void PaperlessApi::dispatch(const QUrl &url, const RequestContext &context,
     if (context.progress)
         connect(reply, &QNetworkReply::uploadProgress, this, context.progress);
 
+    if (context.downloadProgress)
+        connect(reply, &QNetworkReply::downloadProgress, this, context.downloadProgress);
+
     send(reply, callback, redirectsLeft);
 }
 
@@ -578,6 +581,11 @@ void PaperlessApi::saveDocument(int documentId, const QString &fileName, bool or
 
 void PaperlessApi::downloadDocument(int documentId, const QString &fileName, bool original)
 {
+    if (m_config->serverUrl().isEmpty()) {
+        emit documentSaveFailed(documentId, PaperlessApi::tr("No server configured."));
+        return;
+    }
+
     // A subfolder of Downloads keeps Paperiton's copies apart from whatever else
     // landed there; the Downloads Sailjail permission covers it.
     const QString downloads = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
@@ -598,8 +606,13 @@ void PaperlessApi::downloadDocument(int documentId, const QString &fileName, boo
 
     emit documentSaveStarted(documentId);
 
+    RequestContext context;
+    context.downloadProgress = [this, documentId](qint64 received, qint64 total) {
+        emit documentSaveProgress(documentId, received, total);
+    };
+
     const QUrl url = documentFileUrl(documentId, QStringLiteral("download"), original);
-    getData(url, [this, documentId, directory, name](const QByteArray &data, const QString &error, int) {
+    dispatch(url, context, [this, documentId, directory, name](const QByteArray &data, const QString &error, int) {
         if (!error.isEmpty()) {
             emit documentSaveFailed(documentId, error);
             return;
@@ -616,7 +629,7 @@ void PaperlessApi::downloadDocument(int documentId, const QString &fileName, boo
         file.write(data);
         file.close();
         emit documentSaved(documentId, path);
-    });
+    }, MaxRedirects);
 }
 
 QUrl PaperlessApi::fileUrl(const QString &path) const

@@ -351,26 +351,6 @@
         <translation>Download di %1 di %2…</translation>
     </message>
     <message>
-        <source>The file was saved in Downloads/Paperiton</source>
-        <translation>Il file è stato salvato in Downloads/Paperiton</translation>
-    </message>
-    <message>
-        <source>%1 files were saved in Downloads/Paperiton</source>
-        <translation>%1 file sono stati salvati in Downloads/Paperiton</translation>
-    </message>
-    <message>
-        <source>Could not download the file</source>
-        <translation>Impossibile scaricare il file</translation>
-    </message>
-    <message>
-        <source>Could not download the files</source>
-        <translation>Impossibile scaricare i file</translation>
-    </message>
-    <message>
-        <source>%1 of %2 files were saved in Downloads/Paperiton</source>
-        <translation>%1 di %2 file sono stati salvati in Downloads/Paperiton</translation>
-    </message>
-    <message>
         <source>Uploads (%1)</source>
         <translation>Caricamenti (%1)</translation>
     </message>
@@ -1214,6 +1194,30 @@
     <message>
         <source>Adding to Paperless</source>
         <translation>Aggiunta a Paperless</translation>
+    </message>
+    <message>
+        <source>Downloading from Paperless</source>
+        <translation>Download da Paperless</translation>
+    </message>
+    <message>
+        <source>The file was saved in Downloads/Paperiton</source>
+        <translation>Il file è stato salvato in Downloads/Paperiton</translation>
+    </message>
+    <message>
+        <source>%1 files were saved in Downloads/Paperiton</source>
+        <translation>%1 file sono stati salvati in Downloads/Paperiton</translation>
+    </message>
+    <message>
+        <source>%1 of %2 files were saved in Downloads/Paperiton</source>
+        <translation>%1 di %2 file sono stati salvati in Downloads/Paperiton</translation>
+    </message>
+    <message>
+        <source>Could not download the file</source>
+        <translation>Impossibile scaricare il file</translation>
+    </message>
+    <message>
+        <source>Could not download the files</source>
+        <translation>Impossibile scaricare i file</translation>
     </message>
     <message>
         <source>%1 (%2 of %3)</source>

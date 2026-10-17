@@ -19,6 +19,90 @@ ApplicationWindow {
     // each upload used to be announced.
     property string lastAddedFileName
 
+    // Documents asked for from the list are written to Downloads/Paperiton one
+    // after another. The run lives here rather than on the page that started it,
+    // so leaving that page does not take the run, or its notification, with it.
+    property var downloadIds: []
+    property int downloadIndex: -1
+    property int downloadOk: 0
+    property int downloadFail: 0
+    property string downloadFileName
+    // How much of the file being fetched has arrived, as far as the server said.
+    property real downloadByteProgress: 0
+    readonly property bool downloading: downloadIndex >= 0
+    // The whole run, so the bar fills across all of the files rather than
+    // starting over at each of them.
+    readonly property real downloadProgress: {
+        if (downloadIds.length === 0)
+            return 0;
+
+        return Math.min((downloadIndex + downloadByteProgress) / downloadIds.length, 1);
+    }
+
+    function downloadDocuments(ids) {
+        if (downloading || !ids || ids.length === 0)
+            return ;
+
+        downloadIds = ids.slice();
+        downloadIndex = -1;
+        downloadOk = 0;
+        downloadFail = 0;
+        nextDownload();
+    }
+
+    function nextDownload() {
+        var next = downloadIndex + 1;
+        if (next >= downloadIds.length) {
+            var total = downloadIds.length;
+            var saved = downloadOk;
+            var failed = downloadFail;
+            downloadIndex = -1;
+            downloadIds = [];
+            downloadFileName = "";
+            downloadNotice.close();
+            if (failed === 0) {
+                if (total === 1)
+                    notify(qsTr("The file was saved in Downloads/Paperiton"));
+                else
+                    notify(qsTr("%1 files were saved in Downloads/Paperiton").arg(saved));
+            } else if (saved === 0) {
+                notify(total === 1 ? qsTr("Could not download the file") : qsTr("Could not download the files"));
+            } else {
+                notify(qsTr("%1 of %2 files were saved in Downloads/Paperiton").arg(saved).arg(total));
+            }
+            return ;
+        }
+
+        var id = downloadIds[next];
+        var row = documentRow(id);
+        var originalName = row ? (row.originalFileName || "") : "";
+        var archivedName = row ? (row.archivedFileName || "") : "";
+        var title = row ? (row.title || "") : "";
+        // The same choice a single Open makes: an image as it was uploaded,
+        // everything else from the archived PDF when the server has one.
+        var isImage = /\.(png|jpe?g|gif|webp|bmp|tiff?)$/i.test(originalName);
+        var original = isImage || archivedName === "";
+        var name = original ? (originalName || archivedName) : (archivedName || originalName);
+        if (!name)
+            name = (title !== "" ? title : ("paperless-" + id)) + ".pdf";
+
+        // The name is in place before the run counts as started, so the first
+        // notification the timer publishes already says which file it is about.
+        downloadFileName = name;
+        downloadByteProgress = 0;
+        downloadIndex = next;
+        Paperless.saveDocument(id, name, original);
+    }
+
+    function documentRow(documentId) {
+        for (var i = 0; i < Documents.count; ++i) {
+            var row = Documents.get(i);
+            if (row.documentId === documentId)
+                return row;
+        }
+        return null;
+    }
+
     function showMain() {
         pageStack.replaceAbove(null, Paperless.authenticated ? documentsPage : loginPage);
         takePendingUpload();
@@ -147,6 +231,54 @@ ApplicationWindow {
             uploadNotice.body = Uploads.runTotal > 1 ? qsTr("%1 (%2 of %3)").arg(Uploads.currentFileName).arg(Math.min(Uploads.runDone + 1, Uploads.runTotal)).arg(Uploads.runTotal) : Uploads.currentFileName;
             uploadNotice.progress = Uploads.progress;
             uploadNotice.publish();
+        }
+    }
+
+    // A download run is followed the same way an upload run is: one notification
+    // with a bar that fills as the files arrive, and a summary once it is over.
+    Notification {
+        id: downloadNotice
+
+        isTransient: false
+        urgency: Notification.Low
+        summary: qsTr("Downloading from Paperless")
+    }
+
+    Timer {
+        running: app.downloading
+        interval: 1000
+        repeat: true
+        triggeredOnStart: true
+        onTriggered: {
+            downloadNotice.body = app.downloadIds.length > 1 ? qsTr("%1 (%2 of %3)").arg(app.downloadFileName).arg(Math.min(app.downloadIndex + 1, app.downloadIds.length)).arg(app.downloadIds.length) : app.downloadFileName;
+            downloadNotice.progress = app.downloadProgress;
+            downloadNotice.publish();
+        }
+    }
+
+    Connections {
+        target: Paperless
+        // A server that does not say how long the file is leaves the bar where
+        // it stands, rather than sending it back to the start of the file.
+        onDocumentSaveProgress: {
+            if (!app.downloading || total <= 0 || documentId !== app.downloadIds[app.downloadIndex])
+                return ;
+
+            app.downloadByteProgress = Math.min(received / total, 1);
+        }
+        onDocumentSaved: {
+            if (!app.downloading || documentId !== app.downloadIds[app.downloadIndex])
+                return ;
+
+            app.downloadOk++;
+            app.nextDownload();
+        }
+        onDocumentSaveFailed: {
+            if (!app.downloading || documentId !== app.downloadIds[app.downloadIndex])
+                return ;
+
+            app.downloadFail++;
+            app.nextDownload();
         }
     }
 

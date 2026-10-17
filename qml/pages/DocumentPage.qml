@@ -103,13 +103,15 @@ Page {
             page.loadingDetails = false;
             page.errorMessage = error;
         }
+        // A download run started from the list reports itself, and must not also
+        // be taken for the Open this page asked for.
         onDocumentSaveStarted: {
-            if (documentId === page.documentId)
+            if (documentId === page.documentId && !app.downloading)
                 page.saving = true;
 
         }
         onDocumentSaved: {
-            if (documentId !== page.documentId)
+            if (documentId !== page.documentId || app.downloading)
                 return ;
 
             page.saving = false;
@@ -118,7 +120,7 @@ Page {
             page.view(filePath);
         }
         onDocumentSaveFailed: {
-            if (documentId !== page.documentId)
+            if (documentId !== page.documentId || app.downloading)
                 return ;
 
             page.saving = false;
