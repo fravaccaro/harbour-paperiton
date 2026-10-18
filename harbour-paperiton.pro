@@ -66,7 +66,7 @@ DISTFILES += \
     qml/harbour-paperiton.qml \
     qml/components/PaperitonSupportDialog.qml \
     qml/cover/CoverPage.qml \
-    qml/cover/cover-doc.png \
+    qml/cover/cover-boat.png \
     qml/pages/AboutPage.qml \
     qml/pages/BulkEditPage.qml \
     qml/pages/CameraPage.qml \
