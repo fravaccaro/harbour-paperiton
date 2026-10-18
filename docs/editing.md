@@ -9,9 +9,7 @@ nav_order: 3
 
 ## The document view
 
-Opening a document shows its preview along with tags, correspondent, document type, archive serial number and the OCR text the server extracted. PDFs open in the viewer of the Documents application, pictures in an image viewer; both stay inside Paperiton, reading from the private cache.
-
-**Save on device** puts a copy of the archived PDF straight into `~/Downloads` - the one place another application can read a document from (see [Files and permissions](files)).
+Opening a document shows its preview along with tags, correspondent, document type, archive serial number and the OCR text the server extracted. **Open** writes the file into `~/Downloads/Paperiton` under the name the server keeps for it: pictures are shown inside Paperiton, PDFs and other files are opened with the system handler (see [Files and permissions](files)). **Download** in the pulley menu writes the same file there without opening it.
 
 ## Editing one document
 
@@ -19,7 +17,7 @@ The edit page changes title, correspondent, document type, tags, date, archive s
 
 ## Editing several documents
 
-From the document list you can select several documents and change their tags, correspondent or document type in one step.
+From the document list you can select several documents and change their tags, correspondent or document type in one step. **Download** on a row's context menu, or on the pulley menu when two or more are selected, writes each file into `~/Downloads/Paperiton` under the name the server keeps for it (the same archived-or-original choice a single Open would make).
 
 ## Notes
 

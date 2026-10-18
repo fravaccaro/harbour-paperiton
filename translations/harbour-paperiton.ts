@@ -4,19 +4,11 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>A client for the documents of a Paperless-ngx server: search, filters, previews, uploads from the device or the camera, metadata, notes and the task queue.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Report an issue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>About Paperless-ngx</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Paperless-ngx is a separate project and is not affiliated with this app.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -33,6 +25,14 @@
     </message>
     <message>
         <source>Credits for existing translations and how to contribute.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A client for the documents of a Paperless-ngx server.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This app is a separate project and not affiliated with Paperless-ngx.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -192,6 +192,14 @@
 <context>
     <name>DocumentPage</name>
     <message>
+        <source>%1 was saved in Downloads/Paperiton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -212,19 +220,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Opening in another app</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Changes saved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save on device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -275,10 +275,6 @@
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>%1 was saved in Downloads</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>DocumentsPage</name>
@@ -319,6 +315,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Tap documents to select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Edit one document</source>
         <translation type="unfinished"></translation>
     </message>
@@ -347,15 +351,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download one document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download %1 documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading %1 of %2…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Uploads (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -853,19 +869,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The cache folder is not available.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>The folder %1 is not available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Could not write to %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not write to the cache folder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -920,7 +928,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Downloads.</source>
+        <source>The API token is kept in the encrypted storage of Sailfish OS. Opening a document writes it to Downloads/Paperiton under the name the server keeps for it, replacing a file already there with that name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1200,11 +1208,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Added to Paperless</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nothing was added to the archive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 of %2 files were saved in Downloads/Paperiton</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not download the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not download the files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>%1 (%2 of %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 files were added to the archive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Share</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

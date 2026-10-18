@@ -78,7 +78,7 @@ Page {
                 wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.secondaryColor
-                text: qsTr("The API token is kept in the encrypted storage of Sailfish OS. " + "Documents you open are downloaded to the private cache of the app " + "and deleted again when the app closes; \"Save on device\" keeps a " + "copy in Downloads.")
+                text: qsTr("The API token is kept in the encrypted storage of Sailfish OS. " + "Opening a document writes it to Downloads/Paperiton under the name " + "the server keeps for it, replacing a file already there with that name.")
             }
 
             Label {

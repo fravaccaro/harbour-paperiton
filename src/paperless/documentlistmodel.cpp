@@ -63,6 +63,7 @@ bool DocumentListModel::Entry::operator==(const Entry &other) const
             && documentTypeId == other.documentTypeId
             && tagIds == other.tagIds
             && originalFileName == other.originalFileName
+            && archivedFileName == other.archivedFileName
             && archiveSerialNumber == other.archiveSerialNumber
             && pageCount == other.pageCount;
 }
@@ -111,6 +112,7 @@ QHash<int, QByteArray> DocumentListModel::roleNames() const
     roles.insert(TagIdsRole, "tagIds");
     roles.insert(ThumbnailSourceRole, "thumbnailSource");
     roles.insert(OriginalFileNameRole, "originalFileName");
+    roles.insert(ArchivedFileNameRole, "archivedFileName");
     roles.insert(ArchiveSerialNumberRole, "archiveSerialNumber");
     roles.insert(PageCountRole, "pageCount");
     return roles;
@@ -141,6 +143,8 @@ QVariant DocumentListModel::data(const QModelIndex &index, int role) const
         return QStringLiteral("image://paperless/thumb/%1").arg(entry.id);
     case OriginalFileNameRole:
         return entry.originalFileName;
+    case ArchivedFileNameRole:
+        return entry.archivedFileName;
     case ArchiveSerialNumberRole:
         return entry.archiveSerialNumber;
     case PageCountRole:
@@ -440,7 +444,7 @@ QUrl DocumentListModel::pageUrl(int page) const
     // parameter ignores it and answers as it always did.
     query.addQueryItem(QStringLiteral("fields"), QStringLiteral(
                            "id,title,created,added,correspondent,document_type,tags,"
-                           "original_file_name,archive_serial_number,page_count"));
+                           "original_file_name,archived_file_name,archive_serial_number,page_count"));
     if (!m_searchQuery.isEmpty())
         query.addQueryItem(QStringLiteral("query"), m_searchQuery);
     if (m_tagId > 0)
@@ -504,6 +508,7 @@ void DocumentListModel::fetchPage(int page, Request kind)
             entry.correspondentId = optionalId(object.value(QStringLiteral("correspondent")));
             entry.documentTypeId = optionalId(object.value(QStringLiteral("document_type")));
             entry.originalFileName = object.value(QStringLiteral("original_file_name")).toString();
+            entry.archivedFileName = object.value(QStringLiteral("archived_file_name")).toString();
             entry.pageCount = object.value(QStringLiteral("page_count")).toInt();
 
             const QJsonValue asn = object.value(QStringLiteral("archive_serial_number"));

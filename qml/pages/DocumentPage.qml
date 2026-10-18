@@ -13,11 +13,11 @@ Page {
     })
     property bool loadingDetails: true
     property bool saving: false
+    // Set only by open(), so a Download that finishes through the same save
+    // signals is never taken for a request to open the file.
+    property bool openAfterSave: false
     property string statusMessage
     property string errorMessage
-    property var pdfComponent: null
-    property bool openAfterExport: false
-    property bool openedOriginal: false
     // Paperless keeps the file as it was uploaded and, for most documents, an
     // archived PDF next to it.
     property bool hasArchive: !!details.archived_file_name
@@ -41,27 +41,28 @@ Page {
         return /\.(png|jpe?g|gif|webp|bmp|tiff?)$/.test(String(path).toLowerCase());
     }
 
-    // Downloads into the private cache, from where only this app can read the
-    // file; it is deleted again when the app quits. Without an explicit choice
-    // the version that renders best is used: an image shows as an image, while
-    // everything else is read from the archived PDF.
+    // Writes into ~/Downloads/Paperiton under the server's file name
+    // (overwriting if that name is already there), then opens from there:
+    // images stay inside Paperiton, everything else goes to the system handler.
+    // Without an explicit choice the version that renders best is used: an image
+    // shows as an image, while everything else is read from the archived PDF.
+    // Only a tap on the preview (or its press-and-hold menu) asks for this.
     function open(original) {
         page.errorMessage = "";
         page.statusMessage = "";
         if (original === undefined)
             original = isImage() || !hasArchive;
 
-        page.openedOriginal = original;
+        page.openAfterSave = true;
         Paperless.saveDocument(documentId, fileName(original), original);
     }
 
-    // The archived PDF under the name the server keeps for it. A document
-    // without an archive has only the file it was uploaded as, and asking for
-    // the archived version returns that instead.
-    function saveOnDevice() {
-        page.errorMessage = "";
-        page.statusMessage = "";
-        Paperless.exportDocument(page.documentId, fileName(false), false);
+    // Writes the file into Downloads/Paperiton without opening it, in the same
+    // version a preview tap would choose. The run, and its notification, belong
+    // to the window, so it carries on if this page is left behind.
+    function download() {
+        var original = isImage() || !hasArchive;
+        app.downloadDocument(documentId, fileName(original), original);
     }
 
     function view(path) {
@@ -72,21 +73,7 @@ Page {
             });
             return ;
         }
-        if (page.pdfComponent === null)
-            page.pdfComponent = Qt.createComponent(Qt.resolvedUrl("PdfViewPage.qml"));
-
-        if (page.pdfComponent.status === Component.Ready) {
-            pageStack.push(page.pdfComponent, {
-                "source": Paperless.fileUrl(path),
-                "title": page.documentTitle
-            });
-            return ;
-        }
-        // Without the system viewer the file has to leave the sandbox, because
-        // no other app can read the cache directory.
-        page.statusMessage = qsTr("Opening in another app");
-        page.openAfterExport = true;
-        Paperless.exportDocument(documentId, fileName(page.openedOriginal), page.openedOriginal);
+        Qt.openUrlExternally(Paperless.fileUrl(path));
     }
 
     function formatDate(value) {
@@ -128,39 +115,29 @@ Page {
             page.loadingDetails = false;
             page.errorMessage = error;
         }
+        // Only a preview open sets openAfterSave. A Download shares the same
+        // save signals but reports itself through the window notification, and
+        // must not open the file once the run has already cleared app.downloading.
         onDocumentSaveStarted: {
-            if (documentId === page.documentId)
+            if (documentId === page.documentId && page.openAfterSave)
                 page.saving = true;
 
         }
         onDocumentSaved: {
-            if (documentId !== page.documentId)
+            if (documentId !== page.documentId || !page.openAfterSave)
                 return ;
 
+            page.openAfterSave = false;
             page.saving = false;
+            app.notify(qsTr("%1 was saved in Downloads/Paperiton").arg(filePath.substring(filePath.lastIndexOf("/") + 1)));
             page.view(filePath);
         }
-        onDocumentExported: {
-            if (documentId !== page.documentId)
-                return ;
-
-            page.saving = false;
-            page.statusMessage = "";
-            // An export made only to hand the file over says nothing; the other
-            // app appearing is the answer.
-            if (page.openAfterExport) {
-                page.openAfterExport = false;
-                Qt.openUrlExternally(Paperless.fileUrl(filePath));
-                return ;
-            }
-            app.notify(qsTr("%1 was saved in Downloads").arg(filePath.substring(filePath.lastIndexOf("/") + 1)));
-        }
         onDocumentSaveFailed: {
-            if (documentId !== page.documentId)
+            if (documentId !== page.documentId || !page.openAfterSave)
                 return ;
 
+            page.openAfterSave = false;
             page.saving = false;
-            page.openAfterExport = false;
             page.errorMessage = error;
         }
         onDocumentUpdated: {
@@ -218,9 +195,9 @@ Page {
             }
 
             MenuItem {
-                text: qsTr("Save on device")
-                enabled: !page.saving && !page.loadingDetails
-                onClicked: page.saveOnDevice()
+                text: qsTr("Download")
+                enabled: !page.loadingDetails && !page.saving && !app.downloading
+                onClicked: page.download()
             }
 
             MenuItem {
@@ -245,18 +222,17 @@ Page {
                 description: page.formatDate(page.created)
             }
 
-            BackgroundItem {
+            // ContextMenu must hang off a ListItem (or an Item whose height
+            // grows with the menu). Showing it on a fixed-height BackgroundItem
+            // leaves the choices drawn inside the preview instead of on the page.
+            ListItem {
                 id: previewItem
 
                 width: parent.width
-                height: Math.round(page.height * 0.4)
+                contentHeight: Math.round(page.height * 0.4)
                 enabled: !page.saving
+                showMenuOnPressAndHold: page.hasArchive && page.hasOriginal
                 onClicked: page.open()
-                onPressAndHold: {
-                    if (page.hasArchive && page.hasOriginal)
-                        versionMenu.show(previewItem);
-
-                }
 
                 Image {
                     id: preview
@@ -278,19 +254,17 @@ Page {
                     running: preview.status === Image.Loading
                 }
 
-            }
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTr("Open archived PDF")
+                        onClicked: page.open(false)
+                    }
 
-            ContextMenu {
-                id: versionMenu
+                    MenuItem {
+                        text: qsTr("Open original file")
+                        onClicked: page.open(true)
+                    }
 
-                MenuItem {
-                    text: qsTr("Open archived PDF")
-                    onClicked: page.open(false)
-                }
-
-                MenuItem {
-                    text: qsTr("Open original file")
-                    onClicked: page.open(true)
                 }
 
             }

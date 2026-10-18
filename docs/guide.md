@@ -9,7 +9,7 @@ has_toc: true
 
 # Using Paperiton
 
-Paperiton is a native client for a [Paperless-ngx](https://docs.paperless-ngx.com/) server you already run. Everything lives on your server; the app keeps only a private cache on the phone.
+Paperiton is a native client for a [Paperless-ngx](https://docs.paperless-ngx.com/) server you already run. Everything lives on your server; opening a document writes a copy to Downloads/Paperiton.
 
 ## Requirements
 

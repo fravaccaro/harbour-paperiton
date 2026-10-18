@@ -19,7 +19,7 @@ Only file kinds Paperless-ngx accepts without external converters are offered: *
 
 ## Following the upload
 
-An upload shows a notification with a progress bar and ends as one summary rather than a message per file. After the server accepts a file, the app follows the consumer task until the document actually exists, then names the document it created so it can be opened from the queue.
+An upload shows a notification with a progress bar and ends as one summary rather than a message per file. That summary stays in the events view; smaller messages, such as a file the server turned down, appear as a notice inside the app. After the server accepts a file, the app follows the consumer task until the document actually exists, then names the document it created so it can be opened from the queue.
 
 ## The task queue
 

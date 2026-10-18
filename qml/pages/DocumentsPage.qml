@@ -21,6 +21,10 @@ Page {
 
         return parts.join("  \u00b7  ");
     }
+    // Picking documents out of the list is a mode of its own, asked for from the
+    // pulley menu, rather than something a selected document stands for: it is
+    // entered with nothing picked yet.
+    property bool selecting: false
     property var selectedIds: []
     // The field is asked for from the pulley menu rather than standing above
     // the documents all the time.
@@ -28,6 +32,9 @@ Page {
     property var bulkOperations: []
     property int bulkIndex: -1
     property string bulkError
+    // The download run itself belongs to the window, so it keeps going, and
+    // keeps being reported, once this page is no longer the one in front.
+    readonly property bool downloading: app.downloading
 
     function runBulk(operations) {
         bulkError = "";
@@ -40,7 +47,7 @@ Page {
         bulkIndex++;
         if (bulkIndex >= bulkOperations.length) {
             bulkIndex = -1;
-            selectedIds = [];
+            endSelection();
             Documents.reload();
             return ;
         }
@@ -48,8 +55,17 @@ Page {
         Paperless.bulkEdit(selectedIds, operation.method, operation.parameters);
     }
 
-    function startSelection(documentId) {
-        selectedIds = [documentId];
+    function downloadSelected() {
+        if (selectedIds.length === 0)
+            return ;
+
+        app.downloadDocuments(selectedIds);
+        endSelection();
+    }
+
+    function endSelection() {
+        selecting = false;
+        selectedIds = [];
     }
 
     function toggleSelection(documentId) {
@@ -156,8 +172,22 @@ Page {
 
         PullDownMenu {
             MenuItem {
+                text: page.selectedIds.length === 1 ? qsTr("Delete one document") : qsTr("Delete %1 documents").arg(page.selectedIds.length)
+                visible: page.selectedIds.length > 0 && app.allowed("delete_document")
+                enabled: !page.downloading
+                onClicked: deleteRemorse.execute(qsTr("Deleting"), function() {
+                    page.runBulk([{
+                        "method": "delete",
+                        "parameters": {
+                        }
+                    }]);
+                })
+            }
+
+            MenuItem {
                 text: page.selectedIds.length === 1 ? qsTr("Edit one document") : qsTr("Edit %1 documents").arg(page.selectedIds.length)
                 visible: page.selectedIds.length > 0
+                enabled: !page.downloading
                 onClicked: {
                     var dialog = pageStack.push(Qt.resolvedUrl("BulkEditPage.qml"), {
                         "documentCount": page.selectedIds.length
@@ -169,38 +199,42 @@ Page {
             }
 
             MenuItem {
-                text: page.selectedIds.length === 1 ? qsTr("Delete one document") : qsTr("Delete %1 documents").arg(page.selectedIds.length)
-                visible: page.selectedIds.length > 0 && app.allowed("delete_document")
-                onClicked: deleteRemorse.execute(qsTr("Deleting"), function() {
-                    page.runBulk([{
-                        "method": "delete",
-                        "parameters": {
-                        }
-                    }]);
-                })
+                text: page.selectedIds.length === 1 ? qsTr("Download one document") : qsTr("Download %1 documents").arg(page.selectedIds.length)
+                visible: page.selectedIds.length > 0
+                enabled: !page.downloading
+                onClicked: page.downloadSelected()
             }
 
             MenuItem {
                 text: qsTr("Cancel selection")
-                visible: page.selectedIds.length > 0
-                onClicked: page.selectedIds = []
+                visible: page.selecting
+                enabled: !page.downloading
+                onClicked: page.endSelection()
+            }
+
+            // Picking documents serves downloading as much as editing, so this
+            // is offered whatever the account may change.
+            MenuItem {
+                text: qsTr("Select documents")
+                visible: !page.selecting && Documents.count > 0
+                onClicked: page.selecting = true
             }
 
             MenuItem {
                 text: Uploads.activeCount > 0 ? qsTr("Uploads (%1)").arg(Uploads.activeCount) : qsTr("Upload")
-                visible: page.selectedIds.length === 0 && app.allowed("add_document")
+                visible: !page.selecting && app.allowed("add_document")
                 onClicked: pageStack.push(Qt.resolvedUrl("UploadPage.qml"))
             }
 
             MenuItem {
                 text: qsTr("Refresh")
-                visible: page.selectedIds.length === 0
+                visible: !page.selecting
                 onClicked: Documents.reload()
             }
 
             MenuItem {
                 text: page.searchVisible ? qsTr("Hide search") : qsTr("Search")
-                visible: page.selectedIds.length === 0
+                visible: !page.selecting
                 onClicked: page.searchVisible = !page.searchVisible
             }
 
@@ -228,7 +262,15 @@ Page {
 
             PageHeader {
                 title: qsTr("Documents")
-                description: page.selectedIds.length > 0 ? qsTr("%1 selected").arg(page.selectedIds.length) : page.filterSummary
+                description: {
+                    if (page.downloading)
+                        return qsTr("Downloading %1 of %2…").arg(Math.min(app.downloadIndex + 1, app.downloadIds.length)).arg(app.downloadIds.length);
+
+                    if (page.selecting)
+                        return page.selectedIds.length > 0 ? qsTr("%1 selected").arg(page.selectedIds.length) : qsTr("Tap documents to select");
+
+                    return page.filterSummary;
+                }
             }
 
             Label {
@@ -316,8 +358,12 @@ Page {
 
             contentHeight: Theme.itemSizeLarge
             highlighted: down || selected
+            // While documents are being picked there is nothing a row menu
+            // could offer, and an open menu is what would keep the pulley from
+            // answering.
+            showMenuOnPressAndHold: !page.selecting
             onClicked: {
-                if (page.selectedIds.length > 0) {
+                if (page.selecting) {
                     page.toggleSelection(model.documentId);
                     return ;
                 }
@@ -417,14 +463,15 @@ Page {
 
             menu: ContextMenu {
                 MenuItem {
-                    text: qsTr("Select")
-                    visible: page.selectedIds.length === 0 && app.allowed("change_document")
-                    onClicked: page.startSelection(model.documentId)
+                    text: qsTr("Download")
+                    visible: !page.selecting
+                    enabled: !page.downloading
+                    onClicked: app.downloadDocuments([model.documentId])
                 }
 
                 MenuItem {
                     text: qsTr("Delete")
-                    visible: page.selectedIds.length === 0 && app.allowed("delete_document")
+                    visible: !page.selecting && app.allowed("delete_document")
                     onClicked: {
                         // The row is gone by the time the countdown runs out, so
                         // which document it was has to be kept.

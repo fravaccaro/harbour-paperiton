@@ -105,21 +105,6 @@ QString describeFailure(QNetworkReply *reply, int status, const QByteArray &body
     return reply->errorString();
 }
 
-QString uniqueFilePath(const QString &directory, const QString &fileName)
-{
-    const QFileInfo info(fileName);
-    const QString base = info.completeBaseName();
-    const QString suffix = info.suffix().isEmpty() ? QString() : QLatin1Char('.') + info.suffix();
-
-    QString candidate = directory + QLatin1Char('/') + base + suffix;
-    int counter = 2;
-    while (QFile::exists(candidate)) {
-        candidate = QStringLiteral("%1/%2 (%3)%4").arg(directory, base).arg(counter).arg(suffix);
-        ++counter;
-    }
-    return candidate;
-}
-
 QString sanitizeFileName(const QString &name)
 {
     QString clean = name;
@@ -249,6 +234,9 @@ void PaperlessApi::dispatch(const QUrl &url, const RequestContext &context,
 
     if (context.progress)
         connect(reply, &QNetworkReply::uploadProgress, this, context.progress);
+
+    if (context.downloadProgress)
+        connect(reply, &QNetworkReply::downloadProgress, this, context.downloadProgress);
 
     send(reply, callback, redirectsLeft);
 }
@@ -588,31 +576,25 @@ void PaperlessApi::fetchDocument(int documentId)
 
 void PaperlessApi::saveDocument(int documentId, const QString &fileName, bool original)
 {
-    const QString cache = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-    if (cache.isEmpty()) {
-        emit documentSaveFailed(documentId, PaperlessApi::tr("The cache folder is not available."));
+    downloadDocument(documentId, fileName, original);
+}
+
+void PaperlessApi::downloadDocument(int documentId, const QString &fileName, bool original)
+{
+    if (m_config->serverUrl().isEmpty()) {
+        emit documentSaveFailed(documentId, PaperlessApi::tr("No server configured."));
         return;
     }
 
-    // Same document, same file: the cache is emptied anyway when the app quits.
-    downloadDocument(documentId, fileName, original, cache + QStringLiteral("/documents"),
-                     false, false);
-}
-
-void PaperlessApi::exportDocument(int documentId, const QString &fileName, bool original)
-{
-    downloadDocument(documentId, fileName, original,
-                     QStandardPaths::writableLocation(QStandardPaths::DownloadLocation),
-                     true, true);
-}
-
-void PaperlessApi::downloadDocument(int documentId, const QString &fileName, bool original,
-                                    const QString &directory, bool unique, bool exported)
-{
+    // A subfolder of Downloads keeps Paperiton's copies apart from whatever else
+    // landed there; the Downloads Sailjail permission covers it.
+    const QString downloads = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+    const QString directory = downloads.isEmpty()
+            ? QString()
+            : downloads + QStringLiteral("/Paperiton");
     if (directory.isEmpty() || !QDir().mkpath(directory)) {
-        emit documentSaveFailed(documentId, exported
-                                ? PaperlessApi::tr("The folder %1 is not available.").arg(directory)
-                                : PaperlessApi::tr("The cache folder is not available."));
+        emit documentSaveFailed(documentId,
+                                PaperlessApi::tr("The folder %1 is not available.").arg(directory));
         return;
     }
 
@@ -621,37 +603,33 @@ void PaperlessApi::downloadDocument(int documentId, const QString &fileName, boo
         name = QStringLiteral("paperless-%1.pdf").arg(documentId);
     if (!name.contains(QLatin1Char('.')))
         name.append(QStringLiteral(".pdf"));
-    if (!unique)
-        name = QStringLiteral("%1-%2").arg(documentId).arg(name);
 
     emit documentSaveStarted(documentId);
 
+    RequestContext context;
+    context.downloadProgress = [this, documentId](qint64 received, qint64 total) {
+        emit documentSaveProgress(documentId, received, total);
+    };
+
     const QUrl url = documentFileUrl(documentId, QStringLiteral("download"), original);
-    getData(url, [this, documentId, directory, name, unique, exported]
-            (const QByteArray &data, const QString &error, int) {
+    dispatch(url, context, [this, documentId, directory, name](const QByteArray &data, const QString &error, int) {
         if (!error.isEmpty()) {
             emit documentSaveFailed(documentId, error);
             return;
         }
 
-        const QString path = unique ? uniqueFilePath(directory, name)
-                                    : directory + QLatin1Char('/') + name;
+        const QString path = directory + QLatin1Char('/') + name;
         QFile file(path);
         if (!file.open(QIODevice::WriteOnly)) {
-            emit documentSaveFailed(documentId, exported
-                                    ? PaperlessApi::tr("Could not write to %1.").arg(directory)
-                                    : PaperlessApi::tr("Could not write to the cache folder."));
+            emit documentSaveFailed(documentId,
+                                    PaperlessApi::tr("Could not write to %1.").arg(directory));
             return;
         }
 
         file.write(data);
         file.close();
-
-        if (exported)
-            emit documentExported(documentId, path);
-        else
-            emit documentSaved(documentId, path);
-    });
+        emit documentSaved(documentId, path);
+    }, MaxRedirects);
 }
 
 QUrl PaperlessApi::fileUrl(const QString &path) const
@@ -852,6 +830,7 @@ void PaperlessApi::clearTransientCache()
     if (cacheDir.isEmpty())
         return;
 
+    // Leftover document copies from older versions that wrote into the cache.
     QDir(cacheDir + QStringLiteral("/documents")).removeRecursively();
     QDir(cacheDir + QStringLiteral("/captures")).removeRecursively();
 }

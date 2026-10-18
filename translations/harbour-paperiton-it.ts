@@ -4,20 +4,12 @@
 <context>
     <name>AboutPage</name>
     <message>
-        <source>A client for the documents of a Paperless-ngx server: search, filters, previews, uploads from the device or the camera, metadata, notes and the task queue.</source>
-        <translation>Un client per i documenti di un server Paperless-ngx: ricerca, filtri, anteprime, caricamenti dal dispositivo o dalla fotocamera, metadati, note e coda delle operazioni.</translation>
-    </message>
-    <message>
         <source>Report an issue</source>
         <translation>Segnala un problema</translation>
     </message>
     <message>
         <source>About Paperless-ngx</source>
         <translation>Informazioni su Paperless-ngx</translation>
-    </message>
-    <message>
-        <source>Paperless-ngx is a separate project and is not affiliated with this app.</source>
-        <translation>Paperless-ngx è un progetto a sé e non è collegato a questa app.</translation>
     </message>
     <message>
         <source>Feedback</source>
@@ -34,6 +26,14 @@
     <message>
         <source>Credits for existing translations and how to contribute.</source>
         <translation>Crediti per le traduzioni esistenti e come contribuire.</translation>
+    </message>
+    <message>
+        <source>A client for the documents of a Paperless-ngx server.</source>
+        <translation>Un client per i documenti di un server Paperless-ngx.</translation>
+    </message>
+    <message>
+        <source>This app is a separate project and not affiliated with Paperless-ngx.</source>
+        <translation>Quest&apos;app è un progetto a sé e non è collegata a Paperless-ngx.</translation>
     </message>
 </context>
 <context>
@@ -192,6 +192,14 @@
 <context>
     <name>DocumentPage</name>
     <message>
+        <source>%1 was saved in Downloads/Paperiton</source>
+        <translation>%1 è stato salvato in Downloads/Paperiton</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation>Scarica</translation>
+    </message>
+    <message>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
@@ -212,20 +220,12 @@
         <translation>Testo</translation>
     </message>
     <message>
-        <source>Opening in another app</source>
-        <translation>Apertura in un&apos;altra app</translation>
-    </message>
-    <message>
         <source>Changes saved</source>
         <translation>Modifiche salvate</translation>
     </message>
     <message>
         <source>Edit</source>
         <translation>Modifica</translation>
-    </message>
-    <message>
-        <source>Save on device</source>
-        <translation>Salva sul dispositivo</translation>
     </message>
     <message>
         <source>Refresh</source>
@@ -275,10 +275,6 @@
         <source>File</source>
         <translation>File</translation>
     </message>
-    <message>
-        <source>%1 was saved in Downloads</source>
-        <translation>%1 è stato salvato in Download</translation>
-    </message>
 </context>
 <context>
     <name>DocumentsPage</name>
@@ -319,6 +315,14 @@
         <translation>%1 selezionati</translation>
     </message>
     <message>
+        <source>Tap documents to select</source>
+        <translation>Tocca i documenti per selezionarli</translation>
+    </message>
+    <message>
+        <source>Select documents</source>
+        <translation>Seleziona documenti</translation>
+    </message>
+    <message>
         <source>Edit one document</source>
         <translation>Modifica un documento</translation>
     </message>
@@ -347,16 +351,28 @@
         <translation>Annulla la selezione</translation>
     </message>
     <message>
+        <source>Download</source>
+        <translation>Scarica</translation>
+    </message>
+    <message>
+        <source>Download one document</source>
+        <translation>Scarica un documento</translation>
+    </message>
+    <message>
+        <source>Download %1 documents</source>
+        <translation>Scarica %1 documenti</translation>
+    </message>
+    <message>
+        <source>Downloading %1 of %2…</source>
+        <translation>Download di %1 di %2…</translation>
+    </message>
+    <message>
         <source>Uploads (%1)</source>
         <translation>Caricamenti (%1)</translation>
     </message>
     <message>
         <source>Upload</source>
         <translation>Carica</translation>
-    </message>
-    <message>
-        <source>Select</source>
-        <translation>Seleziona</translation>
     </message>
     <message>
         <source>Could not load documents</source>
@@ -672,8 +688,8 @@
     <message numerus="yes">
         <source>License(s)</source>
         <translation>
-            <numerusform>mostra licenza</numerusform>
-            <numerusform>mostra licenze</numerusform>
+            <numerusform>Licenza</numerusform>
+            <numerusform>Licenze</numerusform>
         </translation>
     </message>
     <message>
@@ -853,20 +869,12 @@
         <translation>Inserisci un token API.</translation>
     </message>
     <message>
-        <source>The cache folder is not available.</source>
-        <translation>La cartella della cache non è disponibile.</translation>
-    </message>
-    <message>
         <source>The folder %1 is not available.</source>
         <translation>La cartella %1 non è disponibile.</translation>
     </message>
     <message>
         <source>Could not write to %1.</source>
         <translation>Impossibile scrivere in %1.</translation>
-    </message>
-    <message>
-        <source>Could not write to the cache folder.</source>
-        <translation>Impossibile scrivere nella cartella della cache.</translation>
     </message>
     <message>
         <source>The file could not be read.</source>
@@ -920,8 +928,8 @@
         <translation>Archiviazione</translation>
     </message>
     <message>
-        <source>The API token is kept in the encrypted storage of Sailfish OS. Documents you open are downloaded to the private cache of the app and deleted again when the app closes; &quot;Save on device&quot; keeps a copy in Downloads.</source>
-        <translation>Il token API è conservato nell&apos;archivio cifrato di Sailfish OS. I documenti che apri vengono scaricati nella cache privata dell&apos;app ed eliminati alla chiusura; &quot;Salva sul dispositivo&quot; ne conserva una copia in Download.</translation>
+        <source>The API token is kept in the encrypted storage of Sailfish OS. Opening a document writes it to Downloads/Paperiton under the name the server keeps for it, replacing a file already there with that name.</source>
+        <translation>Il token API è conservato nell&apos;archivio cifrato di Sailfish OS. Aprendo un documento, questo viene scritto in Downloads/Paperiton con il nome che il server gli assegna, sostituendo un file già presente con lo stesso nome.</translation>
     </message>
     <message>
         <source>Secure storage reported: %1</source>
@@ -1200,12 +1208,48 @@
         <translation>Aggiunta a Paperless</translation>
     </message>
     <message>
+        <source>Added to Paperless</source>
+        <translation>Aggiunta completata</translation>
+    </message>
+    <message>
+        <source>Nothing was added to the archive</source>
+        <translation>Non è stato aggiunto nulla all&apos;archivio</translation>
+    </message>
+    <message>
+        <source>%1 of %2 files were saved in Downloads/Paperiton</source>
+        <translation>%1 di %2 file sono stati salvati in Downloads/Paperiton</translation>
+    </message>
+    <message>
+        <source>Could not download the file</source>
+        <translation>Impossibile scaricare il file</translation>
+    </message>
+    <message>
+        <source>Could not download the files</source>
+        <translation>Impossibile scaricare i file</translation>
+    </message>
+    <message>
         <source>%1 (%2 of %3)</source>
         <translation>%1 (%2 di %3)</translation>
     </message>
     <message>
         <source>%1 files were added to the archive</source>
         <translation>%1 file aggiunti all&apos;archivio</translation>
+    </message>
+    <message>
+        <source>Downloaded</source>
+        <translation>Scaricato</translation>
+    </message>
+    <message>
+        <source>Downloading</source>
+        <translation>Download da Paperless</translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation>Apri</translation>
+    </message>
+    <message>
+        <source>Share</source>
+        <translation>Condividi</translation>
     </message>
 </context>
 </TS>
