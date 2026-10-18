@@ -14,19 +14,21 @@ CoverBackground {
     clip: true
 
     HighlightImage {
-        source: Qt.resolvedUrl("cover-doc.png")
+        source: Qt.resolvedUrl("cover-boat.png")
         color: Theme.primaryColor
-        // The sheet is taller than it is wide, so its height is what decides
-        // how much of the cover it takes.
-        sourceSize.height: cover.height * 0.65
+        // The boat is wider than it is tall, so its width is what decides how
+        // much of the cover it takes.
+        sourceSize.width: cover.width * 0.85
         // The same alpha reads much heavier as a dark glyph on a light ambience.
         opacity: Theme.colorScheme === Theme.LightOnDark ? 0.13 : 0.08
 
+        // Only the stern and the keel are cut off: the hull is what makes the
+        // shape readable, so it stays almost whole, afloat in the corner.
         anchors {
             right: parent.right
-            rightMargin: -width * 0.22
+            rightMargin: -width * 0.08
             bottom: parent.bottom
-            bottomMargin: -height * 0.22
+            bottomMargin: -height * 0.04
         }
 
     }

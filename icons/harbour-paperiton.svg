@@ -14,21 +14,26 @@
       <stop offset="1" stop-color="#2fa84f"/>
     </linearGradient>
 
-    <!-- A sheet with a folded corner and three lines of text, drawn on a 172
-         canvas. Its bounding box runs 32,14 to 136,168, so the centre is at
-         84,91. -->
-    <g id="sheet" fill-rule="evenodd">
-      <path d="M42 14h56a10 10 0 0 1 7.07 2.93l28 28A10 10 0 0 1 136 52v106a10 10 0 0 1-10 10H42a10 10 0 0 1-10-10V24a10 10 0 0 1 10-10zm0 14a4 4 0 0 0-4 4v126a4 4 0 0 0 4 4h84a4 4 0 0 0 4-4V58H98a8 8 0 0 1-8-8V28H42z"/>
-      <rect x="52" y="74" width="64" height="9" rx="4.5"/>
-      <rect x="52" y="96" width="64" height="9" rx="4.5"/>
-      <rect x="52" y="118" width="40" height="9" rx="4.5"/>
-    </g>
+    <!-- A folded paper boat on a 140 x 104 box, so its centre is at 70,52:
+         the sail runs from the apex down to the deck, the deck rises to a tip
+         at each end, and the hull closes along the keel. -->
+    <polygon id="boat" points="70,0 114,56 140,48 110,104 30,104 0,48 26,56"/>
+
+    <!-- The two creases are cut out rather than drawn, so the boat keeps
+         reading as one sheet of paper folded twice. -->
+    <mask id="folds" maskUnits="userSpaceOnUse" x="-10" y="-10" width="160" height="124">
+      <rect x="-10" y="-10" width="160" height="124" fill="#ffffff"/>
+      <path d="M70 4V52" stroke="#000000" stroke-width="6"/>
+      <path d="M24 56H116" stroke="#000000" stroke-width="6"/>
+    </mask>
   </defs>
 
   <use xlink:href="#leaf" fill="url(#body)"/>
 
-  <!-- Centred on the leaf: 84,91 of the sheet lands on 43,43 of the icon. -->
-  <g transform="translate(15.28 12.97) scale(0.33)">
-    <use xlink:href="#sheet" fill="#ffffff"/>
+  <!-- Centred on the leaf: 70,52 of the boat lands on 43,43 of the icon. -->
+  <g transform="translate(19.2 25.32) scale(0.34)">
+    <g mask="url(#folds)">
+      <use xlink:href="#boat" fill="#ffffff"/>
+    </g>
   </g>
 </svg>
