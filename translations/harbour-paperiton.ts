@@ -945,6 +945,17 @@
     </message>
 </context>
 <context>
+    <name>StartPage</name>
+    <message>
+        <source>The API token could not be read from the secure storage of Sailfish OS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Try again</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SupportDialog</name>
     <message>
         <source>Hi there!</source>

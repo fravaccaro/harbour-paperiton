@@ -49,6 +49,10 @@ public:
 
     Q_INVOKABLE void clearCredentials();
 
+    // Asks Sailfish Secrets for the token again, after a read that did not get
+    // through left the app waiting rather than signed out.
+    Q_INVOKABLE void reloadSecrets();
+
     // Turns user input such as "paperless.lan" into "https://paperless.lan".
     Q_INVOKABLE static QString normalizeServerUrl(const QString &input);
 

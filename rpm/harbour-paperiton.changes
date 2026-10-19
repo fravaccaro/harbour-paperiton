@@ -1,3 +1,13 @@
+* Mon Oct 19 2026 fravaccaro 0.6.0-9
+- Restarting the phone no longer asks for the API token again: the token lives
+  in a device-lock collection of the encrypted storage, and reading it may ask
+  the system to unlock that collection, which a restart locks again
+- A token that could not be read keeps the app waiting, with what the secure
+  storage said and a way to try again, instead of showing the sign-in page as
+  though the token were gone
+- Tokens written by earlier versions move into the new collection on the first
+  start that can read them
+
 * Sat Oct 17 2026 fravaccaro 0.6.0-8
 - Documents can be downloaded into Downloads/Paperiton from a row's context
   menu, or in bulk from the pulley menu when two or more are selected

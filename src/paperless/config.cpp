@@ -35,6 +35,16 @@ Config::Config(QObject *parent)
     m_secrets.load();
 }
 
+void Config::reloadSecrets()
+{
+    if (!m_secretsError.isEmpty()) {
+        m_secretsError.clear();
+        emit secretsErrorChanged();
+    }
+
+    m_secrets.load();
+}
+
 void Config::applyStoredToken(const QString &token)
 {
     QString value = token;

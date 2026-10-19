@@ -12,7 +12,7 @@ nav_order: 1
 | Part | Purpose |
 |---|---|
 | `src/paperless/config.*` | Server URL, user name and TLS preference in `~/.config/org.frapps/harbour-paperiton/settings.conf` |
-| `src/paperless/secretsstore.*` | The API token in Sailfish Secrets, with migration of tokens written by version 0.1 |
+| `src/paperless/secretsstore.*` | The API token in a device-lock collection of Sailfish Secrets, with migration of tokens written by versions up to 0.6 |
 | `src/paperless/api.*` | `QNetworkAccessManager` wrapper: token header, redirect retries, timeouts, downloads, uploads, permission probe |
 | `src/paperless/documentlistmodel.*` | Paginated list model for `/api/documents/` |
 | `src/paperless/lookupmodel.*` | Tags, correspondents and document types by id |
