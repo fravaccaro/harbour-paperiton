@@ -44,6 +44,11 @@ The SailfishOS Community Team is on Liberapay:
 
 RPMs are attached to the [GitHub releases](https://github.com/fravaccaro/harbour-paperiton/releases/latest) and [OpenRepos](https://openrepos.net/content/fravaccaro/paperiton-paperless-ngx-client).
 
+### Harpoon
+Open Harpoon and scan:
+
+<img src="docs/add-to-harpoon.png" alt="Harpoon QR code" />
+
 ## Developers
 
 [Developers](docs/devel/) - architecture, building, deploying, and CI (maintainers and contributors).
