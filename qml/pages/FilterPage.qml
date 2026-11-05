@@ -14,6 +14,16 @@ Page {
     // Whether there is anything for "Clear all filters" to clear. Showing all
     // documents covers everything it resets apart from the search term.
     readonly property bool anyFilterApplied: !showingAll || Documents.searchQuery !== ""
+    // The fields the Order section offers, in the order its menu names them. A
+    // saved view that sorts by something else still applies as the server
+    // defined it; the section simply has nothing of its own to point at.
+    readonly property var orderFields: ["archive_serial_number", "correspondent__name", "title", "document_type__name", "created", "added", "modified"]
+    // Set while the controls are being brought in line with the list, so that
+    // the index they take does not come back as a fresh choice of the user.
+    property bool syncingOrder: false
+    // The controls settle on an index while they are being built, which is no
+    // choice of the user either, so nothing they say counts until they stand.
+    property bool orderControlsReady: false
 
     // Every choice on this page narrows the list and then shows it: this page is
     // attached to the list and is navigated away from, never popped.
@@ -59,6 +69,42 @@ Page {
         return Documents.tagId <= 0 && Documents.correspondentId <= 0 && SavedViews.matches(index, Documents.filters, Documents.ordering);
     }
 
+    // Paperless names the order as the field to sort by, with a minus in front
+    // of it for the descending direction.
+    function orderingField(ordering) {
+        return ordering.charAt(0) === "-" ? ordering.substring(1) : ordering;
+    }
+
+    function orderingDescending(ordering) {
+        return ordering.charAt(0) === "-";
+    }
+
+    function syncOrderControls() {
+        page.syncingOrder = true;
+        var fieldIndex = page.orderFields.indexOf(page.orderingField(Documents.ordering));
+        if (fieldIndex >= 0)
+            fieldCombo.currentIndex = fieldIndex;
+
+        directionCombo.currentIndex = page.orderingDescending(Documents.ordering) ? 1 : 0;
+        page.syncingOrder = false;
+    }
+
+    // The order is chosen on this page rather than by leaving it, so that the
+    // field and the direction can both be named before going back to the list.
+    function applyOrdering() {
+        if (!page.orderControlsReady || page.syncingOrder)
+            return ;
+
+        var field = page.orderFields[fieldCombo.currentIndex];
+        if (field === undefined)
+            return ;
+
+        var ordering = (directionCombo.currentIndex === 1 ? "-" : "") + field;
+        if (ordering !== Documents.ordering)
+            Documents.ordering = ordering;
+
+    }
+
     allowedOrientations: Orientation.All
     // The names and the views are held for the whole run of the app, so opening
     // this page is the moment to catch up with what the server has meanwhile.
@@ -69,6 +115,17 @@ Page {
         SavedViews.reloadIfStale(300);
         Tags.reloadIfStale(300);
         Correspondents.reloadIfStale(300);
+    }
+    Component.onCompleted: {
+        page.syncOrderControls();
+        page.orderControlsReady = true;
+    }
+
+    // A view, a tag or a correspondent sets the order of its own accord, and
+    // the controls follow rather than keeping what was chosen before.
+    Connections {
+        target: Documents
+        onOrderingChanged: page.syncOrderControls()
     }
 
     SilicaFlickable {
@@ -179,6 +236,70 @@ Page {
                             text: qsTr("Uses filters this app does not support")
                         }
 
+                    }
+
+                }
+
+            }
+
+            SectionHeader {
+                text: qsTr("Order")
+            }
+
+            ComboBox {
+                id: fieldCombo
+
+                width: parent.width
+                label: qsTr("Order by")
+                onCurrentIndexChanged: page.applyOrdering()
+
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTr("ASN")
+                    }
+
+                    MenuItem {
+                        text: qsTr("Correspondent")
+                    }
+
+                    MenuItem {
+                        text: qsTr("Title")
+                    }
+
+                    MenuItem {
+                        text: qsTr("Document type")
+                    }
+
+                    MenuItem {
+                        text: qsTr("Created at")
+                    }
+
+                    MenuItem {
+                        text: qsTr("Added at")
+                    }
+
+                    MenuItem {
+                        text: qsTr("Modified at")
+                    }
+
+                }
+
+            }
+
+            ComboBox {
+                id: directionCombo
+
+                width: parent.width
+                label: qsTr("Direction")
+                onCurrentIndexChanged: page.applyOrdering()
+
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTr("Ascending")
+                    }
+
+                    MenuItem {
+                        text: qsTr("Descending")
                     }
 
                 }

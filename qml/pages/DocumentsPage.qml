@@ -356,7 +356,11 @@ Page {
             property var documentTags: model.tagIds
             property bool selected: page.isSelected(model.documentId)
 
-            contentHeight: Theme.itemSizeLarge
+            // A title runs to two lines when it is long, and the tag dots add
+            // a line of their own, so the row is as tall as what it holds. A
+            // fixed height is what had the text of one row reaching into the
+            // next.
+            contentHeight: Math.max(Theme.itemSizeLarge, textColumn.height + 2 * Theme.paddingMedium)
             highlighted: down || selected
             // While documents are being picked there is nothing a row menu
             // could offer, and an open menu is what would keep the pulley from
@@ -391,7 +395,11 @@ Page {
                     id: thumbnailFrame
 
                     width: Theme.itemSizeSmall * 0.72
+                    // The same height whatever the row needs for its title, so
+                    // that every thumbnail shows the same much of a first page
+                    // and the column of them reads as one.
                     height: Theme.itemSizeLarge - 2 * Theme.paddingSmall
+                    anchors.verticalCenter: parent.verticalCenter
                     color: Theme.rgba(Theme.highlightBackgroundColor, 0.15)
                     radius: Theme.paddingSmall / 2
                     clip: true
@@ -415,6 +423,8 @@ Page {
                 }
 
                 Column {
+                    id: textColumn
+
                     width: parent.width - thumbnailFrame.width - Theme.paddingMedium
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: Theme.paddingSmall / 2

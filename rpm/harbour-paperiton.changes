@@ -1,3 +1,14 @@
+* Thu Nov 05 2026 fravaccaro 0.6.0-10
+- The filters page chooses the order of the document list: by ASN,
+  correspondent, title, document type, filing date, date added or date last
+  changed, ascending or descending
+- The order holds until a tag, a correspondent, a view or the inbox names a
+  place to look of its own
+- The cover shows how many documents are in the inbox and how many there are
+  altogether, instead of one of the two under the name of the app
+- A row of the document list is as tall as the title it carries, so a title
+  that runs to two lines no longer reaches into the row beneath it
+
 * Mon Oct 19 2026 fravaccaro 0.6.0-9
 - Restarting the phone no longer asks for the API token again: the token lives
   in a device-lock collection of the encrypted storage, and reading it may ask

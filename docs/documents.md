@@ -22,4 +22,10 @@ From the filters page you can narrow the list:
 * **saved views** - the views you defined on the server, translated into their query parameters
 * **inbox** - documents carrying the inbox tags of the server
 
+## Order
+
+The same page chooses the order of the list: the field to sort by - ASN, correspondent, title, document type, filing date, the date it was added, or the date it last changed - and whether to read it ascending or descending. The server does the sorting, so it covers the whole archive rather than the part already fetched.
+
+The order holds for as long as the app runs. Picking a tag, a correspondent, "All documents" or the inbox is a fresh place to look and comes back newest filed first, and a saved view brings whatever order it was defined with.
+
 The pulley menu of the filters page also leads to the settings, the task queue, and the About page.

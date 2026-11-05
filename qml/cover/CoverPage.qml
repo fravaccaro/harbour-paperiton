@@ -8,8 +8,12 @@ CoverBackground {
     // read off the inbox tag rather than by listing the inbox a second time.
     readonly property int inboxCount: Paperless.authenticated ? Tags.inboxDocumentCount : 0
     readonly property bool uploading: Uploads.activeCount > 0
-    readonly property bool showInbox: !uploading && inboxCount > 0
-    readonly property int headline: uploading ? Uploads.activeCount : showInbox ? inboxCount : Paperless.totalDocuments
+    // A run of uploads is the one thing happening rather than a count that
+    // keeps, so it has the cover to itself while it lasts.
+    readonly property bool showCounts: Paperless.authenticated && !uploading
+    // Not every server defines an inbox tag, and a count of one that is not
+    // there would be a nought standing for nothing.
+    readonly property bool showInbox: showCounts && Tags.inboxTagId > 0
 
     clip: true
 
@@ -34,7 +38,7 @@ CoverBackground {
     }
 
     Column {
-        spacing: Theme.paddingSmall
+        spacing: Theme.paddingMedium
 
         anchors {
             left: parent.left
@@ -43,49 +47,53 @@ CoverBackground {
             margins: Theme.paddingMedium
         }
 
-        Label {
+        // A number and the word for what it counts belong together, so each
+        // pair is a column of its own and the spacing above separates them.
+        Column {
             width: parent.width
-            horizontalAlignment: Text.AlignHCenter
-            text: qsTr("Paperiton")
-            color: Theme.secondaryHighlightColor
-            font.pixelSize: Theme.fontSizeSmall
-        }
+            visible: cover.uploading
 
-        Label {
-            width: parent.width
-            horizontalAlignment: Text.AlignHCenter
-            visible: Paperless.authenticated && cover.headline > 0
-            text: cover.headline
-            color: Theme.highlightColor
+            CoverCount {
+                text: Uploads.activeCount
+            }
 
-            font {
-                pixelSize: Theme.fontSizeHuge
-                family: Theme.fontFamilyHeading
+            CoverCaption {
+                text: qsTr("uploading", "goes under the number of files being uploaded")
             }
 
         }
 
-        Label {
+        Column {
             width: parent.width
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WordWrap
-            color: Theme.secondaryColor
-            font.pixelSize: Theme.fontSizeExtraSmall
-            text: {
-                if (!Paperless.authenticated)
-                    return qsTr("Not signed in");
+            visible: cover.showInbox
 
-                if (cover.uploading)
-                    return qsTr("uploading", "goes under the number of files being uploaded");
-
-                if (cover.showInbox)
-                    return qsTr("in inbox", "goes under the number of documents in the inbox");
-
-                if (Paperless.totalDocuments === 0)
-                    return qsTr("No documents yet");
-
-                return qsTr("documents", "goes under the total number of documents");
+            CoverCount {
+                text: cover.inboxCount
             }
+
+            CoverCaption {
+                text: qsTr("in inbox", "goes under the number of documents in the inbox")
+            }
+
+        }
+
+        Column {
+            width: parent.width
+            visible: cover.showCounts
+
+            CoverCount {
+                text: Paperless.totalDocuments
+            }
+
+            CoverCaption {
+                text: qsTr("documents", "goes under the total number of documents")
+            }
+
+        }
+
+        CoverCaption {
+            visible: !Paperless.authenticated
+            text: qsTr("Not signed in")
         }
 
     }

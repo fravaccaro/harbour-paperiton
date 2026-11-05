@@ -104,15 +104,7 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>Paperiton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Not signed in</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No documents yet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -450,6 +442,54 @@
     </message>
     <message>
         <source>About</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Order by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ASN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Correspondent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Document type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Created at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Added at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Modified at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ascending</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Descending</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

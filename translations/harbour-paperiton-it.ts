@@ -104,16 +104,8 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>Paperiton</source>
-        <translation>Paperiton</translation>
-    </message>
-    <message>
         <source>Not signed in</source>
         <translation>Accesso non effettuato</translation>
-    </message>
-    <message>
-        <source>No documents yet</source>
-        <translation>Nessun documento</translation>
     </message>
     <message>
         <source>uploading</source>
@@ -451,6 +443,54 @@
     <message>
         <source>About</source>
         <translation>Informazioni</translation>
+    </message>
+    <message>
+        <source>Order</source>
+        <translation>Ordine</translation>
+    </message>
+    <message>
+        <source>Order by</source>
+        <translation>Ordina per</translation>
+    </message>
+    <message>
+        <source>ASN</source>
+        <translation>ASN</translation>
+    </message>
+    <message>
+        <source>Correspondent</source>
+        <translation>Corrispondente</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation>Titolo</translation>
+    </message>
+    <message>
+        <source>Document type</source>
+        <translation>Tipo di documento</translation>
+    </message>
+    <message>
+        <source>Created at</source>
+        <translation>Data di creazione</translation>
+    </message>
+    <message>
+        <source>Added at</source>
+        <translation>Data di aggiunta</translation>
+    </message>
+    <message>
+        <source>Modified at</source>
+        <translation>Data di modifica</translation>
+    </message>
+    <message>
+        <source>Direction</source>
+        <translation>Direzione</translation>
+    </message>
+    <message>
+        <source>Ascending</source>
+        <translation>Crescente</translation>
+    </message>
+    <message>
+        <source>Descending</source>
+        <translation>Decrescente</translation>
     </message>
 </context>
 <context>

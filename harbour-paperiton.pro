@@ -60,6 +60,7 @@ INSTALLS += appicon
 # translations/harbour-paperiton.ts, which sailfishapp_i18n refreshes on its own.
 TRANSLATIONS += \
     translations/harbour-paperiton-it.ts
+    translations/harbour-paperiton-en.ts
 
 DISTFILES += \
     harbour-paperiton.desktop \
