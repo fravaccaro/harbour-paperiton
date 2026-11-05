@@ -8,7 +8,7 @@ Label {
     color: Theme.highlightColor
 
     font {
-        pixelSize: Theme.fontSizeExtraLarge
+        pixelSize: Theme.fontSizeLarge
         family: Theme.fontFamilyHeading
     }
 
