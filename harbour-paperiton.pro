@@ -59,8 +59,8 @@ INSTALLS += appicon
 # Only the translated catalogues belong here. The English source strings live in
 # translations/harbour-paperiton.ts, which sailfishapp_i18n refreshes on its own.
 TRANSLATIONS += \
-    translations/harbour-paperiton-it.ts
     translations/harbour-paperiton-en.ts
+    translations/harbour-paperiton-it.ts
 
 DISTFILES += \
     harbour-paperiton.desktop \
